@@ -2,7 +2,7 @@ import { createServerFn } from '@tanstack/react-start'
 import { and, count, eq, sql } from 'drizzle-orm'
 import { z } from 'zod'
 import { db } from '../../db/index'
-import { galleryImage, invitation, member, project, projectFile } from '../../db/schema'
+import { invitation, member, project, projectFile } from '../../db/schema'
 
 export const getOrgStats = createServerFn({ method: 'GET' }).handler(async ({ data }) => {
   const { organizationId } = z.object({ organizationId: z.string() }).parse(data)

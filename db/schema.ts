@@ -219,27 +219,6 @@ export const invitationRelations = relations(invitation, ({ one }) => ({
   }),
 }))
 
-export const galleryImage = pgTable(
-  'gallery_image',
-  {
-    id: text('id').primaryKey(),
-    name: text('name').notNull(),
-    url: text('url').notNull(),
-    size: text('size').default('0').notNull(), // size in bytes
-    organizationId: text('organization_id')
-      .notNull()
-      .references(() => organization.id, { onDelete: 'cascade' }),
-    createdAt: timestamp('created_at').defaultNow().notNull(),
-  },
-  (table) => [index('gallery_image_organizationId_idx').on(table.organizationId)],
-)
-
-export const galleryImageRelations = relations(galleryImage, ({ one }) => ({
-  organization: one(organization, {
-    fields: [galleryImage.organizationId],
-    references: [organization.id],
-  }),
-}))
 
 // ── Notification System ──────────────────────────────────────────────────────
 export const notification = pgTable(

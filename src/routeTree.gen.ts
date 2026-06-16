@@ -30,7 +30,6 @@ import { Route as AppOrganizationsSlugRouteRouteImport } from './routes/_app/org
 import { Route as AppOrganizationsSlugSettingsRouteImport } from './routes/_app/organizations/$slug/settings'
 import { Route as AppOrganizationsSlugRolesRouteImport } from './routes/_app/organizations/$slug/roles'
 import { Route as AppOrganizationsSlugMembersRouteImport } from './routes/_app/organizations/$slug/members'
-import { Route as AppOrganizationsSlugGalleryRouteImport } from './routes/_app/organizations/$slug/gallery'
 import { Route as AppOrganizationsSlugDashboardRouteImport } from './routes/_app/organizations/$slug/dashboard'
 import { Route as AppOrganizationsSlugProjectsIndexRouteImport } from './routes/_app/organizations/$slug/projects/index'
 import { Route as AppOrganizationsSlugProjectsProjectIdRouteImport } from './routes/_app/organizations/$slug/projects/$projectId'
@@ -142,12 +141,6 @@ const AppOrganizationsSlugMembersRoute =
     path: '/members',
     getParentRoute: () => AppOrganizationsSlugRouteRoute,
   } as any)
-const AppOrganizationsSlugGalleryRoute =
-  AppOrganizationsSlugGalleryRouteImport.update({
-    id: '/gallery',
-    path: '/gallery',
-    getParentRoute: () => AppOrganizationsSlugRouteRoute,
-  } as any)
 const AppOrganizationsSlugDashboardRoute =
   AppOrganizationsSlugDashboardRouteImport.update({
     id: '/dashboard',
@@ -185,7 +178,6 @@ export interface FileRoutesByFullPath {
   '/api/auth/$': typeof ApiAuthSplatRoute
   '/organizations/': typeof AppOrganizationsIndexRoute
   '/organizations/$slug/dashboard': typeof AppOrganizationsSlugDashboardRoute
-  '/organizations/$slug/gallery': typeof AppOrganizationsSlugGalleryRoute
   '/organizations/$slug/members': typeof AppOrganizationsSlugMembersRoute
   '/organizations/$slug/roles': typeof AppOrganizationsSlugRolesRoute
   '/organizations/$slug/settings': typeof AppOrganizationsSlugSettingsRoute
@@ -210,7 +202,6 @@ export interface FileRoutesByTo {
   '/api/auth/$': typeof ApiAuthSplatRoute
   '/organizations': typeof AppOrganizationsIndexRoute
   '/organizations/$slug/dashboard': typeof AppOrganizationsSlugDashboardRoute
-  '/organizations/$slug/gallery': typeof AppOrganizationsSlugGalleryRoute
   '/organizations/$slug/members': typeof AppOrganizationsSlugMembersRoute
   '/organizations/$slug/roles': typeof AppOrganizationsSlugRolesRoute
   '/organizations/$slug/settings': typeof AppOrganizationsSlugSettingsRoute
@@ -238,7 +229,6 @@ export interface FileRoutesById {
   '/api/auth/$': typeof ApiAuthSplatRoute
   '/_app/organizations/': typeof AppOrganizationsIndexRoute
   '/_app/organizations/$slug/dashboard': typeof AppOrganizationsSlugDashboardRoute
-  '/_app/organizations/$slug/gallery': typeof AppOrganizationsSlugGalleryRoute
   '/_app/organizations/$slug/members': typeof AppOrganizationsSlugMembersRoute
   '/_app/organizations/$slug/roles': typeof AppOrganizationsSlugRolesRoute
   '/_app/organizations/$slug/settings': typeof AppOrganizationsSlugSettingsRoute
@@ -265,7 +255,6 @@ export interface FileRouteTypes {
     | '/api/auth/$'
     | '/organizations/'
     | '/organizations/$slug/dashboard'
-    | '/organizations/$slug/gallery'
     | '/organizations/$slug/members'
     | '/organizations/$slug/roles'
     | '/organizations/$slug/settings'
@@ -290,7 +279,6 @@ export interface FileRouteTypes {
     | '/api/auth/$'
     | '/organizations'
     | '/organizations/$slug/dashboard'
-    | '/organizations/$slug/gallery'
     | '/organizations/$slug/members'
     | '/organizations/$slug/roles'
     | '/organizations/$slug/settings'
@@ -317,7 +305,6 @@ export interface FileRouteTypes {
     | '/api/auth/$'
     | '/_app/organizations/'
     | '/_app/organizations/$slug/dashboard'
-    | '/_app/organizations/$slug/gallery'
     | '/_app/organizations/$slug/members'
     | '/_app/organizations/$slug/roles'
     | '/_app/organizations/$slug/settings'
@@ -486,13 +473,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppOrganizationsSlugMembersRouteImport
       parentRoute: typeof AppOrganizationsSlugRouteRoute
     }
-    '/_app/organizations/$slug/gallery': {
-      id: '/_app/organizations/$slug/gallery'
-      path: '/gallery'
-      fullPath: '/organizations/$slug/gallery'
-      preLoaderRoute: typeof AppOrganizationsSlugGalleryRouteImport
-      parentRoute: typeof AppOrganizationsSlugRouteRoute
-    }
     '/_app/organizations/$slug/dashboard': {
       id: '/_app/organizations/$slug/dashboard'
       path: '/dashboard'
@@ -519,7 +499,6 @@ declare module '@tanstack/react-router' {
 
 interface AppOrganizationsSlugRouteRouteChildren {
   AppOrganizationsSlugDashboardRoute: typeof AppOrganizationsSlugDashboardRoute
-  AppOrganizationsSlugGalleryRoute: typeof AppOrganizationsSlugGalleryRoute
   AppOrganizationsSlugMembersRoute: typeof AppOrganizationsSlugMembersRoute
   AppOrganizationsSlugRolesRoute: typeof AppOrganizationsSlugRolesRoute
   AppOrganizationsSlugSettingsRoute: typeof AppOrganizationsSlugSettingsRoute
@@ -530,7 +509,6 @@ interface AppOrganizationsSlugRouteRouteChildren {
 const AppOrganizationsSlugRouteRouteChildren: AppOrganizationsSlugRouteRouteChildren =
   {
     AppOrganizationsSlugDashboardRoute: AppOrganizationsSlugDashboardRoute,
-    AppOrganizationsSlugGalleryRoute: AppOrganizationsSlugGalleryRoute,
     AppOrganizationsSlugMembersRoute: AppOrganizationsSlugMembersRoute,
     AppOrganizationsSlugRolesRoute: AppOrganizationsSlugRolesRoute,
     AppOrganizationsSlugSettingsRoute: AppOrganizationsSlugSettingsRoute,
