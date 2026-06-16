@@ -1,7 +1,6 @@
 import {
   Building2,
   ExternalLink,
-  Image,
   LayoutGrid,
   LifeBuoy,
   MessageSquareText,
@@ -57,11 +56,6 @@ export function AppSidebar({ orgs, currentSlug }: AppSidebarProps) {
           title: t.sidebar.dashboard,
           to: `/organizations/${slug}/dashboard`,
           icon: LayoutGrid,
-        },
-        {
-          title: t.sidebar.gallery,
-          to: `/organizations/${slug}/gallery`,
-          icon: Image,
         },
         {
           title: t.projects.title,

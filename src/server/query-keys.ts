@@ -1,6 +1,5 @@
 import { queryOptions } from '@tanstack/react-query'
 import { getOrgStats } from './dashboard-fns'
-import { getGalleryImages } from './gallery-fns'
 import { getUserNotifications } from './notification-fns'
 import { getOrgBySlug, getUserOrgs } from './org-fns'
 import { getProjectCount } from './project-fns'
@@ -17,11 +16,6 @@ export const orgBySlugQuery = (slug: string) =>
     queryFn: () => getOrgBySlug({ data: { slug } }),
   })
 
-export const galleryQuery = (orgId: string, page: number) =>
-  queryOptions({
-    queryKey: ['gallery', orgId, page] as const,
-    queryFn: () => getGalleryImages({ data: { orgId, page, limit: 10 } }),
-  })
 
 export const orgStatsQuery = (organizationId: string) =>
   queryOptions({

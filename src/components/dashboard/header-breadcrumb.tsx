@@ -1,6 +1,6 @@
 import { Link, useLocation, useParams } from '@tanstack/react-router'
 import { useQueryClient } from '@tanstack/react-query'
-import { LayoutDashboard, Image, Users, Settings, LayoutGrid, Home } from 'lucide-react'
+import { LayoutDashboard, Users, Settings, LayoutGrid, Home } from 'lucide-react'
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -34,7 +34,6 @@ export function HeaderBreadcrumb({ orgName }: HeaderBreadcrumbProps) {
   // Detect current view/page for titles
   const getPageConfig = () => {
     if (lastSegment === 'dashboard') return { title: t.sidebar.dashboard, icon: LayoutDashboard }
-    if (lastSegment === 'gallery') return { title: t.sidebar.gallery, icon: Image }
     if (lastSegment === 'members') return { title: t.sidebar.members, icon: Users }
     if (lastSegment === 'settings') return { title: t.sidebar.settings, icon: Settings }
     if (lastSegment === 'projects') return { title: t.projects.title, icon: LayoutGrid }
