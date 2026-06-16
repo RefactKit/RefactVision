@@ -73,7 +73,11 @@ export function LabelingGallery({
   const itemsPerPage = 12
 
   const filteredFiles = useMemo(() => {
-    return files.filter((f) => (selectedCategoryId ? f.categoryId === selectedCategoryId : true))
+    return files.filter((f) => {
+      if (!selectedCategoryId) return true
+      if (selectedCategoryId === '__unlabeled__') return f.categoryId === null
+      return f.categoryId === selectedCategoryId
+    })
   }, [files, selectedCategoryId])
 
   const totalPages = Math.ceil(filteredFiles.length / itemsPerPage)

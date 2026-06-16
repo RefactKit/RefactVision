@@ -317,12 +317,12 @@ function ProjectStudioPage() {
         <TabsContent value="dataset" className="mt-0 flex flex-col gap-6">
           {/* Category Pills & Progress Bar */}
           <div className="flex flex-col gap-4">
-            <div className="bg-muted/30 p-1 rounded-2xl flex items-center gap-1 w-fit max-w-full overflow-x-auto border border-border/30">
+            <div className="bg-muted/20 dark:bg-muted/15 p-1 rounded-2xl flex items-center gap-1 w-fit max-w-full overflow-x-auto border border-border/50 dark:border-border/25 shadow-sm">
               <button
                 type="button"
                 onClick={() => setSelectedCategoryId(null)}
                 className={cn(
-                  'relative flex items-center gap-1 px-4 py-2 text-sm font-medium rounded-xl transition-all',
+                  'relative flex items-center gap-1 px-4 py-2 text-sm font-medium rounded-xl transition-all whitespace-nowrap',
                   selectedCategoryId === null
                     ? 'bg-background text-foreground shadow-sm'
                     : 'text-muted-foreground hover:text-foreground',
@@ -331,6 +331,23 @@ function ProjectStudioPage() {
                 All
                 <span className="text-[10px] text-muted-foreground align-super -mt-2">
                   {project.files.length}
+                </span>
+              </button>
+
+              <button
+                type="button"
+                onClick={() => setSelectedCategoryId('__unlabeled__')}
+                className={cn(
+                  'relative flex items-center gap-2 px-4 py-2 text-sm font-medium rounded-xl transition-all whitespace-nowrap',
+                  selectedCategoryId === '__unlabeled__'
+                    ? 'bg-background text-foreground shadow-sm'
+                    : 'text-muted-foreground hover:text-foreground',
+                )}
+              >
+                <span className="size-2.5 rounded-full shrink-0 bg-muted-foreground/30" />
+                Not Labelled
+                <span className="text-[10px] text-muted-foreground align-super -mt-2">
+                  {project.files.filter((f) => f.categoryId === null).length}
                 </span>
               </button>
 
@@ -499,7 +516,7 @@ function ProjectStudioPage() {
                   <Button
                     type="submit"
                     className="rounded-xl h-10 w-full font-medium shadow-sm transition-all"
-                    disabled={isUltraImporting}
+                    disabled={isUltraImporting || !ultraKey.trim()}
                   >
                     {isUltraImporting ? (
                       <>
@@ -560,7 +577,7 @@ function ProjectStudioPage() {
                   <Button
                     type="submit"
                     className="rounded-xl h-10 w-full font-medium shadow-sm transition-all"
-                    disabled={isRoboflowImporting}
+                    disabled={isRoboflowImporting || !roboflowKey.trim()}
                   >
                     {isRoboflowImporting ? (
                       <>

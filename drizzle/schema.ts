@@ -217,7 +217,7 @@ export const user = pgTable("user", {
 	image: text(),
 	createdAt: timestamp("created_at", { mode: 'string' }).defaultNow().notNull(),
 	updatedAt: timestamp("updated_at", { mode: 'string' }).defaultNow().notNull(),
-	imageUrl: text("image_url").default('),
+	imageUrl: text("image_url").default(''),
 	role: text().default('user'),
 	banned: boolean().default(false),
 	banReason: text("ban_reason"),
@@ -231,7 +231,7 @@ export const organization = pgTable("organization", {
 	name: text().notNull(),
 	slug: text().notNull(),
 	logo: text(),
-	logoUrl: text("logo_url").default('),
+	logoUrl: text("logo_url").default(''),
 	createdAt: timestamp("created_at", { mode: 'string' }).notNull(),
 	metadata: text(),
 }, (table) => [
