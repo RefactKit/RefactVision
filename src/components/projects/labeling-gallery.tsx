@@ -1,7 +1,13 @@
 import { useState, useMemo } from 'react'
-import { Check, Image as ImageIcon, Upload, Trash2, CheckCircle2 } from 'lucide-react'
+import { Check, Image as ImageIcon, Upload, Trash2, CheckCircle2, Plus, X } from 'lucide-react'
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu'
 import { Button } from '@/components/ui/button'
-import { Badge } from '@/components/ui/badge'
+
 import { useI18n } from '@/i18n/context'
 import {
   Pagination,
@@ -29,19 +35,36 @@ interface ProjectFile {
   } | null
 }
 
+const colorsPalette = [
+  'bg-emerald-500',
+  'bg-blue-500',
+  'bg-violet-500',
+  'bg-amber-500',
+  'bg-rose-500',
+  'bg-pink-500',
+  'bg-cyan-500',
+  'bg-yellow-500',
+  'bg-indigo-500',
+  'bg-teal-500',
+]
+
 interface LabelingGalleryProps {
   files: ProjectFile[]
+  categories: Array<{ id: string; name: string }>
   selectedCategoryId: string | null
-  onBulkLabel: (fileIds: string[]) => void
+  onBulkLabel: (fileIds: string[], categoryId: string | null) => void
   onDeleteFiles: (fileIds: string[]) => void
+  onCreateCategory: (name: string) => void
   onUploadClick: () => void
 }
 
 export function LabelingGallery({
   files,
+  categories,
   selectedCategoryId,
   onBulkLabel,
   onDeleteFiles,
+  onCreateCategory,
   onUploadClick,
 }: LabelingGalleryProps) {
   const { t } = useI18n()
@@ -50,7 +73,11 @@ export function LabelingGallery({
   const itemsPerPage = 12
 
   const filteredFiles = useMemo(() => {
-    return files.filter((f) => (selectedCategoryId ? f.categoryId === selectedCategoryId : true))
+    return files.filter((f) => {
+      if (!selectedCategoryId) return true
+      if (selectedCategoryId === '__unlabeled__') return f.categoryId === null
+      return f.categoryId === selectedCategoryId
+    })
   }, [files, selectedCategoryId])
 
   const totalPages = Math.ceil(filteredFiles.length / itemsPerPage)
@@ -80,24 +107,6 @@ export function LabelingGallery({
     return <FileIcon className="size-10 text-muted-foreground/40" />
   }
 
-  const getBadgeColor = (name: string, mimeType: string) => {
-    const ext = name.split('.').pop()?.toLowerCase()
-
-    // Exact extensions for brand colors
-    if (['xls', 'xlsx', 'csv'].includes(ext || '')) return 'bg-emerald-600 text-white'
-    if (['doc', 'docx'].includes(ext || '')) return 'bg-blue-600 text-white'
-    if (['ppt', 'pptx'].includes(ext || '')) return 'bg-orange-500 text-white'
-    if (ext === 'pdf') return 'bg-red-500 text-white'
-
-    // Mime type fallbacks
-    if (mimeType.includes('image')) return 'bg-indigo-500 text-white'
-    if (mimeType.includes('spreadsheet') || mimeType.includes('csv') || mimeType.includes('excel'))
-      return 'bg-emerald-600 text-white'
-    if (mimeType.includes('pdf')) return 'bg-red-500 text-white'
-
-    return 'bg-slate-600 text-white'
-  }
-
   const getFileExtension = (name: string, mimeType: string) => {
     const ext = name.split('.').pop()?.toUpperCase()
     if (ext && ext !== name.toUpperCase() && ext.length <= 4) {
@@ -115,31 +124,85 @@ export function LabelingGallery({
       <AnimatePresence>
         {selectedIds.length > 0 && (
           <motion.div
-            initial={{ opacity: 0, y: 20 }}
+            initial={{ opacity: 0, y: -20 }}
             animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: 20 }}
-            className="fixed bottom-8 left-1/2 -translate-x-1/2 z-50 flex items-center gap-4 px-6 py-3 bg-card border border-border/50 rounded-2xl shadow-2xl backdrop-blur-xl"
+            exit={{ opacity: 0, y: -20 }}
+            className="fixed top-20 left-1/2 -translate-x-1/2 z-50 flex items-center gap-2 px-4 py-2 bg-card border border-border/50 rounded-2xl shadow-2xl backdrop-blur-xl sm:gap-4 sm:px-6"
           >
             <span className="text-sm font-medium">{selectedIds.length} files selected</span>
             <div className="h-4 w-px bg-border" />
-            <Button size="sm" onClick={() => onBulkLabel(selectedIds)} className="rounded-xl">
-              Apply Label
-            </Button>
+            <DropdownMenu>
+              <DropdownMenuTrigger
+                render={
+                  <Button size="sm" className="rounded-xl gap-1.5 font-medium shadow-sm">
+                    <Plus className="size-4" />
+                    Select Class
+                  </Button>
+                }
+              />
+              <DropdownMenuContent align="center" className="w-48 rounded-xl">
+                {categories.length > 0 ? (
+                  categories.map((cat, idx) => (
+                    <DropdownMenuItem
+                      key={cat.id}
+                      onClick={() => {
+                        onBulkLabel(selectedIds, cat.id)
+                        setSelectedIds([])
+                      }}
+                      className="flex items-center gap-2"
+                    >
+                      <span
+                        className={cn(
+                          'size-2.5 rounded-full shrink-0',
+                          colorsPalette[idx % colorsPalette.length],
+                        )}
+                      />
+                      {cat.name}
+                    </DropdownMenuItem>
+                  ))
+                ) : (
+                  <div className="p-2 text-xs text-muted-foreground text-center">
+                    No classes created yet.
+                  </div>
+                )}
+                {categories.length > 0 && (
+                  <>
+                    <div className="h-px bg-border my-1" />
+                    <DropdownMenuItem
+                      onClick={() => {
+                        onBulkLabel(selectedIds, null)
+                        setSelectedIds([])
+                      }}
+                      className="text-destructive focus:bg-destructive/10 focus:text-destructive flex items-center gap-2"
+                    >
+                      <span className="size-2.5 rounded-full shrink-0 bg-muted-foreground/20" />
+                      Remove Label
+                    </DropdownMenuItem>
+                  </>
+                )}
+                <div className="h-px bg-border my-1" />
+                <DropdownMenuItem
+                  onClick={() => {
+                    const name = prompt('New class name:')
+                    if (name) {
+                      onCreateCategory(name)
+                    }
+                  }}
+                  className="flex items-center gap-2 font-medium"
+                >
+                  <Plus className="size-4 text-muted-foreground" />
+                  Create Class
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
             <Button
-              size="sm"
-              variant="destructive"
-              onClick={() => onDeleteFiles(selectedIds)}
-              className="rounded-xl"
-            >
-              Delete
-            </Button>
-            <Button
-              size="sm"
+              size="icon"
               variant="ghost"
               onClick={() => setSelectedIds([])}
-              className="rounded-xl"
+              className="size-8 rounded-xl"
+              aria-label="Cancel"
             >
-              Cancel
+              <X className="size-4" />
             </Button>
           </motion.div>
         )}
@@ -170,18 +233,18 @@ export function LabelingGallery({
                     getFileIcon(file.mimeType)
                   )}
 
-                  {/* Type Badge (Top Left) */}
-                  <div className="absolute top-2 left-2">
-                    <Badge
+                  {/* Category Color Dot (Top Left) — replaces file type badge */}
+                  {file.categoryId && (
+                    <div
                       className={cn(
-                        'h-5 px-1.5 text-[10px] rounded-lg border-0',
-                        getBadgeColor(file.name, file.mimeType),
+                        'absolute top-2 left-2 size-4 rounded-full border-2 border-background shadow-md z-20 pointer-events-none transition-all',
+                        colorsPalette[
+                          categories.findIndex((c) => c.id === file.categoryId) %
+                            colorsPalette.length
+                        ],
                       )}
-                    >
-                      {file.mimeType.includes('image') && <ImageIcon className="size-3 mr-1" />}
-                      {getFileExtension(file.name, file.mimeType)}
-                    </Badge>
-                  </div>
+                    />
+                  )}
 
                   {/* Selection Checkbox */}
                   <div
