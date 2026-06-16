@@ -143,7 +143,6 @@ export const pt: Translations = {
     workspaces: 'Espaços de Trabalho',
     workspace: 'Espaço de Trabalho',
     administration: 'Administração',
-    gallery: 'Galeria',
     feedback: 'Feedback',
     support: 'Suporte',
     documentation: 'Documentação',
@@ -220,11 +219,6 @@ export const pt: Translations = {
     font: 'Fonte',
     fontDescription: 'Defina a fonte que deseja usar no painel.',
     fontDefault: 'Padrão (Automático)',
-  },
-  gallery: {
-    title: 'Galeria',
-    subtitle: 'Gerencie e visualize as imagens da sua organização.',
-    noImages: 'Nenhuma imagem encontrada.',
   },
   notifications: {
     memberJoined: 'entrou na organização',

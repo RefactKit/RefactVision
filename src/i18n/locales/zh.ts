@@ -139,7 +139,6 @@ export const zh: Translations = {
     workspaces: '工作区',
     workspace: '工作区',
     administration: '管理',
-    gallery: '媒体库',
     feedback: '反馈',
     support: '支持',
     documentation: '文档',
@@ -218,11 +217,6 @@ export const zh: Translations = {
     currentSession: '当前会话',
     revoke: '撤销',
     revokeSessionSuccess: '会话已成功撤销',
-  },
-  gallery: {
-    title: '媒体库',
-    subtitle: '管理和查看您的组织图片。',
-    noImages: '未找到图片。',
   },
   notifications: {
     memberJoined: '加入了组织',

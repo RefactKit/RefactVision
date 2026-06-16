@@ -145,7 +145,6 @@ export const fr: Translations = {
     workspaces: 'Mes Espaces',
     workspace: 'Espace de travail',
     administration: 'Administration',
-    gallery: 'Galerie',
     feedback: 'Feedback',
     support: 'Support',
     documentation: 'Documentation',
@@ -225,11 +224,6 @@ export const fr: Translations = {
     currentSession: 'Session Actuelle',
     revoke: 'Révoquer',
     revokeSessionSuccess: 'Session révoquée avec succès',
-  },
-  gallery: {
-    title: 'Galerie',
-    subtitle: 'Gérez et visualisez les images de votre organisation.',
-    noImages: 'Aucune image trouvée.',
   },
   notifications: {
     memberJoined: "a rejoint l'organisation",

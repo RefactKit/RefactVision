@@ -118,7 +118,6 @@ export const arMa: Translations = {
     workspaces: 'مساحات العمل',
     workspace: 'مساحة العمل',
     administration: 'الإدارة',
-    gallery: 'المعرض',
     feedback: 'تعليقات',
     support: 'الدعم',
     documentation: 'التوثيق',
@@ -196,11 +195,6 @@ export const arMa: Translations = {
     currentSession: 'الجلسة الحالية',
     revoke: 'إلغاء',
     revokeSessionSuccess: 'تم إلغاء الجلسة بنجاح',
-  },
-  gallery: {
-    title: 'المعرض',
-    subtitle: 'إدارة وعرض صور منظمتك.',
-    noImages: 'لم يتم العثور على صور.',
   },
   notifications: {
     memberJoined: 'دخل للمنظمة',

@@ -137,7 +137,6 @@ export const it = {
     workspaces: 'Spazi di lavoro',
     workspace: 'Spazio di lavoro',
     administration: 'Amministrazione',
-    gallery: 'Galleria',
     feedback: 'Feedback',
     support: 'Supporto',
     documentation: 'Documentazione',
@@ -219,11 +218,6 @@ export const it = {
     currentSession: 'Sessione corrente',
     revoke: 'Revoca',
     revokeSessionSuccess: 'Sessione revocata con successo',
-  },
-  gallery: {
-    title: 'Galleria',
-    subtitle: 'Gestisci e visualizza le immagini della tua organizzazione.',
-    noImages: 'Nessuna immagine trovata.',
   },
   notifications: {
     memberJoined: "si è unito all'organizzazione",

@@ -143,7 +143,6 @@ export const en = {
     workspaces: 'Workspaces',
     workspace: 'Workspace',
     administration: 'Administration',
-    gallery: 'Gallery',
     feedback: 'Feedback',
     support: 'Support',
     documentation: 'Documentation',
@@ -223,11 +222,6 @@ export const en = {
     currentSession: 'Current Session',
     revoke: 'Revoke',
     revokeSessionSuccess: 'Session revoked successfully',
-  },
-  gallery: {
-    title: 'Gallery',
-    subtitle: 'Manage and view your organization images.',
-    noImages: 'No images found.',
   },
   notifications: {
     memberJoined: 'joined the organization',
