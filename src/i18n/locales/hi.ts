@@ -140,7 +140,6 @@ export const hi: Translations = {
     workspaces: 'वर्कस्पेस',
     workspace: 'वर्कस्पेस',
     administration: 'प्रशासन',
-    gallery: 'गैलरी',
     feedback: 'फीडबैक',
     support: 'सहायता',
     documentation: 'दस्तावेज़',
@@ -219,11 +218,6 @@ export const hi: Translations = {
     currentSession: 'वर्तमान सत्र',
     revoke: 'रद्द करें',
     revokeSessionSuccess: 'सत्र सफलतापूर्वक रद्द कर दिया गया',
-  },
-  gallery: {
-    title: 'गैलरी',
-    subtitle: 'अपने संगठन की छवियों को प्रबंधित करें और देखें।',
-    noImages: 'कोई छवि नहीं मिली।',
   },
   notifications: {
     memberJoined: 'संगठन में शामिल हुए',

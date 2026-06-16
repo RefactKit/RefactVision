@@ -148,7 +148,6 @@ export const tr = {
     workspaces: 'Çalışma Alanları',
     workspace: 'Çalışma Alanı',
     administration: 'Yönetim',
-    gallery: 'Galeri',
     feedback: 'Geri Bildirim',
     support: 'Destek',
     documentation: 'Dokümantasyon',
@@ -228,11 +227,6 @@ export const tr = {
     currentSession: 'Mevcut Oturum',
     revoke: 'İptal et',
     revokeSessionSuccess: 'Oturum başarıyla iptal edildi',
-  },
-  gallery: {
-    title: 'Galeri',
-    subtitle: 'Organizasyon görsellerinizi yönetin ve görüntüleyin.',
-    noImages: 'Görsel bulunamadı.',
   },
   notifications: {
     memberJoined: 'organizasyona katıldı',

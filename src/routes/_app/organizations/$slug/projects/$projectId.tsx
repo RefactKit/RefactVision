@@ -112,7 +112,7 @@ function ProjectStudioPage() {
 
   if (isLoading || !project)
     return (
-      <div className="flex flex-col gap-6 max-w-7xl mx-auto w-full px-4 py-8 sm:px-6 lg:px-8">
+    <div className="flex flex-col gap-6 max-w-6xl mx-auto w-full">
         {/* Back button skeleton */}
         <Skeleton className="size-8 rounded-lg" />
 
@@ -155,7 +155,7 @@ function ProjectStudioPage() {
     )
 
   return (
-    <div className="flex flex-col gap-4 max-w-7xl mx-auto w-full px-4 py-6 sm:px-6 lg:px-8">
+    <div className="flex flex-col gap-4 max-w-6xl mx-auto w-full">
       {/* Project Header */}
       <div className="flex flex-col gap-4">
         <div className="flex items-center gap-3">

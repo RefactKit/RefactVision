@@ -118,7 +118,6 @@ export const es: Translations = {
     workspaces: 'Espacios',
     workspace: 'Espacio',
     administration: 'Administración',
-    gallery: 'Galería',
     feedback: 'Feedback',
     support: 'Soporte',
     documentation: 'Documentación',
@@ -196,11 +195,6 @@ export const es: Translations = {
     currentSession: 'Sesión Actual',
     revoke: 'Revocar',
     revokeSessionSuccess: 'Sesión revocada con éxito',
-  },
-  gallery: {
-    title: 'Galería',
-    subtitle: 'Gestiona las imágenes de tu organización.',
-    noImages: 'No hay imágenes.',
   },
   notifications: {
     memberJoined: 'se unió a la organización',

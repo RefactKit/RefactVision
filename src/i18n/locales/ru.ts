@@ -142,7 +142,6 @@ export const ru = {
     workspaces: 'Рабочие пространства',
     workspace: 'Рабочее пространство',
     administration: 'Администрирование',
-    gallery: 'Галерея',
     feedback: 'Отзывы',
     support: 'Поддержка',
     documentation: 'Документация',
@@ -224,11 +223,6 @@ export const ru = {
     currentSession: 'Текущая сессия',
     revoke: 'Отозвать',
     revokeSessionSuccess: 'Сессия успешно отозвана',
-  },
-  gallery: {
-    title: 'Галерея',
-    subtitle: 'Управляйте и просматривайте изображения вашей организации.',
-    noImages: 'Изображения не найдены.',
   },
   notifications: {
     memberJoined: 'присоединился к организации',

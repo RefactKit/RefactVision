@@ -144,7 +144,6 @@ export const be: Translations = {
     workspaces: 'Рабочыя прасторы',
     workspace: 'Рабочая прастора',
     administration: 'Адміністраванне',
-    gallery: 'Галерэя',
     feedback: 'Водгукі',
     support: 'Падтрымка',
     documentation: 'Дакументацыя',
@@ -226,11 +225,6 @@ export const be: Translations = {
     currentSession: 'Бягучая сесія',
     revoke: 'Адазваць',
     revokeSessionSuccess: 'Сесія паспяхова адазвана',
-  },
-  gallery: {
-    title: 'Галерэя',
-    subtitle: 'Кіруйце і праглядайце выявы вашай арганізацыі.',
-    noImages: 'Выявы не знойдзены.',
   },
   notifications: {
     memberJoined: 'далучыўся да арганізацыі',
