@@ -7,7 +7,7 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
 import { Button } from '@/components/ui/button'
-import { Badge } from '@/components/ui/badge'
+
 import { useI18n } from '@/i18n/context'
 import {
   Pagination,
@@ -101,24 +101,6 @@ export function LabelingGallery({
     if (mimeType.includes('pdf') || mimeType.includes('text'))
       return <FileText className="size-10 text-blue-500/40" />
     return <FileIcon className="size-10 text-muted-foreground/40" />
-  }
-
-  const getBadgeColor = (name: string, mimeType: string) => {
-    const ext = name.split('.').pop()?.toLowerCase()
-
-    // Exact extensions for brand colors
-    if (['xls', 'xlsx', 'csv'].includes(ext || '')) return 'bg-emerald-600 text-white'
-    if (['doc', 'docx'].includes(ext || '')) return 'bg-blue-600 text-white'
-    if (['ppt', 'pptx'].includes(ext || '')) return 'bg-orange-500 text-white'
-    if (ext === 'pdf') return 'bg-red-500 text-white'
-
-    // Mime type fallbacks
-    if (mimeType.includes('image')) return 'bg-indigo-500 text-white'
-    if (mimeType.includes('spreadsheet') || mimeType.includes('csv') || mimeType.includes('excel'))
-      return 'bg-emerald-600 text-white'
-    if (mimeType.includes('pdf')) return 'bg-red-500 text-white'
-
-    return 'bg-slate-600 text-white'
   }
 
   const getFileExtension = (name: string, mimeType: string) => {
@@ -247,25 +229,11 @@ export function LabelingGallery({
                     getFileIcon(file.mimeType)
                   )}
 
-                  {/* Type Badge (Top Left) */}
-                  <div className="absolute top-2 left-2">
-                    <Badge
-                      className={cn(
-                        'h-5 px-1.5 text-[10px] rounded-lg border-0',
-                        getBadgeColor(file.name, file.mimeType),
-                      )}
-                    >
-                      {file.mimeType.includes('image') && <ImageIcon className="size-3 mr-1" />}
-                      {getFileExtension(file.name, file.mimeType)}
-                    </Badge>
-                  </div>
-
-                  {/* Category Dot Indicator */}
+                  {/* Category Color Dot (Top Left) — replaces file type badge */}
                   {file.categoryId && (
                     <div
                       className={cn(
-                        'absolute top-2.5 right-2.5 size-3.5 rounded-full border border-background shadow-md z-10 pointer-events-none transition-opacity group-hover:opacity-0',
-                        selectedIds.includes(file.id) && 'hidden',
+                        'absolute top-2 left-2 size-4 rounded-full border-2 border-background shadow-md z-20 pointer-events-none transition-all',
                         colorsPalette[
                           categories.findIndex((c) => c.id === file.categoryId) %
                             colorsPalette.length
