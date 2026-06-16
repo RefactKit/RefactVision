@@ -37,6 +37,8 @@ import {
   FileAudio,
   FileJson,
   File as FileIcon,
+  Plus,
+  X,
 } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import { useI18n } from '@/i18n/context'
@@ -56,19 +58,36 @@ interface ProjectFile {
   } | null
 }
 
+const colorsPalette = [
+  'bg-emerald-500',
+  'bg-blue-500',
+  'bg-violet-500',
+  'bg-amber-500',
+  'bg-rose-500',
+  'bg-pink-500',
+  'bg-cyan-500',
+  'bg-yellow-500',
+  'bg-indigo-500',
+  'bg-teal-500',
+]
+
 interface ProjectFilesTableProps {
   files: ProjectFile[]
+  categories: Array<{ id: string; name: string }>
   selectedCategoryId: string | null
-  onBulkLabel: (fileIds: string[]) => void
+  onBulkLabel: (fileIds: string[], categoryId: string | null) => void
   onDeleteFiles: (fileIds: string[]) => void
+  onCreateCategory: (name: string) => void
   onRenameFile?: (fileId: string, newName: string) => void // Optional update action
 }
 
 export function ProjectFilesTable({
   files,
+  categories,
   selectedCategoryId,
   onBulkLabel,
   onDeleteFiles,
+  onCreateCategory,
   onRenameFile,
 }: ProjectFilesTableProps) {
   const { t } = useI18n()
@@ -142,12 +161,7 @@ export function ProjectFilesTable({
     // Images → real thumbnail
     if (mime.includes('image')) {
       return (
-        <img
-          src={file.url}
-          alt={file.name}
-          className="size-full object-cover"
-          loading="lazy"
-        />
+        <img src={file.url} alt={file.name} className="size-full object-cover" loading="lazy" />
       )
     }
 
@@ -182,21 +196,35 @@ export function ProjectFilesTable({
     }
 
     // CSV / Spreadsheet
-    if (['csv', 'xls', 'xlsx'].includes(ext) || mime.includes('spreadsheet') || mime.includes('csv') || mime.includes('excel')) {
+    if (
+      ['csv', 'xls', 'xlsx'].includes(ext) ||
+      mime.includes('spreadsheet') ||
+      mime.includes('csv') ||
+      mime.includes('excel')
+    ) {
       return (
         <div className="flex flex-col items-center justify-center gap-0.5">
           <FileSpreadsheet className="size-5 text-emerald-500" />
-          <span className="text-[9px] font-bold text-emerald-500 leading-none">{ext.toUpperCase() || 'CSV'}</span>
+          <span className="text-[9px] font-bold text-emerald-500 leading-none">
+            {ext.toUpperCase() || 'CSV'}
+          </span>
         </div>
       )
     }
 
     // ZIP / Archive
-    if (['zip', 'rar', 'gz', 'tar', '7z'].includes(ext) || mime.includes('zip') || mime.includes('compressed') || mime.includes('archive')) {
+    if (
+      ['zip', 'rar', 'gz', 'tar', '7z'].includes(ext) ||
+      mime.includes('zip') ||
+      mime.includes('compressed') ||
+      mime.includes('archive')
+    ) {
       return (
         <div className="flex flex-col items-center justify-center gap-0.5">
           <FileArchive className="size-5 text-violet-500" />
-          <span className="text-[9px] font-bold text-violet-500 leading-none">{ext.toUpperCase() || 'ZIP'}</span>
+          <span className="text-[9px] font-bold text-violet-500 leading-none">
+            {ext.toUpperCase() || 'ZIP'}
+          </span>
         </div>
       )
     }
@@ -206,7 +234,9 @@ export function ProjectFilesTable({
       return (
         <div className="flex flex-col items-center justify-center gap-0.5">
           <FileVideo className="size-5 text-blue-500" />
-          <span className="text-[9px] font-bold text-blue-500 leading-none">{ext.toUpperCase() || 'VID'}</span>
+          <span className="text-[9px] font-bold text-blue-500 leading-none">
+            {ext.toUpperCase() || 'VID'}
+          </span>
         </div>
       )
     }
@@ -216,7 +246,9 @@ export function ProjectFilesTable({
       return (
         <div className="flex flex-col items-center justify-center gap-0.5">
           <FileAudio className="size-5 text-pink-500" />
-          <span className="text-[9px] font-bold text-pink-500 leading-none">{ext.toUpperCase() || 'AUD'}</span>
+          <span className="text-[9px] font-bold text-pink-500 leading-none">
+            {ext.toUpperCase() || 'AUD'}
+          </span>
         </div>
       )
     }
@@ -226,7 +258,9 @@ export function ProjectFilesTable({
       return (
         <div className="flex flex-col items-center justify-center gap-0.5">
           <FileText className="size-5 text-sky-500" />
-          <span className="text-[9px] font-bold text-sky-500 leading-none">{ext.toUpperCase() || 'TXT'}</span>
+          <span className="text-[9px] font-bold text-sky-500 leading-none">
+            {ext.toUpperCase() || 'TXT'}
+          </span>
         </div>
       )
     }
@@ -235,7 +269,11 @@ export function ProjectFilesTable({
     return (
       <div className="flex flex-col items-center justify-center gap-0.5">
         <FileIcon className="size-5 text-muted-foreground" />
-        {ext && <span className="text-[9px] font-bold text-muted-foreground leading-none">{ext.toUpperCase()}</span>}
+        {ext && (
+          <span className="text-[9px] font-bold text-muted-foreground leading-none">
+            {ext.toUpperCase()}
+          </span>
+        )}
       </div>
     )
   }
@@ -246,34 +284,85 @@ export function ProjectFilesTable({
       <AnimatePresence>
         {selectedIds.length > 0 && (
           <motion.div
-            initial={{ opacity: 0, y: 20 }}
+            initial={{ opacity: 0, y: -20 }}
             animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: 20 }}
-            className="fixed bottom-8 left-1/2 -translate-x-1/2 z-50 flex items-center gap-4 px-6 py-3 bg-card border border-border/50 rounded-2xl shadow-2xl backdrop-blur-xl"
+            exit={{ opacity: 0, y: -20 }}
+            className="fixed top-20 left-1/2 -translate-x-1/2 z-50 flex items-center gap-2 px-4 py-2 bg-card border border-border/50 rounded-2xl shadow-2xl backdrop-blur-xl sm:gap-4 sm:px-6"
           >
             <span className="text-sm font-medium">{selectedIds.length} files selected</span>
             <div className="h-4 w-px bg-border" />
-            <Button size="sm" onClick={() => onBulkLabel(selectedIds)} className="rounded-xl">
-              Apply Label
-            </Button>
+            <DropdownMenu>
+              <DropdownMenuTrigger
+                render={
+                  <Button size="sm" className="rounded-xl gap-1.5 font-medium shadow-sm">
+                    <Plus className="size-4" />
+                    Select Class
+                  </Button>
+                }
+              />
+              <DropdownMenuContent align="center" className="w-48 rounded-xl">
+                {categories.length > 0 ? (
+                  categories.map((cat, idx) => (
+                    <DropdownMenuItem
+                      key={cat.id}
+                      onClick={() => {
+                        onBulkLabel(selectedIds, cat.id)
+                        setSelectedIds([])
+                      }}
+                      className="flex items-center gap-2"
+                    >
+                      <span
+                        className={cn(
+                          'size-2.5 rounded-full shrink-0',
+                          colorsPalette[idx % colorsPalette.length],
+                        )}
+                      />
+                      {cat.name}
+                    </DropdownMenuItem>
+                  ))
+                ) : (
+                  <div className="p-2 text-xs text-muted-foreground text-center">
+                    No classes created yet.
+                  </div>
+                )}
+                {categories.length > 0 && (
+                  <>
+                    <div className="h-px bg-border my-1" />
+                    <DropdownMenuItem
+                      onClick={() => {
+                        onBulkLabel(selectedIds, null)
+                        setSelectedIds([])
+                      }}
+                      className="text-destructive focus:bg-destructive/10 focus:text-destructive flex items-center gap-2"
+                    >
+                      <span className="size-2.5 rounded-full shrink-0 bg-muted-foreground/20" />
+                      Remove Label
+                    </DropdownMenuItem>
+                  </>
+                )}
+                <div className="h-px bg-border my-1" />
+                <DropdownMenuItem
+                  onClick={() => {
+                    const name = prompt('New class name:')
+                    if (name) {
+                      onCreateCategory(name)
+                    }
+                  }}
+                  className="flex items-center gap-2 font-medium"
+                >
+                  <Plus className="size-4 text-muted-foreground" />
+                  Create Class
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
             <Button
-              size="sm"
-              variant="destructive"
-              onClick={() => {
-                onDeleteFiles(selectedIds)
-                setSelectedIds([])
-              }}
-              className="rounded-xl"
-            >
-              Delete
-            </Button>
-            <Button
-              size="sm"
+              size="icon"
               variant="ghost"
               onClick={() => setSelectedIds([])}
-              className="rounded-xl"
+              className="size-8 rounded-xl"
+              aria-label="Cancel"
             >
-              Cancel
+              <X className="size-4" />
             </Button>
           </motion.div>
         )}
@@ -294,6 +383,7 @@ export function ProjectFilesTable({
               </TableHead>
               <TableHead className="w-[400px]">File Name</TableHead>
               <TableHead>Type</TableHead>
+              <TableHead>Class</TableHead>
               <TableHead>Size</TableHead>
               <TableHead>Uploaded</TableHead>
               <TableHead className="w-12 text-right pr-4"></TableHead>
@@ -337,6 +427,25 @@ export function ProjectFilesTable({
                     >
                       {getFileExtension(file.name, file.mimeType)}
                     </Badge>
+                  </TableCell>
+                  <TableCell>
+                    {file.categoryId ? (
+                      (() => {
+                        const cat = categories.find((c) => c.id === file.categoryId)
+                        const catIdx = categories.findIndex((c) => c.id === file.categoryId)
+                        const dotColor = colorsPalette[catIdx % colorsPalette.length]
+                        return (
+                          <div className="flex items-center gap-1.5">
+                            <span className={cn('size-2 rounded-full shrink-0', dotColor)} />
+                            <span className="text-sm font-medium text-foreground">
+                              {cat?.name || 'Class'}
+                            </span>
+                          </div>
+                        )
+                      })()
+                    ) : (
+                      <span className="text-sm text-muted-foreground">-</span>
+                    )}
                   </TableCell>
                   <TableCell className="text-muted-foreground text-sm">
                     {formatSize(file.size)}
