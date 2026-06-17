@@ -6,11 +6,14 @@ import {
   bulkLabelFiles,
   linkProjectFile,
   deleteFiles,
+  getProjectStats,
 } from '@/server/project-fns'
 import { uploadFile } from '@/server/storage-fns'
 import { LabelingGallery } from '@/components/projects/labeling-gallery'
 import { ProjectFilesTable } from '@/components/projects/project-files-table'
 import { EditProjectDialog } from '@/components/projects/edit-project-dialog'
+import { ProjectStats } from '@/components/projects/project-stats'
+import { ClassesTable } from '@/components/projects/classes-table'
 import { useI18n } from '@/i18n/context'
 import { Skeleton } from '@/components/ui/skeleton'
 import { useState, useMemo } from 'react'
@@ -27,6 +30,10 @@ import {
   Globe,
   Plus,
   ArrowLeft,
+  Database,
+  Network,
+  Tags,
+  BarChart,
 } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
@@ -84,6 +91,11 @@ function ProjectStudioPage() {
   const { data: project, isLoading } = useQuery({
     queryKey: ['project', projectId],
     queryFn: () => getProjectById({ data: projectId }),
+  })
+
+  const { data: stats } = useQuery({
+    queryKey: ['project-stats', projectId],
+    queryFn: () => getProjectStats({ data: projectId }),
   })
 
   const { data: org } = useQuery(orgBySlugQuery(slug))
@@ -241,18 +253,34 @@ function ProjectStudioPage() {
         className="w-full flex flex-col gap-6 mt-6"
       >
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-          <TabsList className="h-11 p-1 bg-muted/80 dark:bg-muted/40 rounded-xl border border-border/60 dark:border-border/20 shadow-inner w-full sm:w-72 flex shrink-0">
+          <TabsList className="h-11 p-1 bg-muted/80 dark:bg-muted/40 rounded-xl border border-border/60 dark:border-border/20 shadow-inner w-full sm:w-auto flex shrink-0 overflow-x-auto">
             <TabsTrigger
               value="dataset"
-              className="px-4 py-2 rounded-lg data-active:bg-background data-active:text-foreground dark:data-active:bg-background/15 data-active:shadow-sm font-medium transition-all"
+              className="px-4 py-2 rounded-lg data-active:bg-background data-active:text-foreground dark:data-active:bg-background/15 data-active:shadow-sm font-medium transition-all gap-2"
             >
+              <Database className="size-4 shrink-0" />
               Dataset
             </TabsTrigger>
             <TabsTrigger
-              value="integration"
-              className="px-4 py-2 rounded-lg data-active:bg-background data-active:text-foreground dark:data-active:bg-background/15 data-active:shadow-sm font-medium transition-all"
+              value="classes"
+              className="px-4 py-2 rounded-lg data-active:bg-background data-active:text-foreground dark:data-active:bg-background/15 data-active:shadow-sm font-medium transition-all gap-2"
             >
+              <Tags className="size-4 shrink-0" />
+              Classes
+            </TabsTrigger>
+            <TabsTrigger
+              value="integration"
+              className="px-4 py-2 rounded-lg data-active:bg-background data-active:text-foreground dark:data-active:bg-background/15 data-active:shadow-sm font-medium transition-all gap-2"
+            >
+              <Network className="size-4 shrink-0" />
               Integration
+            </TabsTrigger>
+            <TabsTrigger
+              value="stats"
+              className="px-4 py-2 rounded-lg data-active:bg-background data-active:text-foreground dark:data-active:bg-background/15 data-active:shadow-sm font-medium transition-all gap-2"
+            >
+              <BarChart className="size-4 shrink-0" />
+              Stats
             </TabsTrigger>
           </TabsList>
 
@@ -420,12 +448,12 @@ function ProjectStudioPage() {
                 files={project.files}
                 categories={project.categories}
                 selectedCategoryId={selectedCategoryId}
-                onBulkLabel={(ids, catId) => {
+                onBulkLabel={(ids, catId) =>
                   bulkLabelFiles({ data: { fileIds: ids, categoryId: catId } }).then(() => {
                     queryClient.invalidateQueries({ queryKey: ['project', projectId] })
                     toast.success('Files labeled')
                   })
-                }}
+                }
                 onDeleteFiles={(ids) => {
                   deleteFiles({ data: ids }).then(() => {
                     queryClient.invalidateQueries({ queryKey: ['project', projectId] })
@@ -445,12 +473,12 @@ function ProjectStudioPage() {
                 files={project.files}
                 categories={project.categories}
                 selectedCategoryId={selectedCategoryId}
-                onBulkLabel={(ids, catId) => {
+                onBulkLabel={(ids, catId) =>
                   bulkLabelFiles({ data: { fileIds: ids, categoryId: catId } }).then(() => {
                     queryClient.invalidateQueries({ queryKey: ['project', projectId] })
                     toast.success('Files labeled')
                   })
-                }}
+                }
                 onDeleteFiles={(ids) => {
                   deleteFiles({ data: ids }).then(() => {
                     queryClient.invalidateQueries({ queryKey: ['project', projectId] })
@@ -592,6 +620,14 @@ function ProjectStudioPage() {
               </CardContent>
             </Card>
           </div>
+        </TabsContent>
+
+        <TabsContent value="classes" className="mt-0">
+          <ClassesTable categories={project.categories} files={project.files} />
+        </TabsContent>
+
+        <TabsContent value="stats" className="mt-0">
+          <ProjectStats stats={stats} />
         </TabsContent>
       </Tabs>
     </div>
