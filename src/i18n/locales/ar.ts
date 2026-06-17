@@ -2,10 +2,10 @@ import type { Translations } from './en'
 
 export const ar: Translations = {
   common: {
-    RefactKit: 'RefactKit',
+    RefactVision: 'RefactVision',
     launch: 'Refact',
     kit: 'Kit',
-    copyright: '© {{year}} RefactKit. جميع الحقوق محفوظة.',
+    copyright: '© {{year}} RefactVision. جميع الحقوق محفوظة.',
     or: 'أو',
     save: 'حفظ التغييرات',
     saving: 'جاري الحفظ...',
@@ -61,7 +61,7 @@ export const ar: Translations = {
       heading: 'ابنِ الـ SaaS الخاص بك على أساس صلب كالصخر',
       subheading: 'بنية تحتية متميزة لتطبيقات الـ multi-tenant عالية الأداء.',
       title: 'إنشاء حسابك',
-      subtitle: 'ابدأ البناء مع RefactKit اليوم',
+      subtitle: 'ابدأ البناء مع RefactVision اليوم',
       name: 'الاسم الكامل',
       namePlaceholder: 'جون دو',
       nameMin: 'يجب أن يكون حرفين على الأقل',
@@ -85,7 +85,7 @@ export const ar: Translations = {
   },
   onboarding: {
     title: 'أنشئ منظمتك',
-    subtitle: 'قم بإعداد مساحة عملك للبدء مع RefactKit.',
+    subtitle: 'قم بإعداد مساحة عملك للبدء مع RefactVision.',
     badge: 'لقد اقتربت',
     heading: 'خطوة أخيرة',
     subheading: 'أنشئ منظمتك للبدء بالتعاون مع فريقك.',
@@ -249,7 +249,8 @@ export const ar: Translations = {
     },
     techStack: {
       title: 'أفضل الأدوات في النظام البيئي',
-      subtitle: 'تم بناء RefactKit على أدوات حديثة وموثوقة لضمان سرعة وأمان وقابلية توسع مشروعك.',
+      subtitle:
+        'تم بناء RefactVision على أدوات حديثة وموثوقة لضمان سرعة وأمان وقابلية توسع مشروعك.',
     },
     dashboard: {
       title: 'لوحة تحكم بمستوى المؤسسات',
@@ -263,7 +264,7 @@ export const ar: Translations = {
     cta: {
       title: 'جاهز لبناء فكرتك الكبيرة القادمة؟',
       subtitle:
-        'انضم إلى المطورين الآخرين الذين يبنون تطبيقات SaaS عالية الأداء باستخدام RefactKit.',
+        'انضم إلى المطورين الآخرين الذين يبنون تطبيقات SaaS عالية الأداء باستخدام RefactVision.',
       button: 'ابدأ الآن',
     },
     footer: {

@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 
-const COLOR_THEME_KEY = 'RefactKit-color-theme'
+const COLOR_THEME_KEY = 'RefactVision-color-theme'
 
 export type ColorTheme = 'default' | 'vega' | 'maia' | 'lyra' | 'mira' | 'luma' | 'refactkit'
 

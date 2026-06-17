@@ -215,7 +215,7 @@ export const updateOrganization = createServerFn({ method: 'POST' }).handler(asy
     throw new Error('Only admins or owners can update the organization settings')
   }
 
-    // Check if the new name is already taken by another organization
+  // Check if the new name is already taken by another organization
   if (name) {
     const existingName = await db.query.organization.findFirst({
       where: sql`LOWER(${organization.name}) = LOWER(${name.trim()})`,

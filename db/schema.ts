@@ -219,7 +219,6 @@ export const invitationRelations = relations(invitation, ({ one }) => ({
   }),
 }))
 
-
 // ── Notification System ──────────────────────────────────────────────────────
 export const notification = pgTable(
   'notification',

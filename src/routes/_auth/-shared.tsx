@@ -14,6 +14,7 @@ import {
 } from '@/components/ui/dropdown-menu'
 import type { Locale } from '@/i18n'
 import { useI18n } from '@/i18n/context'
+import { Logo as SharedLogo } from '@/components/shared/logo'
 
 export function AuthShell({
   children,
@@ -64,7 +65,7 @@ export function AuthShell({
           </div>
           <div className="absolute bottom-12 left-12">
             <p className="text-sm text-muted-foreground/60">
-              © {new Date().getFullYear()} RefactKit
+              © {new Date().getFullYear()} RefactVision
             </p>
           </div>
         </div>
@@ -81,20 +82,7 @@ export function AuthShell({
 }
 
 export function Logo() {
-  return (
-    <Link to="/" className="flex items-center gap-2">
-      <img
-        src="/logo.png"
-        alt="RefactKit"
-        className="h-8 w-auto object-contain sm:h-12 dark:hidden"
-      />
-      <img
-        src="/logo-dark.png"
-        alt="RefactKit"
-        className="h-8 w-auto object-contain sm:h-12 hidden dark:block"
-      />
-    </Link>
-  )
+  return <SharedLogo textSize="text-2xl" iconClassName="size-10" iconSize={22} />
 }
 
 export function Divider() {

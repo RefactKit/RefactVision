@@ -1,9 +1,9 @@
 export const it = {
   common: {
-    RefactKit: 'RefactKit',
+    RefactVision: 'RefactVision',
     launch: 'Refact',
     kit: 'Kit',
-    copyright: '© {{year}} RefactKit. Tutti i diritti riservati.',
+    copyright: '© {{year}} RefactVision. Tutti i diritti riservati.',
     or: 'o',
     save: 'Salva modifiche',
     saving: 'Salvataggio...',
@@ -78,7 +78,7 @@ export const it = {
       heading: 'Costruisci il tuo SaaS su fondamenta solide',
       subheading: 'Architettura premium per app multi-tenant ad alte prestazioni.',
       title: 'Crea il tuo account',
-      subtitle: 'Inizia a creare con RefactKit oggi stesso',
+      subtitle: 'Inizia a creare con RefactVision oggi stesso',
       name: 'Nome completo',
       namePlaceholder: 'Mario Rossi',
       nameMin: 'Minimo 2 caratteri',
@@ -102,7 +102,7 @@ export const it = {
   },
   onboarding: {
     title: 'Crea la tua organizzazione',
-    subtitle: 'Imposta il tuo spazio di lavoro per iniziare con RefactKit.',
+    subtitle: 'Imposta il tuo spazio di lavoro per iniziare con RefactVision.',
     badge: 'Quasi fatto',
     heading: 'Un ultimo passo',
     subheading: 'Crea la tua organizzazione per iniziare a collaborare con il tuo team.',
@@ -274,7 +274,7 @@ export const it = {
     techStack: {
       title: "I migliori strumenti nell'ecosistema",
       subtitle:
-        'RefactKit è costruito sui moderni strumenti consolidati per garantire che il tuo SaaS sia veloce, sicuro e scalabile.',
+        'RefactVision è costruito sui moderni strumenti consolidati per garantire che il tuo SaaS sia veloce, sicuro e scalabile.',
     },
     dashboard: {
       title: 'Dashboard di livello enterprise',
@@ -289,7 +289,7 @@ export const it = {
     cta: {
       title: 'Pronto per costruire la tua prossima grande idea?',
       subtitle:
-        'Unisciti ad altri sviluppatori che costruiscono applicazioni SaaS ad alte prestazioni con RefactKit.',
+        'Unisciti ad altri sviluppatori che costruiscono applicazioni SaaS ad alte prestazioni con RefactVision.',
       button: 'Inizia Ora',
     },
     footer: {

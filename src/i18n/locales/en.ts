@@ -1,9 +1,9 @@
 export const en = {
   common: {
-    RefactKit: 'RefactKit',
+    RefactVision: 'RefactVision',
     launch: 'Refact',
     kit: 'Kit',
-    copyright: '© {{year}} RefactKit. All rights reserved.',
+    copyright: '© {{year}} RefactVision. All rights reserved.',
     or: 'or',
     save: 'Save changes',
     saving: 'Saving...',
@@ -79,7 +79,7 @@ export const en = {
       heading: 'Construct your SaaS on a rock-solid foundation',
       subheading: 'Premium architecture for high-performance multi-tenant apps.',
       title: 'Create your account',
-      subtitle: 'Start building with RefactKit today',
+      subtitle: 'Start building with RefactVision today',
       name: 'Full name',
       namePlaceholder: 'John Doe',
       nameMin: 'Min 2 characters',
@@ -107,7 +107,7 @@ export const en = {
   },
   onboarding: {
     title: 'Create your organization',
-    subtitle: 'Set up your workspace to get started with RefactKit.',
+    subtitle: 'Set up your workspace to get started with RefactVision.',
     badge: 'Almost there',
     heading: 'One last step',
     subheading: 'Create your organization to start collaborating with your team.',
@@ -244,55 +244,131 @@ export const en = {
       getStarted: 'Get Started',
     },
     hero: {
-      badge: 'Save 100+ hours of development',
-      title: 'Build your SaaS,',
+      badge: 'Open-Source Data Labeling Platform',
+      title: 'Label, Review, Export.',
       titleWords: [
-        'with a modern full-stack kit',
-        'at the speed of light',
-        'with production-ready code',
+        'for Computer Vision teams',
+        'with collaborative workflows',
+        'to production-ready datasets',
       ],
       subheading:
-        'The ultimate full-stack starter for founders, devs, and indie hackers. Built with React 19 & TanStack, featuring a production-ready backend API, secure multi-tenancy, and an enterprise-grade dashboard.',
-      getStarted: 'Get Started',
+        'The open-source, collaborative data labeling platform for computer vision. Annotate images, review with your team, and export clean datasets to Ultralytics & Roboflow — all in secure, multi-tenant workspaces.',
+      getStarted: 'Start Labeling',
       viewDocs: 'View Documentation',
       security: {
-        owasp: 'OWASP ASVS Compliant',
-        encrypted: 'AES-256 Encrypted',
+        owasp: 'Privacy-First Design',
+        encrypted: 'End-to-End Secure',
         tenant: 'Multi-Tenant Isolated',
       },
     },
     features: {
+      collaborative: {
+        title: 'Collaborative Labeling',
+        description:
+          'Annotate images across shared datasets with team-based ownership, assignment, and structured review workflows.',
+      },
       multiTenant: {
-        title: 'Multi-Tenant',
-        description: 'Secure and scalable organization management out of the box.',
+        title: 'Multi-Tenant Workspaces',
+        description:
+          'Isolate organizations, teams, datasets, and permissions by workspace. Built for B2B, agency, and multi-client setups.',
       },
-      tanstack: {
-        title: 'TanStack Powered',
-        description: 'Built with TanStack Start, Router, and Query for ultimate performance.',
+      reviewGovernance: {
+        title: 'Review & Governance',
+        description:
+          'Create reviewer flows with approval states, audit visibility, and annotation quality control before export.',
       },
-      modernUI: {
-        title: 'Modern UI',
-        description: 'Crafted with Base UI and Tailwind CSS for a premium experience.',
+      exportReady: {
+        title: 'Export Interoperability',
+        description:
+          'Export datasets into YOLO-oriented pipelines, Roboflow, or custom training workflows. No vendor lock-in.',
+      },
+      privacyFirst: {
+        title: 'Privacy-First',
+        description:
+          'Keep sensitive datasets under organizational control. Self-hosted friendly with developer-controlled workflows.',
+      },
+      openSource: {
+        title: 'Open Source',
+        description:
+          'Inspect, adapt, extend, and self-host the platform. Dataset operations should never be a black box.',
       },
     },
-    techStack: {
-      title: 'The Best Tools in the Ecosystem',
+    workflow: {
+      title: 'From Raw Images to Production Datasets',
       subtitle:
-        'RefactKit is built on top of modern, battle-tested tools to ensure your SaaS is fast, secure, and scalable.',
+        'A streamlined workflow that keeps dataset preparation traceable and collaborative before training begins.',
+      steps: [
+        {
+          title: 'Create Workspace',
+          description: 'Set up your organization with role-based access control.',
+        },
+        {
+          title: 'Upload & Classify',
+          description: 'Upload images and define your custom labeling categories.',
+        },
+        {
+          title: 'Annotate & Review',
+          description: 'Label data collaboratively with structured QA workflows.',
+        },
+        {
+          title: 'Export & Train',
+          description: 'Export curated datasets to Ultralytics, Roboflow, or custom pipelines.',
+        },
+      ],
+    },
+    useCases: {
+      title: 'Built for Real-World Vision',
+      subtitle:
+        'From agriculture to industrial QA, RefactVision powers the data layer behind production CV systems.',
+      items: [
+        {
+          title: 'Agriculture',
+          description:
+            'Label crop diseases, pests, and fruit conditions for mobile or edge detection.',
+          emoji: '🌾',
+        },
+        {
+          title: 'Retail & Shelf Intelligence',
+          description:
+            'Build datasets for product detection, shelf compliance, and store monitoring.',
+          emoji: '🏪',
+        },
+        {
+          title: 'Industrial QA',
+          description: 'Label defects, components, and inspection categories across factories.',
+          emoji: '🏭',
+        },
+        {
+          title: 'Logistics & Warehousing',
+          description: 'Annotate boxes, pallets, damaged items, and package states.',
+          emoji: '📦',
+        },
+        {
+          title: 'Medical Imaging',
+          description: 'Create private annotation layers for sensitive clinical datasets.',
+          emoji: '🏥',
+        },
+        {
+          title: 'Research Teams',
+          description: 'A private collaborative annotation layer for internal experimentation.',
+          emoji: '🔬',
+        },
+      ],
+    },
+    integrations: {
+      title: 'Seamless Export Pipeline',
+      subtitle: 'Your labels go where your models train. No lock-in, no friction.',
     },
     dashboard: {
-      title: 'Enterprise-grade Dashboard',
-      subtitle: 'Everything you need to manage your organizations and users in one place.',
-    },
-    detailedFeatures: {
-      title: 'Everything you need to launch',
+      title: 'Powerful Labeling Interface',
       subtitle:
-        'Focus on your core features while we handle the complexities of multi-tenancy, authentication, and performance.',
+        'An intuitive workspace where non-ML domain experts can easily annotate datasets using custom categories.',
     },
     cta: {
-      title: 'Ready to build your next big idea?',
-      subtitle: 'Join other developers building high-performance SaaS applications with RefactKit.',
-      button: 'Get Started Now',
+      title: 'Ready to build production-ready datasets?',
+      subtitle:
+        'Join computer vision teams using RefactVision to annotate, review, and export with confidence.',
+      button: 'Start Labeling Now',
     },
     footer: {
       madeWith: 'Made with ❤️ by',
