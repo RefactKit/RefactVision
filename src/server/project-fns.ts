@@ -3,10 +3,10 @@ import { getRequest } from '@tanstack/react-start/server'
 import { and, count, eq, sql } from 'drizzle-orm'
 import { nanoid } from 'nanoid'
 import { z } from 'zod'
+import { supabase } from '@/lib/supabase'
 import { db } from '../../db/index'
 import { member, project, projectCategory, projectFile, projectType } from '../../db/schema'
 import { auth } from '../../lib/auth'
-import { supabase } from '@/lib/supabase'
 
 // --- Types & Schemas ---
 
@@ -173,7 +173,7 @@ export const createProject = createServerFn({ method: 'POST' }).handler(async ({
   }
 
   const id = nanoid()
-  const slug = validated.title.toLowerCase().replace(/[^a-z0-9]+/g, '-') + '-' + nanoid(4)
+  const slug = `${validated.title.toLowerCase().replace(/[^a-z0-9]+/g, '-')}-${nanoid(4)}`
 
   await db.insert(project).values({
     id,
@@ -257,16 +257,25 @@ export const bulkLabelFiles = createServerFn({ method: 'POST' }).handler(async (
 
   // 2. Determine target state
   const isLabeling = categoryId !== null
-  const targetFolder = isLabeling ? 'labeled' : 'unlabeled'
-  const sourceFolder = isLabeling ? 'unlabeled' : 'labeled'
 
   // 3. Move files in storage and collect updates
   for (const file of files) {
-    if (!file.path.includes(`/${sourceFolder}/`)) continue // Skip if already in correct state or custom path
+    let newPath = file.path
+    let pathChanged = false
 
-    const newPath = file.path.replace(`/${sourceFolder}/`, `/${targetFolder}/`)
+    if (isLabeling) {
+      if (file.path.includes('/unlabeled/')) {
+        newPath = file.path.replace('/unlabeled/', '/labeled/')
+        pathChanged = true
+      }
+    } else {
+      if (file.path.includes('/labeled/')) {
+        newPath = file.path.replace('/labeled/', '/unlabeled/')
+        pathChanged = true
+      }
+    }
 
-    if (file.path !== newPath) {
+    if (pathChanged && file.path !== newPath && supabase) {
       const { error: moveError } = await supabase.storage.from('projects').move(file.path, newPath)
 
       if (moveError) {
@@ -278,7 +287,24 @@ export const bulkLabelFiles = createServerFn({ method: 'POST' }).handler(async (
         data: { publicUrl },
       } = supabase.storage.from('projects').getPublicUrl(newPath)
 
-      // 4. Update DB for this specific file
+      let newMetadata = file.metadata
+      if (isLabeling && categoryId) {
+        try {
+          const metaObj = file.metadata ? JSON.parse(file.metadata) : {}
+          const cats = metaObj.categoryIds || []
+          if (!cats.includes(categoryId)) {
+            cats.push(categoryId)
+            metaObj.categoryIds = cats
+            newMetadata = JSON.stringify(metaObj)
+          }
+        } catch (e) {
+          console.error('Failed to parse metadata', e)
+        }
+      } else if (!isLabeling) {
+        newMetadata = null
+      }
+
+      // 4. Update DB for this specific file with path change
       await db
         .update(projectFile)
         .set({
@@ -286,13 +312,35 @@ export const bulkLabelFiles = createServerFn({ method: 'POST' }).handler(async (
           labeled: isLabeling,
           path: newPath,
           url: publicUrl,
+          metadata: newMetadata,
         })
         .where(eq(projectFile.id, file.id))
     } else {
-      // Just update category if path replacement didn't happen (edge case)
+      let newMetadata = file.metadata
+      if (isLabeling && categoryId) {
+        try {
+          const metaObj = file.metadata ? JSON.parse(file.metadata) : {}
+          const cats = metaObj.categoryIds || []
+          if (!cats.includes(categoryId)) {
+            cats.push(categoryId)
+            metaObj.categoryIds = cats
+            newMetadata = JSON.stringify(metaObj)
+          }
+        } catch (e) {
+          console.error('Failed to parse metadata', e)
+        }
+      } else if (!isLabeling) {
+        newMetadata = null
+      }
+
+      // Just update category if path replacement didn't happen (e.g. changing category on already labeled file)
       await db
         .update(projectFile)
-        .set({ categoryId, labeled: isLabeling })
+        .set({
+          categoryId,
+          labeled: isLabeling,
+          metadata: newMetadata,
+        })
         .where(eq(projectFile.id, file.id))
     }
   }
@@ -368,4 +416,44 @@ export const linkProjectFile = createServerFn({ method: 'POST' }).handler(async 
     ...validated,
   })
   return { id }
+})
+
+/** Get project statistics */
+export const getProjectStats = createServerFn({ method: 'GET' }).handler(async ({ data }) => {
+  const projectId = z.string().parse(data)
+  
+  const files = await db.select().from(projectFile).where(eq(projectFile.projectId, projectId))
+
+  let sizeGroups = [
+    { name: '< 100 KB', value: 0 },
+    { name: '100-500 KB', value: 0 },
+    { name: '500 KB-1 MB', value: 0 },
+    { name: '> 1 MB', value: 0 },
+  ]
+  
+  let totalSize = 0;
+  for (const f of files) {
+     totalSize += f.size;
+     const kb = f.size / 1024;
+     if (kb < 100) sizeGroups[0].value++;
+     else if (kb < 500) sizeGroups[1].value++;
+     else if (kb < 1024) sizeGroups[2].value++;
+     else sizeGroups[3].value++;
+  }
+  const meanSize = files.length > 0 ? totalSize / files.length : 0;
+
+  // Mocked dimensions data since we don't store it yet
+  const dimensionsData = [
+     { name: "1050", width: 0, height: files.length },
+     { name: "1950", width: files.length, height: 0 }
+  ]
+
+  return {
+     totalFiles: files.length,
+     meanSize,
+     sizeGroups: sizeGroups.filter(g => g.value > 0).length > 0 ? sizeGroups.filter(g => g.value > 0) : sizeGroups,
+     dimensionsData,
+     meanWidth: 1950,
+     meanHeight: 1050
+  }
 })

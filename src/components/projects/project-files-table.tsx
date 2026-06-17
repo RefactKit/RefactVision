@@ -1,21 +1,34 @@
-import { useState, useMemo } from 'react'
+import { AnimatePresence, motion } from 'framer-motion'
 import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from '@/components/ui/table'
+  Check,
+  CheckCheck,
+  Download,
+  FileArchive,
+  FileAudio,
+  FileCode,
+  File as FileIcon,
+  FileJson,
+  FileSpreadsheet,
+  FileText,
+  FileVideo,
+  Image as ImageIcon,
+  MoreHorizontal,
+  Plus,
+  Trash2,
+  X,
+} from 'lucide-react'
+import { useMemo, useState } from 'react'
+import { Badge } from '@/components/ui/badge'
+import { Button } from '@/components/ui/button'
+import { Checkbox } from '@/components/ui/checkbox'
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
-import { Button } from '@/components/ui/button'
-import { Badge } from '@/components/ui/badge'
-import { Checkbox } from '@/components/ui/checkbox'
+import { Field, FieldGroup } from '@/components/ui/field'
+import { Input } from '@/components/ui/input'
 import {
   Pagination,
   PaginationContent,
@@ -25,24 +38,23 @@ import {
   PaginationPrevious,
 } from '@/components/ui/pagination'
 import {
-  MoreHorizontal,
-  Download,
-  Trash2,
-  Image as ImageIcon,
-  FileSpreadsheet,
-  FileText,
-  FileCode,
-  FileArchive,
-  FileVideo,
-  FileAudio,
-  FileJson,
-  File as FileIcon,
-  Plus,
-  X,
-} from 'lucide-react'
-import { cn } from '@/lib/utils'
+  Popover,
+  PopoverContent,
+  PopoverDescription,
+  PopoverHeader,
+  PopoverTitle,
+  PopoverTrigger,
+} from '@/components/ui/popover'
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from '@/components/ui/table'
 import { useI18n } from '@/i18n/context'
-import { AnimatePresence, motion } from 'framer-motion'
+import { cn } from '@/lib/utils'
 
 interface ProjectFile {
   id: string
@@ -75,7 +87,7 @@ interface ProjectFilesTableProps {
   files: ProjectFile[]
   categories: Array<{ id: string; name: string }>
   selectedCategoryId: string | null
-  onBulkLabel: (fileIds: string[], categoryId: string | null) => void
+  onBulkLabel: (fileIds: string[], categoryId: string | null) => Promise<void>
   onDeleteFiles: (fileIds: string[]) => void
   onCreateCategory: (name: string) => void
   onRenameFile?: (fileId: string, newName: string) => void // Optional update action
@@ -94,6 +106,10 @@ export function ProjectFilesTable({
   const [selectedIds, setSelectedIds] = useState<string[]>([])
   const [currentPage, setCurrentPage] = useState(1)
   const itemsPerPage = 10
+  const [popoverOpen, setPopoverOpen] = useState(false)
+  const [isCreating, setIsCreating] = useState(false)
+  const [newClassName, setNewClassName] = useState('')
+  const [checkedClassIds, setCheckedClassIds] = useState<string[]>([])
 
   const filteredFiles = useMemo(() => {
     return files.filter((f) => {
@@ -126,7 +142,7 @@ export function ProjectFilesTable({
     const k = 1024
     const sizes = ['Bytes', 'KB', 'MB', 'GB']
     const i = Math.floor(Math.log(bytes) / Math.log(k))
-    return `${parseFloat((bytes / Math.pow(k, i)).toFixed(2))} ${sizes[i]}`
+    return `${parseFloat((bytes / k ** i).toFixed(2))} ${sizes[i]}`
   }
 
   const formatDate = (date: string | Date) => {
@@ -295,8 +311,18 @@ export function ProjectFilesTable({
           >
             <span className="text-sm font-medium">{selectedIds.length} files selected</span>
             <div className="h-4 w-px bg-border" />
-            <DropdownMenu>
-              <DropdownMenuTrigger
+            <Popover
+              open={popoverOpen}
+              onOpenChange={(open) => {
+                setPopoverOpen(open)
+                if (!open) {
+                  setIsCreating(false)
+                  setNewClassName('')
+                  setCheckedClassIds([])
+                }
+              }}
+            >
+              <PopoverTrigger
                 render={
                   <Button size="sm" className="rounded-xl gap-1.5 font-medium shadow-sm">
                     <Plus className="size-4" />
@@ -304,61 +330,154 @@ export function ProjectFilesTable({
                   </Button>
                 }
               />
-              <DropdownMenuContent align="center" className="w-48 rounded-xl">
-                {categories.length > 0 ? (
-                  categories.map((cat, idx) => (
-                    <DropdownMenuItem
-                      key={cat.id}
-                      onClick={() => {
-                        onBulkLabel(selectedIds, cat.id)
-                        setSelectedIds([])
-                      }}
-                      className="flex items-center gap-2"
-                    >
-                      <span
-                        className={cn(
-                          'size-2.5 rounded-full shrink-0',
-                          colorsPalette[idx % colorsPalette.length],
-                        )}
-                      />
-                      {cat.name}
-                    </DropdownMenuItem>
-                  ))
-                ) : (
-                  <div className="p-2 text-xs text-muted-foreground text-center">
-                    No classes created yet.
-                  </div>
-                )}
-                {categories.length > 0 && (
-                  <>
+              <PopoverContent align="center" className="w-56 p-1 rounded-2xl">
+                {!isCreating ? (
+                  <div className="flex flex-col gap-0.5">
+                    {categories.length > 0 ? (
+                      categories.map((cat, idx) => {
+                        const isChecked = checkedClassIds.includes(cat.id)
+                        return (
+                          <button
+                            key={cat.id}
+                            type="button"
+                            onClick={() => {
+                              setCheckedClassIds((prev) =>
+                                prev.includes(cat.id)
+                                  ? prev.filter((id) => id !== cat.id)
+                                  : [...prev, cat.id],
+                              )
+                            }}
+                            className={cn(
+                              'flex w-full items-center gap-2 rounded-xl px-3 py-2 text-sm outline-hidden select-none text-left transition-colors',
+                              isChecked
+                                ? 'bg-primary/10 text-primary'
+                                : 'hover:bg-accent hover:text-accent-foreground',
+                            )}
+                          >
+                            <span
+                              className={cn(
+                                'size-2.5 rounded-full shrink-0',
+                                colorsPalette[idx % colorsPalette.length],
+                              )}
+                            />
+                            <span className="truncate flex-1">{cat.name}</span>
+                            {isChecked && <Check className="size-3.5 text-primary shrink-0" />}
+                          </button>
+                        )
+                      })
+                    ) : (
+                      <div className="p-3 text-xs text-muted-foreground text-center">
+                        No classes created yet.
+                      </div>
+                    )}
+                    {checkedClassIds.length > 0 && (
+                      <>
+                        <div className="h-px bg-border my-1" />
+                        <div className="px-1 pb-1">
+                          <Button
+                            type="button"
+                            size="sm"
+                            onClick={async () => {
+                              for (const classId of checkedClassIds) {
+                                await onBulkLabel(selectedIds, classId)
+                              }
+                              setSelectedIds([])
+                              setCheckedClassIds([])
+                              setPopoverOpen(false)
+                            }}
+                            className="w-full h-8 rounded-xl gap-1.5 text-xs font-semibold"
+                          >
+                            <CheckCheck className="size-3.5" />
+                            Apply {checkedClassIds.length}{' '}
+                            {checkedClassIds.length === 1 ? 'class' : 'classes'}
+                          </Button>
+                        </div>
+                      </>
+                    )}
+                    {categories.length > 0 && (
+                      <>
+                        <div className="h-px bg-border my-1" />
+                        <button
+                          type="button"
+                          onClick={async () => {
+                            await onBulkLabel(selectedIds, null)
+                            setSelectedIds([])
+                            setCheckedClassIds([])
+                            setPopoverOpen(false)
+                          }}
+                          className="flex w-full items-center gap-2 rounded-xl px-3 py-2 text-sm text-destructive hover:bg-destructive/10 hover:text-destructive outline-hidden select-none text-left transition-colors"
+                        >
+                          <span className="size-2.5 rounded-full shrink-0 bg-muted-foreground/20" />
+                          Remove Label
+                        </button>
+                      </>
+                    )}
                     <div className="h-px bg-border my-1" />
-                    <DropdownMenuItem
-                      onClick={() => {
-                        onBulkLabel(selectedIds, null)
-                        setSelectedIds([])
-                      }}
-                      className="text-destructive focus:bg-destructive/10 focus:text-destructive flex items-center gap-2"
+                    <button
+                      type="button"
+                      onClick={() => setIsCreating(true)}
+                      className="flex w-full items-center gap-2 rounded-xl px-3 py-2 text-sm font-medium hover:bg-accent hover:text-accent-foreground outline-hidden select-none text-left transition-colors"
                     >
-                      <span className="size-2.5 rounded-full shrink-0 bg-muted-foreground/20" />
-                      Remove Label
-                    </DropdownMenuItem>
-                  </>
+                      <Plus className="size-4 text-muted-foreground" />
+                      Create Class
+                    </button>
+                  </div>
+                ) : (
+                  <form
+                    onSubmit={(e) => {
+                      e.preventDefault()
+                      if (newClassName.trim()) {
+                        onCreateCategory(newClassName.trim())
+                        setNewClassName('')
+                        setIsCreating(false)
+                        setPopoverOpen(false)
+                      }
+                    }}
+                    className="p-3 flex flex-col gap-3"
+                  >
+                    <PopoverHeader className="p-0">
+                      <PopoverTitle className="text-sm font-semibold">New Class</PopoverTitle>
+                      <PopoverDescription className="text-xs text-muted-foreground">
+                        Create a new label class.
+                      </PopoverDescription>
+                    </PopoverHeader>
+                    <FieldGroup className="gap-2">
+                      <Field>
+                        <Input
+                          autoFocus
+                          placeholder="Class name"
+                          value={newClassName}
+                          onChange={(e) => setNewClassName(e.target.value)}
+                          className="h-8 text-sm px-2.5 rounded-lg"
+                        />
+                      </Field>
+                    </FieldGroup>
+                    <div className="flex items-center justify-end gap-1.5">
+                      <Button
+                        type="button"
+                        variant="ghost"
+                        size="sm"
+                        onClick={() => {
+                          setIsCreating(false)
+                          setNewClassName('')
+                        }}
+                        className="h-7 text-xs px-2.5 rounded-lg"
+                      >
+                        Cancel
+                      </Button>
+                      <Button
+                        type="submit"
+                        size="sm"
+                        disabled={!newClassName.trim()}
+                        className="h-7 text-xs px-2.5 rounded-lg"
+                      >
+                        Create
+                      </Button>
+                    </div>
+                  </form>
                 )}
-                <div className="h-px bg-border my-1" />
-                <DropdownMenuItem
-                  onClick={() => {
-                    const name = prompt('New class name:')
-                    if (name) {
-                      onCreateCategory(name)
-                    }
-                  }}
-                  className="flex items-center gap-2 font-medium"
-                >
-                  <Plus className="size-4 text-muted-foreground" />
-                  Create Class
-                </DropdownMenuItem>
-              </DropdownMenuContent>
-            </DropdownMenu>
+              </PopoverContent>
+            </Popover>
             <Button
               size="icon"
               variant="ghost"
