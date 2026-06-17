@@ -250,7 +250,7 @@ export const auth = betterAuth({
         // Platform-specific handler
         // Vercel/Nitro support waitUntil
         if (typeof (globalThis as any).waitUntil === 'function') {
-          ;(globalThis as any).waitUntil(promise)
+          ; (globalThis as any).waitUntil(promise)
         }
       },
     },
@@ -294,7 +294,7 @@ export const auth = betterAuth({
         const acceptUrl = `${getBaseURL()}/accept-invite?id=${data.invitation.id}`
         sendEmail({
           to: data.email,
-          subject: `Join ${data.organization.name} on RefactKit`,
+          subject: `Join ${data.organization.name} on RefactVision`,
           template: React.createElement(InvitationEmail, {
             orgName: data.organization.name,
             inviterName: data.inviter.user.name || 'Someone',
@@ -372,7 +372,7 @@ export const auth = betterAuth({
     }),
     openAPI({
       path: '/openapi.json',
-      nonce: process.env.OPENAPI_NONCE || 'refactkit-openapi-nonce',
+      nonce: process.env.OPENAPI_NONCE || 'refactVision-openapi-nonce',
     }),
     multiSession(),
     sentinel(),
