@@ -86,7 +86,7 @@ export const auth = betterAuth({
 
   emailAndPassword: {
     enabled: true,
-    requireEmailVerification: true,
+    requireEmailVerification: process.env.ENABLE_EMAIL_VERIFICATION !== 'false',
     customSyntheticUser: ({ coreFields, additionalFields, id }) => ({
       ...coreFields,
       role: 'user',
@@ -261,9 +261,10 @@ export const auth = betterAuth({
   },
 
   emailVerification: {
-    sendOnSignUp: true,
+    sendOnSignUp: process.env.ENABLE_EMAIL_VERIFICATION !== 'false',
     autoSignIn: true,
     sendVerificationEmail: async ({ user, url }) => {
+      if (process.env.ENABLE_EMAIL_VERIFICATION === 'false') return
       console.log(`Sending verification email to: ${user.email}`)
       sendEmail({
         to: user.email,

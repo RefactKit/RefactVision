@@ -4,7 +4,7 @@ import { Label } from '@/components/ui/label'
 import { PasswordInput } from '@/components/ui/password-input'
 import { useI18n } from '@/i18n/context'
 import { useForm } from '@tanstack/react-form'
-import { createFileRoute, Link } from '@tanstack/react-router'
+import { createFileRoute, Link, useNavigate } from '@tanstack/react-router'
 import { Mail } from 'lucide-react'
 import { useState } from 'react'
 import { toast } from 'sonner'
@@ -20,6 +20,7 @@ import {
   TwitterIcon,
 } from './-shared'
 
+
 export const Route = createFileRoute('/_auth/signup')({
   validateSearch: (search: Record<string, unknown>): { callbackURL?: string } => {
     return {
@@ -34,6 +35,7 @@ function SignupPage() {
   const l = t.auth.signup
   const { callbackURL } = Route.useSearch()
   const [isSignedUp, setIsSignedUp] = useState(false)
+  const navigate = useNavigate()
 
   const schema = z.object({
     name: z.string().min(2, l.nameMin),
@@ -66,7 +68,11 @@ function SignupPage() {
       // In all success cases — new signup or duplicate email — show the same
       // "check your inbox" screen. The real owner is notified via onExistingUserSignUp.
       // This is the correct OWASP-compliant account-enumeration-safe UX pattern.
-      setIsSignedUp(true)
+      if (import.meta.env.VITE_ENABLE_EMAIL_VERIFICATION === 'false') {
+        navigate({ to: callbackURL || '/login' })
+      } else {
+        setIsSignedUp(true)
+      }
     },
   })
 
