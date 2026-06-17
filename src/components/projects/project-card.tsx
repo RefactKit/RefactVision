@@ -167,19 +167,32 @@ export function ProjectCard({
         </div>
       )
     }
-    if (['csv', 'xls', 'xlsx'].includes(ext) || mime.includes('spreadsheet') || mime.includes('csv') || mime.includes('excel')) {
+    if (
+      ['csv', 'xls', 'xlsx'].includes(ext) ||
+      mime.includes('spreadsheet') ||
+      mime.includes('csv') ||
+      mime.includes('excel')
+    ) {
       return (
         <div className="flex flex-col items-center justify-center gap-0.5 size-full bg-emerald-50 dark:bg-emerald-950/30">
           <FileSpreadsheet className="size-4 text-emerald-500" />
-          <span className="text-[8px] font-bold text-emerald-500 leading-none">{ext.toUpperCase() || 'CSV'}</span>
+          <span className="text-[8px] font-bold text-emerald-500 leading-none">
+            {ext.toUpperCase() || 'CSV'}
+          </span>
         </div>
       )
     }
-    if (['zip', 'rar', 'gz', 'tar', '7z'].includes(ext) || mime.includes('zip') || mime.includes('compressed')) {
+    if (
+      ['zip', 'rar', 'gz', 'tar', '7z'].includes(ext) ||
+      mime.includes('zip') ||
+      mime.includes('compressed')
+    ) {
       return (
         <div className="flex flex-col items-center justify-center gap-0.5 size-full bg-violet-50 dark:bg-violet-950/30">
           <FileArchive className="size-4 text-violet-500" />
-          <span className="text-[8px] font-bold text-violet-500 leading-none">{ext.toUpperCase() || 'ZIP'}</span>
+          <span className="text-[8px] font-bold text-violet-500 leading-none">
+            {ext.toUpperCase() || 'ZIP'}
+          </span>
         </div>
       )
     }
@@ -187,7 +200,9 @@ export function ProjectCard({
       return (
         <div className="flex flex-col items-center justify-center gap-0.5 size-full bg-blue-50 dark:bg-blue-950/30">
           <FileVideo className="size-4 text-blue-500" />
-          <span className="text-[8px] font-bold text-blue-500 leading-none">{ext.toUpperCase() || 'VID'}</span>
+          <span className="text-[8px] font-bold text-blue-500 leading-none">
+            {ext.toUpperCase() || 'VID'}
+          </span>
         </div>
       )
     }
@@ -195,14 +210,20 @@ export function ProjectCard({
       return (
         <div className="flex flex-col items-center justify-center gap-0.5 size-full bg-pink-50 dark:bg-pink-950/30">
           <FileAudio className="size-4 text-pink-500" />
-          <span className="text-[8px] font-bold text-pink-500 leading-none">{ext.toUpperCase() || 'AUD'}</span>
+          <span className="text-[8px] font-bold text-pink-500 leading-none">
+            {ext.toUpperCase() || 'AUD'}
+          </span>
         </div>
       )
     }
     return (
       <div className="flex flex-col items-center justify-center gap-0.5 size-full">
         <FileIcon className="size-4 text-muted-foreground" />
-        {ext && <span className="text-[8px] font-bold text-muted-foreground leading-none">{ext.toUpperCase()}</span>}
+        {ext && (
+          <span className="text-[8px] font-bold text-muted-foreground leading-none">
+            {ext.toUpperCase()}
+          </span>
+        )}
       </div>
     )
   }
@@ -230,7 +251,9 @@ export function ProjectCard({
                 ))}
                 {remainder > 0 && (
                   <div className="size-8 rounded-full ring-2 ring-background bg-muted/70 flex items-center justify-center shrink-0">
-                    <span className="text-[10px] font-medium text-muted-foreground">+{remainder}</span>
+                    <span className="text-[10px] font-medium text-muted-foreground">
+                      +{remainder}
+                    </span>
                   </div>
                 )}
               </div>

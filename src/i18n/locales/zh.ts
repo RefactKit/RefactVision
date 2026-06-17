@@ -2,10 +2,10 @@ import type { Translations } from './en'
 
 export const zh: Translations = {
   common: {
-    RefactKit: 'RefactKit',
+    RefactVision: 'RefactVision',
     launch: 'Refact',
     kit: 'Kit',
-    copyright: '© {{year}} RefactKit. 保留所有权利。',
+    copyright: '© {{year}} RefactVision. 保留所有权利。',
     or: '或',
     save: '保存修改',
     saving: '保存中...',
@@ -80,7 +80,7 @@ export const zh: Translations = {
       heading: '在坚如磐石的基础上构建您的 SaaS',
       subheading: '为高性能多租户应用打造的高级架构。',
       title: '创建您的帐户',
-      subtitle: '立即使用 RefactKit 开始构建',
+      subtitle: '立即使用 RefactVision 开始构建',
       name: '全名',
       namePlaceholder: '张三',
       nameMin: '至少 2 个字符',
@@ -104,7 +104,7 @@ export const zh: Translations = {
   },
   onboarding: {
     title: '创建您的组织',
-    subtitle: '设置您的工作区以开始使用 RefactKit。',
+    subtitle: '设置您的工作区以开始使用 RefactVision。',
     badge: '即将完成',
     heading: '最后一步',
     subheading: '创建您的组织以开始与团队协作。',
@@ -269,7 +269,7 @@ export const zh: Translations = {
     techStack: {
       title: '生态系统中最好的工具',
       subtitle:
-        'RefactKit 构建在现代化、经过实战检验的工具之上，确保您的 SaaS 快速、安全且可扩展。',
+        'RefactVision 构建在现代化、经过实战检验的工具之上，确保您的 SaaS 快速、安全且可扩展。',
     },
     dashboard: {
       title: '企业级仪表板',
@@ -281,7 +281,7 @@ export const zh: Translations = {
     },
     cta: {
       title: '准备好构建您的下一个伟大创意了吗？',
-      subtitle: '加入其他正在使用 RefactKit 构建高性能 SaaS 应用的开发者。',
+      subtitle: '加入其他正在使用 RefactVision 构建高性能 SaaS 应用的开发者。',
       button: '立即开始',
     },
     footer: {

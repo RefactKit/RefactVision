@@ -86,7 +86,9 @@ function OnboardingPage() {
               ))}
             </ul>
           </div>
-          <p className="text-sm text-muted-foreground/60">© {new Date().getFullYear()} RefactKit</p>
+          <p className="text-sm text-muted-foreground/60">
+            © {new Date().getFullYear()} RefactVision
+          </p>
         </div>
       </div>
 

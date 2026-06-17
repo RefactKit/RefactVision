@@ -26,7 +26,6 @@ import {
   List,
   MoreHorizontal,
   Pencil,
-  Github,
   Globe,
   Plus,
   ArrowLeft,
@@ -35,6 +34,7 @@ import {
   Tags,
   BarChart,
 } from 'lucide-react'
+import { HugeiconsIcon } from '@hugeicons/react'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
 import {
@@ -57,6 +57,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Input } from '@/components/ui/input'
 import { Field, FieldLabel } from '@/components/ui/field'
 import { Spinner } from '@/components/ui/spinner'
+import { GithubIcon } from '@hugeicons/core-free-icons'
 
 const colorsPalette = [
   'bg-emerald-500',
@@ -229,7 +230,7 @@ function ProjectStudioPage() {
               rel="noreferrer"
               className="flex items-center gap-1.5 hover:text-foreground transition-colors"
             >
-              <Github className="size-4" />
+              <HugeiconsIcon icon={GithubIcon} size={24} className="size-4" />
               GitHub
             </a>
           )}

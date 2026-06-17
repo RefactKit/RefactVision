@@ -16,7 +16,6 @@ export const orgBySlugQuery = (slug: string) =>
     queryFn: () => getOrgBySlug({ data: { slug } }),
   })
 
-
 export const orgStatsQuery = (organizationId: string) =>
   queryOptions({
     queryKey: ['org-stats', organizationId] as const,

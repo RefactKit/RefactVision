@@ -2,10 +2,10 @@ import type { Translations } from './en'
 
 export const de: Translations = {
   common: {
-    RefactKit: 'RefactKit',
+    RefactVision: 'RefactVision',
     launch: 'Refact',
     kit: 'Kit',
-    copyright: '© {{year}} RefactKit. Alle Rechte vorbehalten.',
+    copyright: '© {{year}} RefactVision. Alle Rechte vorbehalten.',
     or: 'oder',
     save: 'Änderungen speichern',
     saving: 'Wird gespeichert...',
@@ -62,7 +62,7 @@ export const de: Translations = {
       heading: 'Bauen Sie Ihr SaaS auf einem soliden Fundament auf',
       subheading: 'Premium-Architektur für hochperformante Multi-Tenant-Anwendungen.',
       title: 'Konto erstellen',
-      subtitle: 'Beginnen Sie noch heute mit RefactKit',
+      subtitle: 'Beginnen Sie noch heute mit RefactVision',
       name: 'Vollständiger Name',
       namePlaceholder: 'Max Mustermann',
       nameMin: 'Mindestens 2 Zeichen',
@@ -106,7 +106,7 @@ export const de: Translations = {
   },
   onboarding: {
     title: 'Organisation erstellen',
-    subtitle: 'Richten Sie Ihren Workspace ein, um mit RefactKit zu starten.',
+    subtitle: 'Richten Sie Ihren Workspace ein, um mit RefactVision zu starten.',
     badge: 'Fast geschafft',
     heading: 'Ein letzter Schritt',
     subheading: 'Erstellen Sie Ihre Organisation, um mit Ihrem Team zusammenzuarbeiten.',
@@ -281,7 +281,7 @@ export const de: Translations = {
     techStack: {
       title: 'Die besten Tools im Ökosystem',
       subtitle:
-        'RefactKit basiert auf modernen, praxiserprobten Tools, um sicherzustellen, dass Ihr SaaS schnell, sicher und skalierbar ist.',
+        'RefactVision basiert auf modernen, praxiserprobten Tools, um sicherzustellen, dass Ihr SaaS schnell, sicher und skalierbar ist.',
     },
     dashboard: {
       title: 'Enterprise-Dashboard',
@@ -296,7 +296,7 @@ export const de: Translations = {
     cta: {
       title: 'Bereit für Ihre nächste große Idee?',
       subtitle:
-        'Schließen Sie sich anderen Entwicklern an, die hochperformante SaaS-Anwendungen mit RefactKit bauen.',
+        'Schließen Sie sich anderen Entwicklern an, die hochperformante SaaS-Anwendungen mit RefactVision bauen.',
       button: 'Jetzt loslegen',
     },
     footer: {
