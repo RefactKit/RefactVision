@@ -1,9 +1,9 @@
 import { sentinelClient } from '@better-auth/infra/client'
 import {
+  adminClient,
   inferAdditionalFields,
   multiSessionClient,
   organizationClient,
-  adminClient,
 } from 'better-auth/client/plugins'
 import { createAuthClient } from 'better-auth/react'
 import { getBaseURL } from '@/lib/base-url'

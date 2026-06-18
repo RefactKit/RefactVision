@@ -1,5 +1,5 @@
+import { PutObjectCommand, S3Client } from '@aws-sdk/client-s3'
 import { createServerFn } from '@tanstack/react-start'
-import { S3Client, PutObjectCommand } from '@aws-sdk/client-s3'
 
 // Fallback to the provided env vars if they aren't in process.env
 const s3Region = process.env.S3_REGION || 'eu-west-3'

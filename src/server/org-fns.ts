@@ -1,9 +1,9 @@
-import { slugify } from '@/lib/slugify'
 import { createServerFn } from '@tanstack/react-start'
 import { getRequest } from '@tanstack/react-start/server'
 import { and, eq, sql } from 'drizzle-orm'
 import { nanoid } from 'nanoid'
 import { z } from 'zod'
+import { slugify } from '@/lib/slugify'
 import { db } from '../../db/index'
 import { member, organization, organizationRole, projectType } from '../../db/schema'
 import { auth } from '../../lib/auth'
@@ -215,7 +215,7 @@ export const updateOrganization = createServerFn({ method: 'POST' }).handler(asy
     throw new Error('Only admins or owners can update the organization settings')
   }
 
-    // Check if the new name is already taken by another organization
+  // Check if the new name is already taken by another organization
   if (name) {
     const existingName = await db.query.organization.findFirst({
       where: sql`LOWER(${organization.name}) = LOWER(${name.trim()})`,

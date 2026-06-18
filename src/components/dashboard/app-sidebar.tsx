@@ -1,3 +1,4 @@
+import { useQuery } from '@tanstack/react-query'
 import {
   Building2,
   ExternalLink,
@@ -19,12 +20,11 @@ import {
   SidebarSeparator,
 } from '@/components/ui/sidebar'
 import { useI18n } from '@/i18n/context'
-import { useQuery } from '@tanstack/react-query'
+import { projectsCountQuery } from '@/server/query-keys'
 import { NavMain } from './nav-main'
 import { NavSecondary } from './nav-secondary'
 import { NavUser } from './nav-user'
 import { OrgSwitcher } from './org-switcher'
-import { projectsCountQuery } from '@/server/query-keys'
 
 interface Org {
   id: string
@@ -54,44 +54,44 @@ export function AppSidebar({ orgs, currentSlug }: AppSidebarProps) {
   // Group 1: Workspace Core items (Always visible)
   const platformItems = slug
     ? [
-      {
-        title: t.sidebar.dashboard,
-        to: `/organizations/${slug}/dashboard`,
-        icon: LayoutGrid,
-      },
-      {
-        title: t.projects.title,
-        to: `/organizations/${slug}/projects`,
-        icon: FolderIcon,
-        badge: projectsCount ?? 0,
-      },
-    ]
+        {
+          title: t.sidebar.dashboard,
+          to: `/organizations/${slug}/dashboard`,
+          icon: LayoutGrid,
+        },
+        {
+          title: t.projects.title,
+          to: `/organizations/${slug}/projects`,
+          icon: FolderIcon,
+          badge: projectsCount ?? 0,
+        },
+      ]
     : []
 
   // Group 2: Management / Administration (Only for Owner & Admin per matrix)
   const adminItems =
     slug && userRole !== 'member'
       ? [
-        {
-          title: t.sidebar.team,
-          to: `/organizations/${slug}/members`,
-          icon: Users,
-        },
-        {
-          title: t.sidebar.workspaceSettings,
-          to: `/organizations/${slug}/settings`,
-          icon: Settings,
-        },
-        ...(userRole === 'owner'
-          ? [
-            {
-              title: 'Rôles & Permissions',
-              to: `/organizations/${slug}/roles`,
-              icon: ShieldCheck,
-            },
-          ]
-          : []),
-      ]
+          {
+            title: t.sidebar.team,
+            to: `/organizations/${slug}/members`,
+            icon: Users,
+          },
+          {
+            title: t.sidebar.workspaceSettings,
+            to: `/organizations/${slug}/settings`,
+            icon: Settings,
+          },
+          ...(userRole === 'owner'
+            ? [
+                {
+                  title: 'Rôles & Permissions',
+                  to: `/organizations/${slug}/roles`,
+                  icon: ShieldCheck,
+                },
+              ]
+            : []),
+        ]
       : []
 
   // Group 3: Account / Personal (Flat as requested)

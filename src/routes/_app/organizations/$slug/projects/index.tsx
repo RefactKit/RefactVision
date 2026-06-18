@@ -1,15 +1,15 @@
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { createFileRoute, Link, useParams } from '@tanstack/react-router'
-import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
-import { getProjects, createProject, deleteProject, getProjectTypes } from '@/server/project-fns'
-import { ProjectList } from '@/components/projects/project-list'
+import { useState } from 'react'
+import { toast } from 'sonner'
 import { CreateProjectDialog } from '@/components/projects/create-project-dialog'
 import { EditProjectDialog } from '@/components/projects/edit-project-dialog'
-import { useI18n } from '@/i18n/context'
+import { ProjectList } from '@/components/projects/project-list'
 import { LoadingSpinner } from '@/components/ui/loading-spinner'
-import { toast } from 'sonner'
+import { useI18n } from '@/i18n/context'
+import { createProject, deleteProject, getProjects, getProjectTypes } from '@/server/project-fns'
 import { orgBySlugQuery } from '@/server/query-keys'
 import { useSession } from '../../../../../../lib/auth-client'
-import { useState } from 'react'
 
 export const Route = createFileRoute('/_app/organizations/$slug/projects/')({
   component: ProjectsPage,

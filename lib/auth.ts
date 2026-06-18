@@ -86,7 +86,7 @@ export const auth = betterAuth({
 
   emailAndPassword: {
     enabled: true,
-    requireEmailVerification: true,
+    requireEmailVerification: process.env.ENABLE_EMAIL_VERIFICATION !== 'false',
     customSyntheticUser: ({ coreFields, additionalFields, id }) => ({
       ...coreFields,
       role: 'user',
@@ -261,9 +261,10 @@ export const auth = betterAuth({
   },
 
   emailVerification: {
-    sendOnSignUp: true,
+    sendOnSignUp: process.env.ENABLE_EMAIL_VERIFICATION !== 'false',
     autoSignIn: true,
     sendVerificationEmail: async ({ user, url }) => {
+      if (process.env.ENABLE_EMAIL_VERIFICATION === 'false') return
       console.log(`Sending verification email to: ${user.email}`)
       sendEmail({
         to: user.email,
@@ -293,7 +294,7 @@ export const auth = betterAuth({
         const acceptUrl = `${getBaseURL()}/accept-invite?id=${data.invitation.id}`
         sendEmail({
           to: data.email,
-          subject: `Join ${data.organization.name} on RefactKit`,
+          subject: `Join ${data.organization.name} on RefactVision`,
           template: React.createElement(InvitationEmail, {
             orgName: data.organization.name,
             inviterName: data.inviter.user.name || 'Someone',
@@ -371,7 +372,7 @@ export const auth = betterAuth({
     }),
     openAPI({
       path: '/openapi.json',
-      nonce: process.env.OPENAPI_NONCE || 'refactkit-openapi-nonce',
+      nonce: process.env.OPENAPI_NONCE || 'refactVision-openapi-nonce',
     }),
     multiSession(),
     sentinel(),

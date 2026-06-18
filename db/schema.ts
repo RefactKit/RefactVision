@@ -219,7 +219,6 @@ export const invitationRelations = relations(invitation, ({ one }) => ({
   }),
 }))
 
-
 // ── Notification System ──────────────────────────────────────────────────────
 export const notification = pgTable(
   'notification',
@@ -358,6 +357,7 @@ export const projectRelations = relations(project, ({ one, many }) => ({
   }),
   categories: many(projectCategory),
   files: many(projectFile),
+  models: many(projectModel),
 }))
 
 export const projectCategoryRelations = relations(projectCategory, ({ one, many }) => ({
@@ -386,5 +386,66 @@ export const projectFileRelations = relations(projectFile, ({ one }) => ({
   user: one(user, {
     fields: [projectFile.uploadedBy],
     references: [user.id],
+  }),
+}))
+
+// ── ML Models Catalog ────────────────────────────────────────────────────────
+export const mlModel = pgTable('ml_model', {
+  id: text('id').primaryKey(),
+  name: text('name').notNull(),
+  framework: text('framework').notNull(), // e.g. "yolov8", "detectron2", "pytorch", "tensorflow"
+  architecture: text('architecture').notNull(), // e.g. "Object Detection", "Image Classification", "Segmentation"
+  description: text('description'),
+  version: text('version').notNull(), // e.g. "v1.0" or "v8.0"
+  createdAt: timestamp('created_at').defaultNow().notNull(),
+  updatedAt: timestamp('updated_at')
+    .defaultNow()
+    .$onUpdate(() => new Date())
+    .notNull(),
+})
+
+// ── Project-specific Models ──────────────────────────────────────────────────
+export const projectModel = pgTable(
+  'project_model',
+  {
+    id: text('id').primaryKey(),
+    projectId: text('project_id')
+      .notNull()
+      .references(() => project.id, { onDelete: 'cascade' }),
+    modelId: text('model_id')
+      .notNull()
+      .references(() => mlModel.id, { onDelete: 'cascade' }),
+    name: text('name').notNull(), // Custom name for this project model
+    status: text('status').default('draft').notNull(), // 'draft' | 'training' | 'ready' | 'deployed' | 'archived'
+    version: text('version').notNull(), // Project-specific model version
+    metrics: text('metrics'), // JSON string: { mAP, precision, recall, f1, loss, accuracy }
+    description: text('description'),
+    fileUrl: text('file_url'),
+    fileSize: integer('file_size'),
+    createdAt: timestamp('created_at').defaultNow().notNull(),
+    updatedAt: timestamp('updated_at')
+      .defaultNow()
+      .$onUpdate(() => new Date())
+      .notNull(),
+  },
+  (table) => [
+    index('project_model_projectId_idx').on(table.projectId),
+    index('project_model_modelId_idx').on(table.modelId),
+  ],
+)
+
+// Relations
+export const mlModelRelations = relations(mlModel, ({ many }) => ({
+  projectModels: many(projectModel),
+}))
+
+export const projectModelRelations = relations(projectModel, ({ one }) => ({
+  project: one(project, {
+    fields: [projectModel.projectId],
+    references: [project.id],
+  }),
+  model: one(mlModel, {
+    fields: [projectModel.modelId],
+    references: [mlModel.id],
   }),
 }))

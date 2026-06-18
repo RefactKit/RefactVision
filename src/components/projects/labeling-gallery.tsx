@@ -354,38 +354,42 @@ export function LabelingGallery({
                   )}
 
                   {/* Category Color Dots (Top Left) — replaces file type badge */}
-                  {(file.categoryId || file.metadata) && (() => {
-                    let catIds: string[] = []
-                    if (file.categoryId) catIds.push(file.categoryId)
-                    if (file.metadata) {
-                      try {
-                        const metaObj = JSON.parse(file.metadata)
-                        if (metaObj.categoryIds && Array.isArray(metaObj.categoryIds)) {
-                          catIds = Array.from(new Set([...catIds, ...metaObj.categoryIds]))
-                        }
-                      } catch (e) {}
-                    }
-                    if (catIds.length === 0) return null
+                  {(file.categoryId || file.metadata) &&
+                    (() => {
+                      let catIds: string[] = []
+                      if (file.categoryId) catIds.push(file.categoryId)
+                      if (file.metadata) {
+                        try {
+                          const metaObj = JSON.parse(file.metadata)
+                          if (metaObj.categoryIds && Array.isArray(metaObj.categoryIds)) {
+                            catIds = Array.from(new Set([...catIds, ...metaObj.categoryIds]))
+                          }
+                        } catch (e) {}
+                      }
+                      if (catIds.length === 0) return null
 
-                    return (
-                      <div className="absolute top-2 left-2 z-20 pointer-events-none flex items-center -space-x-1.5">
-                        {catIds.map((cId, i) => {
-                          const catIndex = categories.findIndex((c) => c.id === cId)
-                          const colorClass = catIndex >= 0 ? colorsPalette[catIndex % colorsPalette.length] : 'bg-gray-400'
-                          return (
-                            <div
-                              key={cId}
-                              className={cn(
-                                'size-4 rounded-full border-2 border-background shadow-md transition-all',
-                                colorClass
-                              )}
-                              style={{ zIndex: 10 - i }}
-                            />
-                          )
-                        })}
-                      </div>
-                    )
-                  })()}
+                      return (
+                        <div className="absolute top-2 left-2 z-20 pointer-events-none flex items-center -space-x-1.5">
+                          {catIds.map((cId, i) => {
+                            const catIndex = categories.findIndex((c) => c.id === cId)
+                            const colorClass =
+                              catIndex >= 0
+                                ? colorsPalette[catIndex % colorsPalette.length]
+                                : 'bg-gray-400'
+                            return (
+                              <div
+                                key={cId}
+                                className={cn(
+                                  'size-4 rounded-full border-2 border-background shadow-md transition-all',
+                                  colorClass,
+                                )}
+                                style={{ zIndex: 10 - i }}
+                              />
+                            )
+                          })}
+                        </div>
+                      )
+                    })()}
 
                   {/* Selection Checkbox */}
                   <div

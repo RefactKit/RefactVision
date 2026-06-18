@@ -1,9 +1,9 @@
 export const tr = {
   common: {
-    RefactKit: 'RefactKit',
+    RefactVision: 'RefactVision',
     launch: 'Refact',
     kit: 'Kit',
-    copyright: '© {{year}} RefactKit. Tüm hakları saklıdır.',
+    copyright: '© {{year}} RefactVision. Tüm hakları saklıdır.',
     or: 'veya',
     save: 'Değişiklikleri kaydet',
     saving: 'Kaydediliyor...',
@@ -80,7 +80,7 @@ export const tr = {
       heading: 'SaaS projenizi sağlam bir temel üzerine inşa edin',
       subheading: 'Yüksek performanslı çok kiracılı uygulamalar için premium mimari.',
       title: 'Hesabınızı oluşturun',
-      subtitle: 'RefactKit ile bugün inşa etmeye başlayın',
+      subtitle: 'RefactVision ile bugün inşa etmeye başlayın',
       name: 'Tam isim',
       namePlaceholder: 'John Doe',
       nameMin: 'En az 2 karakter',
@@ -108,7 +108,7 @@ export const tr = {
   },
   onboarding: {
     title: 'Organizasyonunuzu oluşturun',
-    subtitle: "RefactKit'e başlamak için çalışma alanınızı kurun.",
+    subtitle: "RefactVision'e başlamak için çalışma alanınızı kurun.",
     badge: 'Neredeyse bitti',
     heading: 'Son bir adım',
     subheading: 'Ekibinizle işbirliğine başlamak için organizasyonunuzu oluşturun.',
@@ -279,7 +279,7 @@ export const tr = {
     techStack: {
       title: 'Ekosistemdeki En İyi Araçlar',
       subtitle:
-        'RefactKit, SaaS projenizin hızlı, güvenli ve ölçeklenebilir olmasını sağlamak için modern ve kanıtlanmış araçlar üzerine inşa edilmiştir.',
+        'RefactVision, SaaS projenizin hızlı, güvenli ve ölçeklenebilir olmasını sağlamak için modern ve kanıtlanmış araçlar üzerine inşa edilmiştir.',
     },
     dashboard: {
       title: 'Kurumsal Düzeyde Panel',
@@ -294,7 +294,7 @@ export const tr = {
     cta: {
       title: 'Sıradaki büyük fikrinizi inşa etmeye hazır mısınız?',
       subtitle:
-        'RefactKit ile yüksek performanslı SaaS uygulamaları geliştiren diğer geliştiricilere katılın.',
+        'RefactVision ile yüksek performanslı SaaS uygulamaları geliştiren diğer geliştiricilere katılın.',
       button: 'Şimdi Başlayın',
     },
     footer: {

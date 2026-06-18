@@ -2,10 +2,10 @@ import type { Translations } from './en'
 
 export const hi: Translations = {
   common: {
-    RefactKit: 'RefactKit',
+    RefactVision: 'RefactVision',
     launch: 'Refact',
     kit: 'Kit',
-    copyright: '© {{year}} RefactKit. सर्वाधिकार सुरक्षित।',
+    copyright: '© {{year}} RefactVision. सर्वाधिकार सुरक्षित।',
     or: 'या',
     save: 'परिवर्तन सहेजें',
     saving: 'सहेजा जा रहा है...',
@@ -61,7 +61,7 @@ export const hi: Translations = {
       heading: 'अपने SaaS को एक मजबूत आधार पर बनाएं',
       subheading: 'उच्च-प्रदर्शन मल्टी-टेनेंट अनुप्रयोगों के लिए प्रीमियम आर्किटेक्चर।',
       title: 'अपना खाता बनाएं',
-      subtitle: 'आज ही RefactKit के साथ निर्माण शुरू करें',
+      subtitle: 'आज ही RefactVision के साथ निर्माण शुरू करें',
       name: 'पूरा नाम',
       namePlaceholder: 'जॉन डो',
       nameMin: 'न्यूनतम 2 अक्षर',
@@ -105,7 +105,7 @@ export const hi: Translations = {
   },
   onboarding: {
     title: 'अपना संगठन बनाएं',
-    subtitle: 'RefactKit के साथ शुरू करने के लिए अपना वर्कस्पेस सेटअप करें।',
+    subtitle: 'RefactVision के साथ शुरू करने के लिए अपना वर्कस्पेस सेटअप करें।',
     badge: 'आप लगभग पहुँच गए हैं',
     heading: 'एक अंतिम कदम',
     subheading: 'अपनी टीम के साथ सहयोग शुरू करने के लिए अपना संगठन बनाएं।',
@@ -270,7 +270,7 @@ export const hi: Translations = {
     techStack: {
       title: 'पारिस्थितिकी तंत्र में सबसे अच्छे उपकरण',
       subtitle:
-        'RefactKit आधुनिक, परीक्षण किए गए उपकरणों के शीर्ष पर बनाया गया है ताकि यह सुनिश्चित हो सके कि आपका SaaS तेज़, सुरक्षित और स्केलेबल है।',
+        'RefactVision आधुनिक, परीक्षण किए गए उपकरणों के शीर्ष पर बनाया गया है ताकि यह सुनिश्चित हो सके कि आपका SaaS तेज़, सुरक्षित और स्केलेबल है।',
     },
     dashboard: {
       title: 'एंटरप्राइज-ग्रेड डैशबोर्ड',
@@ -284,7 +284,7 @@ export const hi: Translations = {
     },
     cta: {
       title: 'अपना अगला बड़ा विचार बनाने के लिए तैयार हैं?',
-      subtitle: 'RefactKit के साथ उच्च-प्रदर्शन SaaS अनुप्रयोग बनाने वाले अन्य डेवलपर्स के साथ जुड़ें।',
+      subtitle: 'RefactVision के साथ उच्च-प्रदर्शन SaaS अनुप्रयोग बनाने वाले अन्य डेवलपर्स के साथ जुड़ें।',
       button: 'अभी शुरू करें',
     },
     footer: {

@@ -1,6 +1,8 @@
-"use client";
+'use client'
 
-import { useState } from "react";
+import { Image as ImageIcon, Search, Shapes } from 'lucide-react'
+import { useState } from 'react'
+import { Input } from '@/components/ui/input'
 import {
   Table,
   TableBody,
@@ -8,10 +10,8 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@/components/ui/table";
-import { Input } from "@/components/ui/input";
-import { Search, Shapes, Image as ImageIcon } from "lucide-react";
-import { cn } from "@/lib/utils";
+} from '@/components/ui/table'
+import { cn } from '@/lib/utils'
 
 const colorsPalette = [
   'bg-emerald-500',
@@ -27,29 +27,29 @@ const colorsPalette = [
 ]
 
 interface Category {
-  id: string;
-  name: string;
+  id: string
+  name: string
 }
 
 interface ProjectFile {
-  categoryId: string | null;
+  categoryId: string | null
 }
 
 export function ClassesTable({
   categories,
   files,
 }: {
-  categories: Category[];
-  files: ProjectFile[];
+  categories: Category[]
+  files: ProjectFile[]
 }) {
-  const [searchQuery, setSearchQuery] = useState("");
+  const [searchQuery, setSearchQuery] = useState('')
 
   const filteredCategories = categories.filter((cat) =>
-    cat.name.toLowerCase().includes(searchQuery.toLowerCase())
-  );
+    cat.name.toLowerCase().includes(searchQuery.toLowerCase()),
+  )
 
-  const totalAnnotations = files.filter(f => f.categoryId !== null).length;
-  const totalImages = files.filter(f => f.categoryId !== null).length;
+  const totalAnnotations = files.filter((f) => f.categoryId !== null).length
+  const totalImages = files.filter((f) => f.categoryId !== null).length
 
   return (
     <div className="w-full flex flex-col gap-4 bg-background border border-border/40 shadow-sm rounded-2xl overflow-hidden p-6">
@@ -60,7 +60,7 @@ export function ClassesTable({
             {categories.length} classes · {totalAnnotations} annotations
           </p>
         </div>
-        
+
         <div className="relative w-full max-w-sm">
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 size-4 text-muted-foreground" />
           <Input
@@ -84,20 +84,18 @@ export function ClassesTable({
           </TableHeader>
           <TableBody>
             {filteredCategories.map((cat, index) => {
-              const fileCount = files.filter(f => f.categoryId === cat.id).length;
-              const colorClass = colorsPalette[index % colorsPalette.length];
-              
+              const fileCount = files.filter((f) => f.categoryId === cat.id).length
+              const colorClass = colorsPalette[index % colorsPalette.length]
+
               return (
                 <TableRow key={cat.id}>
                   <TableCell className="font-medium text-muted-foreground">
                     <div className="flex items-center gap-3">
-                      <div className={cn("size-3.5 rounded-full shrink-0 shadow-sm", colorClass)} />
+                      <div className={cn('size-3.5 rounded-full shrink-0 shadow-sm', colorClass)} />
                       {index}
                     </div>
                   </TableCell>
-                  <TableCell className="font-medium text-foreground">
-                    {cat.name}
-                  </TableCell>
+                  <TableCell className="font-medium text-foreground">{cat.name}</TableCell>
                   <TableCell className="text-right">
                     <div className="flex items-center justify-end gap-1.5 text-muted-foreground bg-muted/30 px-2 py-1 rounded-md w-fit ml-auto border border-border/20">
                       <Shapes className="size-3.5" />
@@ -111,9 +109,9 @@ export function ClassesTable({
                     </div>
                   </TableCell>
                 </TableRow>
-              );
+              )
             })}
-            
+
             {/* Total Row */}
             {filteredCategories.length > 0 && (
               <TableRow className="bg-muted/10 font-medium hover:bg-muted/10">
@@ -137,12 +135,12 @@ export function ClassesTable({
           </TableBody>
         </Table>
       </div>
-      
+
       {filteredCategories.length === 0 && (
         <div className="py-8 text-center text-muted-foreground text-sm border border-dashed border-border/40 rounded-xl mt-4 bg-muted/10">
           No classes found matching your search.
         </div>
       )}
     </div>
-  );
+  )
 }

@@ -9,8 +9,8 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select'
-import { type Font, useFont } from '@/hooks/use-font'
 import { type ColorTheme, useColorTheme } from '@/hooks/use-color-theme'
+import { type Font, useFont } from '@/hooks/use-font'
 import { cn } from '@/lib/utils'
 import { useSession } from '../../../../lib/auth-client'
 

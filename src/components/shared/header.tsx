@@ -1,5 +1,6 @@
 import { Link } from '@tanstack/react-router'
 import { ColorThemeToggle, LanguageToggle, ThemeToggle } from '@/components/shared/auth-ui'
+import { Logo } from '@/components/shared/logo'
 import { Button } from '@/components/ui/button'
 import { useI18n } from '@/i18n/context'
 
@@ -10,18 +11,7 @@ export function Header({ hideAuthButtons = false }: { hideAuthButtons?: boolean 
   return (
     <header className="sticky top-0 z-50 flex h-16 w-full items-center justify-between border-b border-border/40 bg-background/95 dark:bg-black px-6 backdrop-blur supports-[backdrop-filter]:bg-background/60 dark:supports-[backdrop-filter]:bg-black lg:px-12">
       <div className="flex items-center gap-2">
-        <Link to="/">
-          <img
-            src="/logo.png"
-            alt="RefactKit"
-            className="h-8 w-auto object-contain sm:h-10 dark:hidden"
-          />
-          <img
-            src="/logo-dark.png"
-            alt="RefactKit"
-            className="h-8 w-auto object-contain sm:h-10 hidden dark:block"
-          />
-        </Link>
+        <Logo />
       </div>
       <div className="flex items-center gap-2 sm:gap-4">
         {!hideAuthButtons && (

@@ -2,10 +2,10 @@ import type { Translations } from './en'
 
 export const es: Translations = {
   common: {
-    RefactKit: 'RefactKit',
+    RefactVision: 'RefactVision',
     launch: 'Refact',
     kit: 'Kit',
-    copyright: '© {{year}} RefactKit. Todos los derechos reservados.',
+    copyright: '© {{year}} RefactVision. Todos los derechos reservados.',
     or: 'o',
     save: 'Guardar cambios',
     saving: 'Guardando...',
@@ -59,7 +59,7 @@ export const es: Translations = {
       heading: 'Construye tu SaaS sobre una base sólida como una roca',
       subheading: 'Arquitectura premium para aplicaciones multi-tenant de alto rendimiento.',
       title: 'Crear cuenta',
-      subtitle: 'Empieza a construir con RefactKit hoy',
+      subtitle: 'Empieza a construir con RefactVision hoy',
       name: 'Nombre completo',
       namePlaceholder: 'Juan Pérez',
       nameMin: 'Mínimo 2 caracteres',
@@ -251,7 +251,7 @@ export const es: Translations = {
     techStack: {
       title: 'Las mejores herramientas del ecosistema',
       subtitle:
-        'RefactKit está construido sobre herramientas modernas y probadas para asegurar que tu SaaS sea rápido, seguro y escalable.',
+        'RefactVision está construido sobre herramientas modernas y probadas para asegurar que tu SaaS sea rápido, seguro y escalable.',
     },
     dashboard: {
       title: 'Panel de control de nivel empresarial',
@@ -266,7 +266,7 @@ export const es: Translations = {
     cta: {
       title: '¿Listo para construir tu próxima gran idea?',
       subtitle:
-        'Únete a otros desarrolladores que construyen aplicaciones SaaS de alto rendimiento con RefactKit.',
+        'Únete a otros desarrolladores que construyen aplicaciones SaaS de alto rendimiento con RefactVision.',
       button: 'Empezar ahora',
     },
     footer: {

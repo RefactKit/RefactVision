@@ -1,4 +1,6 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
+import { Bell, Check, Shield, UserCheck, UserMinus, UserPlus, Users, UserX } from 'lucide-react'
+import { toast } from 'sonner'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { Button } from '@/components/ui/button'
 import {
@@ -11,12 +13,10 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
 import { useI18n } from '@/i18n/context'
-import { userNotificationsQuery } from '@/server/query-keys'
-import { markAllNotificationsRead } from '@/server/notification-fns'
 import type { NotificationType } from '@/server/notification-fns'
+import { markAllNotificationsRead } from '@/server/notification-fns'
+import { userNotificationsQuery } from '@/server/query-keys'
 import { authClient } from '../../../lib/auth-client'
-import { toast } from 'sonner'
-import { Bell, Check, Shield, UserCheck, UserMinus, UserPlus, UserX, Users } from 'lucide-react'
 
 function getInitials(name: string): string {
   return name

@@ -1,48 +1,31 @@
-import { createFileRoute, useParams } from '@tanstack/react-router'
-import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
+import { GithubIcon } from '@hugeicons/core-free-icons'
+import { HugeiconsIcon } from '@hugeicons/react'
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
+import { createFileRoute, Link, useParams } from '@tanstack/react-router'
 import {
-  getProjectById,
-  createCategory,
-  bulkLabelFiles,
-  linkProjectFile,
-  deleteFiles,
-  getProjectStats,
-} from '@/server/project-fns'
-import { uploadFile } from '@/server/storage-fns'
-import { LabelingGallery } from '@/components/projects/labeling-gallery'
-import { ProjectFilesTable } from '@/components/projects/project-files-table'
-import { EditProjectDialog } from '@/components/projects/edit-project-dialog'
-import { ProjectStats } from '@/components/projects/project-stats'
-import { ClassesTable } from '@/components/projects/classes-table'
-import { useI18n } from '@/i18n/context'
-import { Skeleton } from '@/components/ui/skeleton'
-import { useState, useMemo } from 'react'
-import { toast } from 'sonner'
-import { orgBySlugQuery } from '@/server/query-keys'
-import { cn } from '@/lib/utils'
-import {
+  ArrowLeft,
+  BarChart,
+  Brain,
+  Database,
   Folder,
+  Globe,
   LayoutGrid,
   List,
   MoreHorizontal,
-  Pencil,
-  Github,
-  Globe,
-  Plus,
-  ArrowLeft,
-  Database,
   Network,
+  Pencil,
+  Plus,
   Tags,
-  BarChart,
 } from 'lucide-react'
-import { Button } from '@/components/ui/button'
+import { useMemo, useState } from 'react'
+import { toast } from 'sonner'
+import { ClassesTable } from '@/components/projects/classes-table'
+import { EditProjectDialog } from '@/components/projects/edit-project-dialog'
+import { LabelingGallery } from '@/components/projects/labeling-gallery'
+import { ModelsTable } from '@/components/projects/models-table'
+import { ProjectFilesTable } from '@/components/projects/project-files-table'
+import { ProjectStats } from '@/components/projects/project-stats'
 import { Badge } from '@/components/ui/badge'
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu'
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -51,12 +34,31 @@ import {
   BreadcrumbPage,
   BreadcrumbSeparator,
 } from '@/components/ui/breadcrumb'
-import { Link } from '@tanstack/react-router'
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
+import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
-import { Input } from '@/components/ui/input'
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu'
 import { Field, FieldLabel } from '@/components/ui/field'
+import { Input } from '@/components/ui/input'
+import { Skeleton } from '@/components/ui/skeleton'
 import { Spinner } from '@/components/ui/spinner'
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
+import { useI18n } from '@/i18n/context'
+import { cn } from '@/lib/utils'
+import {
+  bulkLabelFiles,
+  createCategory,
+  deleteFiles,
+  getProjectById,
+  getProjectStats,
+  linkProjectFile,
+} from '@/server/project-fns'
+import { orgBySlugQuery } from '@/server/query-keys'
+import { uploadFile } from '@/server/storage-fns'
 
 const colorsPalette = [
   'bg-emerald-500',
@@ -229,7 +231,7 @@ function ProjectStudioPage() {
               rel="noreferrer"
               className="flex items-center gap-1.5 hover:text-foreground transition-colors"
             >
-              <Github className="size-4" />
+              <HugeiconsIcon icon={GithubIcon} size={24} className="size-4" />
               GitHub
             </a>
           )}
@@ -267,6 +269,13 @@ function ProjectStudioPage() {
             >
               <Tags className="size-4 shrink-0" />
               Classes
+            </TabsTrigger>
+            <TabsTrigger
+              value="models"
+              className="px-4 py-2 rounded-lg data-active:bg-background data-active:text-foreground dark:data-active:bg-background/15 data-active:shadow-sm font-medium transition-all gap-2"
+            >
+              <Brain className="size-4 shrink-0" />
+              Models
             </TabsTrigger>
             <TabsTrigger
               value="integration"
@@ -624,6 +633,10 @@ function ProjectStudioPage() {
 
         <TabsContent value="classes" className="mt-0">
           <ClassesTable categories={project.categories} files={project.files} />
+        </TabsContent>
+
+        <TabsContent value="models" className="mt-0">
+          <ModelsTable projectId={projectId} />
         </TabsContent>
 
         <TabsContent value="stats" className="mt-0">

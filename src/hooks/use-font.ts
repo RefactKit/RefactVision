@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 
-const FONT_KEY = 'RefactKit-font'
+const FONT_KEY = 'RefactVision-font'
 
 export type Font = 'default' | 'google-sans' | 'zain' | 'geist' | 'baloo'
 

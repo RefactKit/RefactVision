@@ -2,10 +2,10 @@ import type { Translations } from './en'
 
 export const be: Translations = {
   common: {
-    RefactKit: 'RefactKit',
+    RefactVision: 'RefactVision',
     launch: 'Refact',
     kit: 'Kit',
-    copyright: '© {{year}} RefactKit. Усе правы абаронены.',
+    copyright: '© {{year}} RefactVision. Усе правы абаронены.',
     or: 'або',
     save: 'Захаваць змены',
     saving: 'Захаванне...',
@@ -81,7 +81,7 @@ export const be: Translations = {
       subheading:
         'Прэміяльная архітэктура для высокапрадукцыйных шматкарыстальніцкіх прыкладанняў.',
       title: 'Стварыце акаўнт',
-      subtitle: 'Пачніце ствараць з RefactKit ужо сёння',
+      subtitle: 'Пачніце ствараць з RefactVision ужо сёння',
       name: 'Поўнае імя',
       namePlaceholder: 'Ян Іваноў',
       nameMin: 'Мінімум 2 сімвалы',
@@ -105,7 +105,7 @@ export const be: Translations = {
   },
   onboarding: {
     title: 'Стварыце вашу арганізацыю',
-    subtitle: 'Наладзьце сваю рабочую вобласць, каб пачаць працу з RefactKit.',
+    subtitle: 'Наладзьце сваю рабочую вобласць, каб пачаць працу з RefactVision.',
     badge: 'Амаль гатова',
     heading: 'Апошні крок',
     subheading: 'Стварыце вашу арганізацыю, каб пачаць супрацоўнічаць з камандай.',
@@ -281,7 +281,7 @@ export const be: Translations = {
     techStack: {
       title: 'Лепшыя інструменты экасістэмы',
       subtitle:
-        'RefactKit пабудаваны на аснове сучасных і правераных інструментаў, каб ваш SaaS быў хуткім, бяспечным і маштабуемым.',
+        'RefactVision пабудаваны на аснове сучасных і правераных інструментаў, каб ваш SaaS быў хуткім, бяспечным і маштабуемым.',
     },
     dashboard: {
       title: 'Панэль карпаратыўнага ўзроўню',
@@ -296,7 +296,7 @@ export const be: Translations = {
     cta: {
       title: 'Гатовы ўвасобіць сваю наступную вялікую ідэю?',
       subtitle:
-        'Далучайцеся да іншых распрацоўшчыкаў, якія ствараюць высокапрадукцыйныя SaaS прыкладанні з RefactKit.',
+        'Далучайцеся да іншых распрацоўшчыкаў, якія ствараюць высокапрадукцыйныя SaaS прыкладанні з RefactVision.',
       button: 'Пачаць прама зараз',
     },
     footer: {

@@ -421,39 +421,42 @@ export const linkProjectFile = createServerFn({ method: 'POST' }).handler(async 
 /** Get project statistics */
 export const getProjectStats = createServerFn({ method: 'GET' }).handler(async ({ data }) => {
   const projectId = z.string().parse(data)
-  
+
   const files = await db.select().from(projectFile).where(eq(projectFile.projectId, projectId))
 
-  let sizeGroups = [
+  const sizeGroups = [
     { name: '< 100 KB', value: 0 },
     { name: '100-500 KB', value: 0 },
     { name: '500 KB-1 MB', value: 0 },
     { name: '> 1 MB', value: 0 },
   ]
-  
-  let totalSize = 0;
+
+  let totalSize = 0
   for (const f of files) {
-     totalSize += f.size;
-     const kb = f.size / 1024;
-     if (kb < 100) sizeGroups[0].value++;
-     else if (kb < 500) sizeGroups[1].value++;
-     else if (kb < 1024) sizeGroups[2].value++;
-     else sizeGroups[3].value++;
+    totalSize += f.size
+    const kb = f.size / 1024
+    if (kb < 100) sizeGroups[0].value++
+    else if (kb < 500) sizeGroups[1].value++
+    else if (kb < 1024) sizeGroups[2].value++
+    else sizeGroups[3].value++
   }
-  const meanSize = files.length > 0 ? totalSize / files.length : 0;
+  const meanSize = files.length > 0 ? totalSize / files.length : 0
 
   // Mocked dimensions data since we don't store it yet
   const dimensionsData = [
-     { name: "1050", width: 0, height: files.length },
-     { name: "1950", width: files.length, height: 0 }
+    { name: '1050', width: 0, height: files.length },
+    { name: '1950', width: files.length, height: 0 },
   ]
 
   return {
-     totalFiles: files.length,
-     meanSize,
-     sizeGroups: sizeGroups.filter(g => g.value > 0).length > 0 ? sizeGroups.filter(g => g.value > 0) : sizeGroups,
-     dimensionsData,
-     meanWidth: 1950,
-     meanHeight: 1050
+    totalFiles: files.length,
+    meanSize,
+    sizeGroups:
+      sizeGroups.filter((g) => g.value > 0).length > 0
+        ? sizeGroups.filter((g) => g.value > 0)
+        : sizeGroups,
+    dimensionsData,
+    meanWidth: 1950,
+    meanHeight: 1050,
   }
 })
