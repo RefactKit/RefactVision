@@ -4,6 +4,7 @@ import { useTheme } from 'next-themes'
 import { useEffect, useState } from 'react'
 import { LanguageToggle, ThemeToggle } from '@/components/shared/auth-ui'
 import { Header } from '@/components/shared/header'
+import { Logo as SharedLogo } from '@/components/shared/logo'
 import { DotPattern } from '@/components/ui/dot-pattern'
 import {
   DropdownMenu,
@@ -14,7 +15,6 @@ import {
 } from '@/components/ui/dropdown-menu'
 import type { Locale } from '@/i18n'
 import { useI18n } from '@/i18n/context'
-import { Logo as SharedLogo } from '@/components/shared/logo'
 
 export function AuthShell({
   children,

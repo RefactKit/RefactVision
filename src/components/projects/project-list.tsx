@@ -1,6 +1,8 @@
-import { useState } from 'react'
 import { authClient } from 'lib/auth-client'
-import { ProjectCard } from './project-card'
+import { Filter, Plus, Search, SortAsc } from 'lucide-react'
+import { useState } from 'react'
+import { Button } from '@/components/ui/button'
+import { Empty, EmptyDescription, EmptyHeader, EmptyMedia, EmptyTitle } from '@/components/ui/empty'
 import { Input } from '@/components/ui/input'
 import {
   Select,
@@ -9,10 +11,9 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select'
-import { Search, Filter, SortAsc, Plus } from 'lucide-react'
-import { Button } from '@/components/ui/button'
 import { useI18n } from '@/i18n/context'
-import { Empty, EmptyHeader, EmptyTitle, EmptyDescription, EmptyMedia } from '@/components/ui/empty'
+import { ProjectCard } from './project-card'
+
 interface Project {
   id: string
   title: string

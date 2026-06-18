@@ -1,46 +1,26 @@
+import { Link } from '@tanstack/react-router'
+import { motion } from 'framer-motion'
+import { authClient } from 'lib/auth-client'
 import {
+  Copy,
+  ExternalLink,
+  FileArchive,
+  FileAudio,
+  FileCode,
+  File as FileIcon,
+  FileJson,
+  FileSpreadsheet,
+  FileText,
+  FileVideo,
   Folder,
-  User,
-  Trash2,
-  Pencil,
   Globe,
   MoreVertical,
-  Copy,
+  Pencil,
   Share2,
-  ExternalLink,
-  FileText,
-  FileCode,
-  FileSpreadsheet,
-  FileArchive,
-  FileVideo,
-  FileAudio,
-  FileJson,
-  File as FileIcon,
+  Trash2,
+  User,
 } from 'lucide-react'
-import {
-  Card,
-  CardAction,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from '@/components/ui/card'
-import { Badge } from '@/components/ui/badge'
-import { Button } from '@/components/ui/button'
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-  DropdownMenuSeparator,
-} from '@/components/ui/dropdown-menu'
 import { toast } from 'sonner'
-import { useI18n } from '@/i18n/context'
-import { motion } from 'framer-motion'
-import { Link } from '@tanstack/react-router'
-import { authClient } from 'lib/auth-client'
 import {
   AlertDialog,
   AlertDialogAction,
@@ -52,6 +32,26 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from '@/components/ui/alert-dialog'
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
+import { Badge } from '@/components/ui/badge'
+import { Button } from '@/components/ui/button'
+import {
+  Card,
+  CardAction,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from '@/components/ui/card'
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu'
+import { useI18n } from '@/i18n/context'
 
 interface TopFile {
   url: string

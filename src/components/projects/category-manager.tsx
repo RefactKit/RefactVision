@@ -1,5 +1,5 @@
+import { ChevronDown, ChevronRight, MoreVertical, Pencil, Plus, Tag, Trash2 } from 'lucide-react'
 import { useState } from 'react'
-import { Plus, Tag, ChevronRight, ChevronDown, MoreVertical, Pencil, Trash2 } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { useI18n } from '@/i18n/context'

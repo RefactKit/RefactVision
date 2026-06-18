@@ -1,16 +1,16 @@
+import { sql } from 'drizzle-orm'
 import {
-  pgTable,
-  index,
+  bigint,
+  boolean,
   foreignKey,
+  index,
+  integer,
+  pgTable,
   text,
   timestamp,
-  boolean,
-  integer,
-  bigint,
   unique,
   uniqueIndex,
 } from 'drizzle-orm/pg-core'
-import { sql } from 'drizzle-orm'
 
 export const account = pgTable(
   'account',

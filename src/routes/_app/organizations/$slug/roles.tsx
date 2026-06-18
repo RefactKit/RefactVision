@@ -1,6 +1,6 @@
 import { createFileRoute } from '@tanstack/react-router'
-import { ForbiddenContent } from '@/components/shared/forbidden-content'
 import { RoleMatrix } from '@/components/settings/roles/role-matrix'
+import { ForbiddenContent } from '@/components/shared/forbidden-content'
 import { Route as OrgRoute } from './route'
 
 export const Route = createFileRoute('/_app/organizations/$slug/roles')({

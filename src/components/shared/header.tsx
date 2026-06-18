@@ -1,8 +1,8 @@
 import { Link } from '@tanstack/react-router'
 import { ColorThemeToggle, LanguageToggle, ThemeToggle } from '@/components/shared/auth-ui'
+import { Logo } from '@/components/shared/logo'
 import { Button } from '@/components/ui/button'
 import { useI18n } from '@/i18n/context'
-import { Logo } from '@/components/shared/logo'
 
 export function Header({ hideAuthButtons = false }: { hideAuthButtons?: boolean }) {
   const { t } = useI18n()

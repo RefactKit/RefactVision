@@ -424,7 +424,7 @@ export const getProjectStats = createServerFn({ method: 'GET' }).handler(async (
 
   const files = await db.select().from(projectFile).where(eq(projectFile.projectId, projectId))
 
-  let sizeGroups = [
+  const sizeGroups = [
     { name: '< 100 KB', value: 0 },
     { name: '100-500 KB', value: 0 },
     { name: '500 KB-1 MB', value: 0 },

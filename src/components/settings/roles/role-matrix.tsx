@@ -1,7 +1,12 @@
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
+import { Loader2, Plus, ShieldAlert, Trash2 } from 'lucide-react'
 import React, { useState } from 'react'
-import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
-import { authClient } from '../../../../lib/auth-client'
+import { toast } from 'sonner'
+import { Badge } from '@/components/ui/badge'
+import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
+import { Checkbox } from '@/components/ui/checkbox'
+import { Input } from '@/components/ui/input'
 import {
   Table,
   TableBody,
@@ -10,14 +15,9 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table'
-import { Button } from '@/components/ui/button'
-import { Input } from '@/components/ui/input'
-import { Checkbox } from '@/components/ui/checkbox'
-import { toast } from 'sonner'
-import { Loader2, Plus, Trash2, ShieldAlert } from 'lucide-react'
-import { Badge } from '@/components/ui/badge'
-import { cn } from '@/lib/utils'
 import { useI18n } from '@/i18n/context'
+import { cn } from '@/lib/utils'
+import { authClient } from '../../../../lib/auth-client'
 
 const AVAILABLE_RESOURCES = {
   project: ['create', 'read', 'update', 'delete'],
