@@ -242,6 +242,20 @@ export const createCategory = createServerFn({ method: 'POST' }).handler(async (
   return { id }
 })
 
+/** Update a category's name */
+export const updateCategory = createServerFn({ method: 'POST' }).handler(async ({ data }) => {
+  const { id, name } = z.object({ id: z.string(), name: z.string().min(1) }).parse(data)
+  await db.update(projectCategory).set({ name }).where(eq(projectCategory.id, id))
+  return { success: true }
+})
+
+/** Delete a category */
+export const deleteCategory = createServerFn({ method: 'POST' }).handler(async ({ data }) => {
+  const id = z.string().parse(data)
+  await db.delete(projectCategory).where(eq(projectCategory.id, id))
+  return { success: true }
+})
+
 // --- Labeling ---
 
 /** Bulk update categories and move files in storage */
@@ -442,6 +456,16 @@ export const getProjectStats = createServerFn({ method: 'GET' }).handler(async (
   }
   const meanSize = files.length > 0 ? totalSize / files.length : 0
 
+  const extCounts: Record<string, number> = {}
+  for (const f of files) {
+    const ext = f.name.split('.').pop()?.toLowerCase() || 'unknown'
+    extCounts[ext] = (extCounts[ext] || 0) + 1
+  }
+  const extensionsData = Object.entries(extCounts).map(([ext, count]) => ({
+    extension: ext,
+    count,
+  }))
+
   // Mocked dimensions data since we don't store it yet
   const dimensionsData = [
     { name: '1050', width: 0, height: files.length },
@@ -458,5 +482,6 @@ export const getProjectStats = createServerFn({ method: 'GET' }).handler(async (
     dimensionsData,
     meanWidth: 1950,
     meanHeight: 1050,
+    extensionsData,
   }
 })

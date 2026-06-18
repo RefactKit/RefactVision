@@ -246,57 +246,138 @@ export const fr: Translations = {
       getStarted: 'Commencer',
     },
     hero: {
-      badge: 'Gagnez plus de 100 heures de développement',
-      title: 'Construisez votre SaaS,',
+      badge: "Plateforme Open-Source d'Étiquetage de Données",
+      title: 'Étiquetez, Révisez, Exportez.',
       titleWords: [
-        'avec un kit full-stack moderne',
-        'à la vitesse de la lumière',
-        'avec un code prêt pour la prod',
+        'pour les équipes de Computer Vision',
+        'avec des flux collaboratifs',
+        'en jeux de données prêts pour la prod',
       ],
       subheading:
-        'Le starter full-stack ultime pour les fondateurs, devs et indie hackers. Propulsé par React 19 & TanStack, avec une API backend, une multi-location sécurisée et un dashboard de niveau entreprise.',
-      getStarted: 'Commencer',
+        "La plateforme d'étiquetage de données collaborative et open-source pour la vision par ordinateur. Annotez les images, révisez avec votre équipe et exportez des jeux de données propres vers Ultralytics et Roboflow — le tout dans des espaces de travail multi-locataires sécurisés.",
+      getStarted: 'Commencer à Étiqueter',
       viewDocs: 'Voir la Documentation',
       security: {
-        owasp: 'Conforme OWASP ASVS',
-        encrypted: 'Chiffré en AES-256',
-        tenant: 'Isolation Multi-Tenant',
+        owasp: 'Conception Axée sur la Confidentialité',
+        encrypted: 'Sécurisé de Bout en Bout',
+        tenant: 'Multi-Locataire Isolé',
       },
     },
     features: {
+      collaborative: {
+        title: 'Étiquetage Collaboratif',
+        description:
+          'Annotez les images sur des jeux de données partagés avec une attribution par équipe et des flux de révision structurés.',
+      },
       multiTenant: {
-        title: 'Multi-Locataire',
-        description: 'Gestion d’organisation sécurisée et évolutive prête à l’emploi.',
+        title: 'Espaces de Travail Multi-Locataires',
+        description:
+          'Isolez les organisations, équipes, jeux de données et permissions par espace de travail. Idéal pour le B2B et le multi-client.',
       },
-      tanstack: {
-        title: 'Propulsé par TanStack',
-        description: 'Construit avec TanStack Start, Router et Query pour une performance ultime.',
+      reviewGovernance: {
+        title: 'Révision & Gouvernance',
+        description:
+          "Créez des flux de validation avec des états d'approbation et un contrôle de qualité des annotations avant l'export.",
       },
-      modernUI: {
-        title: 'Interface Moderne',
-        description: 'Conçu avec Base UI et Tailwind CSS pour une expérience premium.',
+      exportReady: {
+        title: "Interopérabilité d'Export",
+        description:
+          "Exportez vos jeux de données vers des pipelines orientés YOLO, Roboflow ou des flux d'entraînement personnalisés.",
+      },
+      privacyFirst: {
+        title: 'Confidentialité Prioritaire',
+        description:
+          "Gardez le contrôle sur vos jeux de données sensibles. Adapté à l'auto-hébergement avec contrôle total pour les développeurs.",
+      },
+      openSource: {
+        title: 'Open Source',
+        description:
+          'Inspectez, adaptez, étendez et auto-hébergez la plateforme. Vos données ne doivent jamais être une boîte noire.',
       },
     },
-    techStack: {
-      title: "Les meilleurs outils de l'écosystème",
+    workflow: {
+      title: 'Des Images Brutes aux Jeux de Données Prêts',
       subtitle:
-        'RefactVision est construit sur des outils modernes et éprouvés pour garantir que votre SaaS est rapide, sécurisé et évolutif.',
+        "Un flux de travail simplifié qui maintient la traçabilité et la collaboration du jeu de données avant l'entraînement.",
+      steps: [
+        {
+          title: 'Créer un Espace',
+          description: "Configurez votre organisation avec un contrôle d'accès basé sur les rôles.",
+        },
+        {
+          title: 'Téléverser & Classer',
+          description:
+            "Téléversez vos images et définissez vos catégories d'étiquetage personnalisées.",
+        },
+        {
+          title: 'Annoter & Réviseur',
+          description:
+            "Étiquetez les données en collaboration avec des flux d'assurance qualité structurés.",
+        },
+        {
+          title: 'Exporter & Entraîner',
+          description:
+            'Exportez des jeux de données vers Ultralytics, Roboflow ou des pipelines sur mesure.',
+        },
+      ],
+    },
+    useCases: {
+      title: 'Conçu pour la Vision Réelle',
+      subtitle:
+        "De l'agriculture au contrôle qualité industriel, RefactVision alimente la couche de données de vos systèmes de vision.",
+      items: [
+        {
+          title: 'Agriculture',
+          description:
+            "Étiquetez les maladies des cultures, les parasites et l'état des fruits pour détection mobile ou embarquée.",
+          emoji: '🌾',
+        },
+        {
+          title: 'Commerce & Intelligence de Rayon',
+          description:
+            'Construisez des jeux de données pour la détection de produits, la conformité des rayons et la surveillance.',
+          emoji: '🏪',
+        },
+        {
+          title: 'Contrôle Qualité Industriel',
+          description:
+            "Étiquetez les défauts, composants et catégories d'inspection dans vos usines.",
+          emoji: '🏭',
+        },
+        {
+          title: 'Logistics & Entreposage',
+          description: 'Annotez les cartons, palettes, articles endommagés et états des colis.',
+          emoji: '📦',
+        },
+        {
+          title: 'Imagerie Médicale',
+          description:
+            "Créez des couches d'annotation privées pour vos jeux de données cliniques sensibles.",
+          emoji: '🏥',
+        },
+        {
+          title: 'Équipes de Recherche',
+          description:
+            "Une couche collaborative privée d'annotation pour vos expérimentations internes.",
+          emoji: '🔬',
+        },
+      ],
+    },
+    integrations: {
+      title: "Pipeline d'Exportation Fluide",
+      subtitle:
+        "Vos étiquettes vont là où vos modèles s'entraînent. Pas de verrouillage propriétaire.",
     },
     dashboard: {
-      title: 'Tableau de bord de niveau entreprise',
+      title: "Interface d'Étiquetage Puissante",
       subtitle:
-        'Tout ce dont vous avez besoin pour gérer vos organisations et utilisateurs en un seul endroit.',
-    },
-    detailedFeatures: {
-      title: 'Tout ce dont vous avez besoin pour lancer',
-      subtitle:
-        'Concentrez-vous sur vos fonctionnalités de base pendant que nous gérons les complexités du multi-tenant, de l’authentification et de la performance.',
+        'Un espace de travail intuitif où les experts métier non-techniques peuvent facilement annoter des images.',
     },
     cta: {
-      title: 'Prêt à construire votre prochaine grande idée ?',
+      title: 'Prêt à créer des jeux de données de haute qualité ?',
       subtitle:
-        'Rejoignez d’autres développeurs qui construisent des applications SaaS haute performance avec RefactVision.',
-      button: 'Commencer maintenant',
+        'Rejoignez les équipes qui utilisent RefactVision pour annoter, réviser et exporter en toute confiance.',
+      button: 'Commencer à Étiqueter',
     },
     footer: {
       madeWith: 'Fait avec ❤️ par',
