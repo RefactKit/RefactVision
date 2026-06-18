@@ -1,11 +1,12 @@
 # RefactVision
 
+[![Quality gate](https://sonarcloud.io/api/project_badges/quality_gate?project=RefactKit_RefactVision)](https://sonarcloud.io/summary/new_code?id=RefactKit_RefactVision)
 ![License](https://img.shields.io/badge/license-Open%20Source-16a34a?style=flat-square)
 ![Computer Vision](https://img.shields.io/badge/domain-Computer%20Vision-2563eb?style=flat-square)
 ![Multi-Tenant](https://img.shields.io/badge/architecture-Multi--Tenant-f59e0b?style=flat-square)
 ![Collaboration](https://img.shields.io/badge/workflow-Collaborative-7c3aed?style=flat-square)
 ![Interoperability](https://img.shields.io/badge/export-Roboflow%20%7C%20Ultralytics-0f766e?style=flat-square)
-[![Quality gate](https://sonarcloud.io/api/project_badges/quality_gate?project=RefactKit_RefactVision)](https://sonarcloud.io/summary/new_code?id=RefactKit_RefactVision)
+
 > **RefactVision** is an open-source, collaborative data labeling platform for computer vision teams. It helps organizations annotate, review, govern, and export image datasets across secure workspaces while staying interoperable with downstream training stacks such as Ultralytics and Roboflow.
 
 RefactVision is built for teams that want more than a basic annotation tool. It combines collaborative labeling, role-based review workflows, multi-tenant workspace isolation, and privacy-first data ownership in one product so datasets can move from raw images to production-ready exports with less friction.
