@@ -1,13 +1,12 @@
 import { GithubIcon } from '@hugeicons/core-free-icons'
 import { HugeiconsIcon } from '@hugeicons/react'
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
+import { useQuery, useQueryClient } from '@tanstack/react-query'
 import { createFileRoute, Link, useParams } from '@tanstack/react-router'
 import {
   ArrowLeft,
   BarChart,
-  Brain,
+  Cpu,
   Database,
-  Folder,
   Globe,
   LayoutGrid,
   List,
@@ -17,7 +16,7 @@ import {
   Plus,
   Tags,
 } from 'lucide-react'
-import { useMemo, useState } from 'react'
+import { useState } from 'react'
 import { toast } from 'sonner'
 import { ClassesTable } from '@/components/projects/classes-table'
 import { EditProjectDialog } from '@/components/projects/edit-project-dialog'
@@ -25,17 +24,8 @@ import { LabelingGallery } from '@/components/projects/labeling-gallery'
 import { ModelsTable } from '@/components/projects/models-table'
 import { ProjectFilesTable } from '@/components/projects/project-files-table'
 import { ProjectStats } from '@/components/projects/project-stats'
-import { Badge } from '@/components/ui/badge'
-import {
-  Breadcrumb,
-  BreadcrumbItem,
-  BreadcrumbLink,
-  BreadcrumbList,
-  BreadcrumbPage,
-  BreadcrumbSeparator,
-} from '@/components/ui/breadcrumb'
 import { Button } from '@/components/ui/button'
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
+import { Card, CardContent, CardDescription, CardHeader } from '@/components/ui/card'
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -261,35 +251,35 @@ function ProjectStudioPage() {
               className="px-4 py-2 rounded-lg data-active:bg-background data-active:text-foreground dark:data-active:bg-background/15 data-active:shadow-sm font-medium transition-all gap-2"
             >
               <Database className="size-4 shrink-0" />
-              Dataset
+              {t.projects.tabs.dataset}
             </TabsTrigger>
             <TabsTrigger
               value="classes"
               className="px-4 py-2 rounded-lg data-active:bg-background data-active:text-foreground dark:data-active:bg-background/15 data-active:shadow-sm font-medium transition-all gap-2"
             >
               <Tags className="size-4 shrink-0" />
-              Classes
+              {t.projects.tabs.classes}
             </TabsTrigger>
             <TabsTrigger
               value="models"
               className="px-4 py-2 rounded-lg data-active:bg-background data-active:text-foreground dark:data-active:bg-background/15 data-active:shadow-sm font-medium transition-all gap-2"
             >
-              <Brain className="size-4 shrink-0" />
-              Models
+              <Cpu className="size-4 shrink-0" />
+              {t.projects.tabs.models}
             </TabsTrigger>
             <TabsTrigger
               value="integration"
               className="px-4 py-2 rounded-lg data-active:bg-background data-active:text-foreground dark:data-active:bg-background/15 data-active:shadow-sm font-medium transition-all gap-2"
             >
               <Network className="size-4 shrink-0" />
-              Integration
+              {t.projects.tabs.integration}
             </TabsTrigger>
             <TabsTrigger
               value="stats"
               className="px-4 py-2 rounded-lg data-active:bg-background data-active:text-foreground dark:data-active:bg-background/15 data-active:shadow-sm font-medium transition-all gap-2"
             >
               <BarChart className="size-4 shrink-0" />
-              Stats
+              {t.projects.tabs.stats}
             </TabsTrigger>
           </TabsList>
 
