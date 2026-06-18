@@ -126,6 +126,7 @@ function ProjectStudioPage() {
             }
           }
           queryClient.invalidateQueries({ queryKey: ['project', projectId] })
+          queryClient.invalidateQueries({ queryKey: ['project-stats', projectId] })
         },
         {
           loading: 'Uploading files...',
@@ -328,6 +329,7 @@ function ProjectStudioPage() {
                       if (name) {
                         createCategory({ data: { projectId, name } }).then(() => {
                           queryClient.invalidateQueries({ queryKey: ['project', projectId] })
+                          queryClient.invalidateQueries({ queryKey: ['project-stats', projectId] })
                           toast.success('Category added')
                         })
                       }
@@ -379,7 +381,9 @@ function ProjectStudioPage() {
               </button>
 
               {project.categories.map((cat, idx) => {
-                const count = project.files.filter((f) => getFileCategoryIds(f).includes(cat.id)).length
+                const count = project.files.filter((f) =>
+                  getFileCategoryIds(f).includes(cat.id),
+                ).length
                 const isActive = selectedCategoryId === cat.id
                 const dotColor = colorsPalette[idx % colorsPalette.length]
                 return (
@@ -410,7 +414,9 @@ function ProjectStudioPage() {
             {project.files.length > 0 && (
               <div className="h-2 w-full rounded-full flex overflow-hidden bg-muted/20 border border-border/10 shadow-inner">
                 {project.categories.map((cat, idx) => {
-                  const count = project.files.filter((f) => getFileCategoryIds(f).includes(cat.id)).length
+                  const count = project.files.filter((f) =>
+                    getFileCategoryIds(f).includes(cat.id),
+                  ).length
                   if (count === 0) return null
                   const percentage = (count / project.files.length) * 100
                   const dotColor = colorsPalette[idx % colorsPalette.length]
@@ -425,7 +431,9 @@ function ProjectStudioPage() {
                 })}
                 {/* Unlabeled Files segment */}
                 {(() => {
-                  const unlabeledCount = project.files.filter((f) => getFileCategoryIds(f).length === 0).length
+                  const unlabeledCount = project.files.filter(
+                    (f) => getFileCategoryIds(f).length === 0,
+                  ).length
                   if (unlabeledCount === 0) return null
                   const percentage = (unlabeledCount / project.files.length) * 100
                   return (
@@ -447,22 +455,23 @@ function ProjectStudioPage() {
                 files={project.files}
                 categories={project.categories}
                 selectedCategoryId={selectedCategoryId}
-                
                 onBulkLabel={(ids, catId) =>
                   bulkLabelFiles({ data: { fileIds: ids, categoryId: catId } }).then(() => {
                     queryClient.invalidateQueries({ queryKey: ['project', projectId] })
+                    queryClient.invalidateQueries({ queryKey: ['project-stats', projectId] })
                   })
                 }
-
                 onDeleteFiles={(ids) => {
                   deleteFiles({ data: ids }).then(() => {
                     queryClient.invalidateQueries({ queryKey: ['project', projectId] })
+                    queryClient.invalidateQueries({ queryKey: ['project-stats', projectId] })
                     toast.success('Files deleted')
                   })
                 }}
                 onCreateCategory={(name) => {
                   createCategory({ data: { projectId, name } }).then(() => {
                     queryClient.invalidateQueries({ queryKey: ['project', projectId] })
+                    queryClient.invalidateQueries({ queryKey: ['project-stats', projectId] })
                     toast.success('Category added')
                   })
                 }}
@@ -476,18 +485,21 @@ function ProjectStudioPage() {
                 onBulkLabel={(ids, catId) =>
                   bulkLabelFiles({ data: { fileIds: ids, categoryId: catId } }).then(() => {
                     queryClient.invalidateQueries({ queryKey: ['project', projectId] })
+                    queryClient.invalidateQueries({ queryKey: ['project-stats', projectId] })
                     toast.success('Files labeled')
                   })
                 }
                 onDeleteFiles={(ids) => {
                   deleteFiles({ data: ids }).then(() => {
                     queryClient.invalidateQueries({ queryKey: ['project', projectId] })
+                    queryClient.invalidateQueries({ queryKey: ['project-stats', projectId] })
                     toast.success('Files deleted')
                   })
                 }}
                 onCreateCategory={(name) => {
                   createCategory({ data: { projectId, name } }).then(() => {
                     queryClient.invalidateQueries({ queryKey: ['project', projectId] })
+                    queryClient.invalidateQueries({ queryKey: ['project-stats', projectId] })
                     toast.success('Category added')
                   })
                 }}
@@ -623,7 +635,11 @@ function ProjectStudioPage() {
         </TabsContent>
 
         <TabsContent value="classes" className="mt-0">
-          <ClassesTable categories={project.categories} files={project.files} />
+          <ClassesTable
+            projectId={projectId}
+            categories={project.categories}
+            files={project.files}
+          />
         </TabsContent>
 
         <TabsContent value="models" className="mt-0">

@@ -225,7 +225,7 @@ export function LabelingGallery({
                               toast.success(
                                 checkedClassIds.length === 1
                                   ? 'Label applied successfully'
-                                  : `${checkedClassIds.length} labels applied successfully`
+                                  : `${checkedClassIds.length} labels applied successfully`,
                               )
                             }}
                             className="w-full h-8 rounded-xl gap-1.5 text-xs font-semibold"
