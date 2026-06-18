@@ -1,20 +1,21 @@
+import { GithubLogoIcon } from '@phosphor-icons/react'
 import { createFileRoute, Link, redirect } from '@tanstack/react-router'
-import { motion, useMotionValue, useTransform, animate } from 'framer-motion'
+import { animate, motion, useMotionValue, useTransform } from 'framer-motion'
 import {
   ArrowRight,
-  Eye,
-  ShieldCheck,
-  Tags,
-  Users,
-  ShieldCheck as ShieldCheckLucide,
-  FileOutput,
-  Upload,
-  ScanSearch,
   ArrowRightCircle,
-  Rocket,
-  FolderLock,
   Code2,
+  Eye,
+  FileOutput,
+  FolderLock,
   Layers,
+  Rocket,
+  ScanSearch,
+  ShieldCheck,
+  ShieldCheck as ShieldCheckLucide,
+  Tags,
+  Upload,
+  Users,
 } from 'lucide-react'
 import { useEffect, useRef } from 'react'
 import { Header } from '@/components/shared/header'
@@ -29,7 +30,6 @@ import { useI18n } from '@/i18n/context'
 import { cn } from '@/lib/utils'
 import { getServerSession } from '@/server/auth-fns'
 import { userOrgsQuery } from '@/server/query-keys'
-import { GithubLogoIcon } from '@phosphor-icons/react'
 
 export const Route = createFileRoute('/')({
   loader: async ({ context }) => {

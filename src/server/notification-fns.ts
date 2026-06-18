@@ -7,8 +7,8 @@ import { createServerFn } from '@tanstack/react-start'
 import { getRequest } from '@tanstack/react-start/server'
 import { and, desc, eq, lt } from 'drizzle-orm'
 import { z } from 'zod'
-import { notification } from '../../db/schema'
 import { db } from '../../db/index'
+import { notification } from '../../db/schema'
 
 // ── Shared type (safe for client import) ─────────────────────────────────────
 

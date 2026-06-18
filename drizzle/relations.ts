@@ -1,18 +1,18 @@
 import { relations } from 'drizzle-orm/relations'
 import {
-  user,
   account,
-  organization,
   galleryImage,
-  notification,
-  organizationRole,
-  project,
-  projectType,
-  projectCategory,
-  projectFile,
-  session,
   invitation,
   member,
+  notification,
+  organization,
+  organizationRole,
+  project,
+  projectCategory,
+  projectFile,
+  projectType,
+  session,
+  user,
 } from './schema'
 
 export const accountRelations = relations(account, ({ one }) => ({

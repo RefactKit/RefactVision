@@ -250,7 +250,7 @@ export const auth = betterAuth({
         // Platform-specific handler
         // Vercel/Nitro support waitUntil
         if (typeof (globalThis as any).waitUntil === 'function') {
-          ; (globalThis as any).waitUntil(promise)
+          ;(globalThis as any).waitUntil(promise)
         }
       },
     },

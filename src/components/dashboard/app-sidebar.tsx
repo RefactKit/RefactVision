@@ -1,3 +1,4 @@
+import { useQuery } from '@tanstack/react-query'
 import {
   Building2,
   ExternalLink,
@@ -19,12 +20,11 @@ import {
   SidebarSeparator,
 } from '@/components/ui/sidebar'
 import { useI18n } from '@/i18n/context'
-import { useQuery } from '@tanstack/react-query'
+import { projectsCountQuery } from '@/server/query-keys'
 import { NavMain } from './nav-main'
 import { NavSecondary } from './nav-secondary'
 import { NavUser } from './nav-user'
 import { OrgSwitcher } from './org-switcher'
-import { projectsCountQuery } from '@/server/query-keys'
 
 interface Org {
   id: string

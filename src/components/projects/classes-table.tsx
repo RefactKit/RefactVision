@@ -1,6 +1,8 @@
 'use client'
 
+import { Image as ImageIcon, Search, Shapes } from 'lucide-react'
 import { useState } from 'react'
+import { Input } from '@/components/ui/input'
 import {
   Table,
   TableBody,
@@ -9,8 +11,6 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table'
-import { Input } from '@/components/ui/input'
-import { Search, Shapes, Image as ImageIcon } from 'lucide-react'
 import { cn } from '@/lib/utils'
 
 const colorsPalette = [

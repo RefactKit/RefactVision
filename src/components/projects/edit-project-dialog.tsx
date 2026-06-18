@@ -1,5 +1,8 @@
-import { useState, useEffect } from 'react'
-import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
+import { Github, Link as LinkIcon, Pencil } from 'lucide-react'
+import { useEffect, useState } from 'react'
+import { toast } from 'sonner'
+import { Button } from '@/components/ui/button'
 import {
   Dialog,
   DialogContent,
@@ -8,10 +11,8 @@ import {
   DialogHeader,
   DialogTitle,
 } from '@/components/ui/dialog'
-import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
-import { Textarea } from '@/components/ui/textarea'
 import {
   Select,
   SelectContent,
@@ -19,11 +20,10 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select'
-import { useI18n } from '@/i18n/context'
 import { Spinner } from '@/components/ui/spinner'
-import { Pencil, Github, Link as LinkIcon } from 'lucide-react'
+import { Textarea } from '@/components/ui/textarea'
+import { useI18n } from '@/i18n/context'
 import { getProjectById, updateProject } from '@/server/project-fns'
-import { toast } from 'sonner'
 
 interface EditProjectDialogProps {
   projectId: string | null

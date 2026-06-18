@@ -1,6 +1,6 @@
 import { Link } from '@tanstack/react-router'
-import { cn } from '@/lib/utils'
 import { Scan } from 'lucide-react'
+import { cn } from '@/lib/utils'
 
 interface LogoProps {
   className?: string

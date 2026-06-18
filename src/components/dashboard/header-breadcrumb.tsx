@@ -1,6 +1,6 @@
-import { Link, useLocation, useParams } from '@tanstack/react-router'
 import { useQueryClient } from '@tanstack/react-query'
-import { LayoutDashboard, Users, Settings, LayoutGrid, Home } from 'lucide-react'
+import { Link, useLocation, useParams } from '@tanstack/react-router'
+import { Home, LayoutDashboard, LayoutGrid, Settings, Users } from 'lucide-react'
 import {
   Breadcrumb,
   BreadcrumbItem,

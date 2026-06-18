@@ -1,14 +1,14 @@
-import { Button } from '@/components/ui/button'
-import { Input } from '@/components/ui/input'
-import { Label } from '@/components/ui/label'
-import { PasswordInput } from '@/components/ui/password-input'
-import { useI18n } from '@/i18n/context'
 import { useForm } from '@tanstack/react-form'
 import { createFileRoute, Link, useNavigate } from '@tanstack/react-router'
 import { Mail } from 'lucide-react'
 import { useState } from 'react'
 import { toast } from 'sonner'
 import { z } from 'zod'
+import { Button } from '@/components/ui/button'
+import { Input } from '@/components/ui/input'
+import { Label } from '@/components/ui/label'
+import { PasswordInput } from '@/components/ui/password-input'
+import { useI18n } from '@/i18n/context'
 import { authClient } from '../../../lib/auth-client'
 import {
   AuthShell,
@@ -19,7 +19,6 @@ import {
   MicrosoftIcon,
   TwitterIcon,
 } from './-shared'
-
 
 export const Route = createFileRoute('/_auth/signup')({
   validateSearch: (search: Record<string, unknown>): { callbackURL?: string } => {
