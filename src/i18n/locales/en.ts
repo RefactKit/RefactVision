@@ -388,6 +388,13 @@ export const en = {
     search: 'Search projects...',
     noProjects: 'No projects found.',
     emptyDesc: 'Try adjusting your search or filters.',
+    tabs: {
+      dataset: 'Dataset',
+      classes: 'Classes',
+      models: 'Models',
+      integration: 'Integration',
+      stats: 'Stats',
+    },
     form: {
       title: 'Title',
       description: 'Description',

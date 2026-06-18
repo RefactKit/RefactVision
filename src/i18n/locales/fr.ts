@@ -316,6 +316,13 @@ export const fr: Translations = {
     search: 'Rechercher des projets...',
     noProjects: 'Aucun projet trouvé.',
     emptyDesc: 'Essayez d’ajuster votre recherche ou vos filtres.',
+    tabs: {
+      dataset: 'Données',
+      classes: 'Classes',
+      models: 'Modèles',
+      integration: 'Intégration',
+      stats: 'Statistiques',
+    },
     form: {
       title: 'Titre',
       description: 'Description',
