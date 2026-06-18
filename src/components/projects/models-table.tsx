@@ -4,8 +4,6 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { Link } from '@tanstack/react-router'
 import {
   Boxes,
-  Brain,
-  CheckCircle,
   Cpu,
   ExternalLink,
   Eye,
@@ -250,7 +248,7 @@ export function ModelsTable({ projectId }: ModelsTableProps) {
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
           <h3 className="text-lg font-semibold text-foreground flex items-center gap-2">
-            <Brain className="size-5 text-primary" />
+            <Cpu className="size-5 text-primary" />
             ML Models
           </h3>
           <p className="text-sm text-muted-foreground mt-1">
@@ -273,7 +271,7 @@ export function ModelsTable({ projectId }: ModelsTableProps) {
             variant="outline"
             size="icon"
             className="h-10 w-10 rounded-xl border-border/60 hover:bg-muted"
-            render={<Link to="/settings" search={{ view: 'models' }} />}
+            render={<Link to="/_app/settings" search={{ view: 'models' } as any} />}
             title="View Global Catalog"
           >
             <Eye className="size-4 text-muted-foreground hover:text-foreground" />
@@ -312,7 +310,7 @@ export function ModelsTable({ projectId }: ModelsTableProps) {
                 if (pm.metrics) {
                   try {
                     metricsObj = JSON.parse(pm.metrics)
-                  } catch (e) {
+                  } catch (_e) {
                     // ignore
                   }
                 }
@@ -395,7 +393,7 @@ export function ModelsTable({ projectId }: ModelsTableProps) {
                           variant="ghost"
                           size="icon-sm"
                           className="text-muted-foreground hover:text-foreground"
-                          render={<Link to="/settings" search={{ view: 'models' }} />}
+                          render={<Link to="/_app/settings" search={{ view: 'models' } as any} />}
                           title="View Global Catalog"
                         >
                           <Eye className="size-3.5" />
@@ -457,7 +455,7 @@ export function ModelsTable({ projectId }: ModelsTableProps) {
           <form onSubmit={handleRegister}>
             <DialogHeader>
               <DialogTitle className="flex items-center gap-2 text-foreground font-heading">
-                <Brain className="size-5 text-primary" />
+                <Cpu className="size-5 text-primary" />
                 Register Trained Model
               </DialogTitle>
               <DialogDescription>
