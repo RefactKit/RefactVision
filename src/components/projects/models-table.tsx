@@ -271,7 +271,7 @@ export function ModelsTable({ projectId }: ModelsTableProps) {
             variant="outline"
             size="icon"
             className="h-10 w-10 rounded-xl border-border/60 hover:bg-muted"
-            render={<Link to="/_app/settings" search={{ view: 'models' } as any} />}
+            render={<Link to="/settings" search={{ view: 'models' } as any} />}
             title="View Global Catalog"
           >
             <Eye className="size-4 text-muted-foreground hover:text-foreground" />
@@ -393,7 +393,7 @@ export function ModelsTable({ projectId }: ModelsTableProps) {
                           variant="ghost"
                           size="icon-sm"
                           className="text-muted-foreground hover:text-foreground"
-                          render={<Link to="/_app/settings" search={{ view: 'models' } as any} />}
+                          render={<Link to="/settings" search={{ view: 'models' } as any} />}
                           title="View Global Catalog"
                         >
                           <Eye className="size-3.5" />
