@@ -1,17 +1,3 @@
-import { AnimatePresence, motion } from 'framer-motion'
-import {
-  Check,
-  CheckCheck,
-  Download,
-  File as FileIcon,
-  FileSpreadsheet,
-  FileText,
-  Image as ImageIcon,
-  Plus,
-  Trash2,
-  X,
-} from 'lucide-react'
-import { useMemo, useState } from 'react'
 import { Button } from '@/components/ui/button'
 import { Field, FieldGroup } from '@/components/ui/field'
 import { Input } from '@/components/ui/input'
@@ -32,7 +18,22 @@ import {
   PopoverTrigger,
 } from '@/components/ui/popover'
 import { useI18n } from '@/i18n/context'
-import { cn } from '@/lib/utils'
+import { cn, getFileCategoryIds } from '@/lib/utils'
+import { AnimatePresence, motion } from 'framer-motion'
+import {
+  Check,
+  CheckCheck,
+  Download,
+  File as FileIcon,
+  FileSpreadsheet,
+  FileText,
+  Image as ImageIcon,
+  Plus,
+  Trash2,
+  X,
+} from 'lucide-react'
+import { useMemo, useState } from 'react'
+import { toast } from 'sonner'
 
 interface ProjectFile {
   id: string
@@ -92,8 +93,8 @@ export function LabelingGallery({
   const filteredFiles = useMemo(() => {
     return files.filter((f) => {
       if (!selectedCategoryId) return true
-      if (selectedCategoryId === '__unlabeled__') return f.categoryId === null
-      return f.categoryId === selectedCategoryId
+      if (selectedCategoryId === '__unlabeled__') return getFileCategoryIds(f).length === 0
+      return getFileCategoryIds(f).includes(selectedCategoryId)
     })
   }, [files, selectedCategoryId])
 
@@ -221,6 +222,11 @@ export function LabelingGallery({
                               setSelectedIds([])
                               setCheckedClassIds([])
                               setPopoverOpen(false)
+                              toast.success(
+                                checkedClassIds.length === 1
+                                  ? 'Label applied successfully'
+                                  : `${checkedClassIds.length} labels applied successfully`
+                              )
                             }}
                             className="w-full h-8 rounded-xl gap-1.5 text-xs font-semibold"
                           >

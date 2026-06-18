@@ -1,7 +1,5 @@
 'use client'
 
-import { Image as ImageIcon, Search, Shapes } from 'lucide-react'
-import { useState } from 'react'
 import { Input } from '@/components/ui/input'
 import {
   Table,
@@ -11,7 +9,9 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table'
-import { cn } from '@/lib/utils'
+import { cn, getFileCategoryIds } from '@/lib/utils'
+import { Image as ImageIcon, Search, Shapes } from 'lucide-react'
+import { useState } from 'react'
 
 const colorsPalette = [
   'bg-emerald-500',
@@ -33,6 +33,7 @@ interface Category {
 
 interface ProjectFile {
   categoryId: string | null
+  metadata?: string | null
 }
 
 export function ClassesTable({
@@ -48,8 +49,8 @@ export function ClassesTable({
     cat.name.toLowerCase().includes(searchQuery.toLowerCase()),
   )
 
-  const totalAnnotations = files.filter((f) => f.categoryId !== null).length
-  const totalImages = files.filter((f) => f.categoryId !== null).length
+  const totalAnnotations = files.filter((f) => getFileCategoryIds(f).length > 0).length
+  const totalImages = files.filter((f) => getFileCategoryIds(f).length > 0).length
 
   return (
     <div className="w-full flex flex-col gap-4 bg-background border border-border/40 shadow-sm rounded-2xl overflow-hidden p-6">
@@ -84,7 +85,7 @@ export function ClassesTable({
           </TableHeader>
           <TableBody>
             {filteredCategories.map((cat, index) => {
-              const fileCount = files.filter((f) => f.categoryId === cat.id).length
+              const fileCount = files.filter((f) => getFileCategoryIds(f).includes(cat.id)).length
               const colorClass = colorsPalette[index % colorsPalette.length]
 
               return (
