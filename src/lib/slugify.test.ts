@@ -3,7 +3,7 @@ import { slugify } from './slugify'
 
 describe('slugify utility', () => {
   it('should convert to lowercase', () => {
-    expect(slugify('RefactKit')).toBe('RefactKit')
+    expect(slugify('RefactKit')).toBe('refactkit')
   })
 
   it('should replace spaces with hyphens', () => {

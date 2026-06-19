@@ -5,8 +5,17 @@ import { nanoid } from 'nanoid'
 import { z } from 'zod'
 import { supabase } from '@/lib/supabase'
 import { db } from '../../db/index'
-import { member, project, projectCategory, projectFile, projectType } from '../../db/schema'
+import {
+  member,
+  project,
+  projectCategory,
+  projectFile,
+  projectType,
+  mlModel,
+  projectModel,
+} from '../../db/schema'
 import { auth } from '../../lib/auth'
+import { encrypt, decrypt } from './crypto-fns'
 
 // --- Types & Schemas ---
 
@@ -60,7 +69,7 @@ async function checkProjectPermission(
       return null
     })
 
-  if (check?.hasPermission) return true
+  if (check?.success) return true
 
   // 2. Fallback: Check membership directly via DB using the organizationId we already have
   //    (getActiveMember requires setActiveOrganization, which this app doesn't use)
@@ -156,7 +165,12 @@ export const getProjectById = createServerFn({ method: 'GET' }).handler(async ({
     .from(projectCategory)
     .where(eq(projectCategory.projectId, projectId))
 
-  return { ...proj, files, categories }
+  return {
+    ...proj,
+    roboflowApiKey: proj.roboflowApiKey ? '••••••••' : null,
+    files,
+    categories,
+  }
 })
 
 /** Create a new project */
@@ -170,6 +184,18 @@ export const createProject = createServerFn({ method: 'POST' }).handler(async ({
   const hasPermission = await checkProjectPermission(request, validated.organizationId, 'create')
   if (!hasPermission) {
     throw new Error('Unauthorized: You do not have permission to create a project')
+  }
+
+  // Check if a project with the same title already exists in this organization
+  const existingProject = await db.query.project.findFirst({
+    where: and(
+      eq(project.organizationId, validated.organizationId),
+      sql`lower(${project.title}) = lower(${validated.title})`,
+    ),
+  })
+
+  if (existingProject) {
+    throw new Error('A project with this title already exists in this organization')
   }
 
   const id = nanoid()
@@ -203,6 +229,20 @@ export const updateProject = createServerFn({ method: 'POST' }).handler(async ({
 
   const hasAccess = await checkProjectPermission(request, proj.organizationId, 'update')
   if (!hasAccess) throw new Error('Unauthorized')
+
+  // Check if the title is being changed and if it conflicts with an existing project
+  if (updates.title && updates.title.toLowerCase() !== proj.title.toLowerCase()) {
+    const existingProject = await db.query.project.findFirst({
+      where: and(
+        eq(project.organizationId, proj.organizationId),
+        sql`lower(${project.title}) = lower(${updates.title})`,
+      ),
+    })
+
+    if (existingProject) {
+      throw new Error('A project with this title already exists in this organization')
+    }
+  }
 
   await db.update(project).set(updates).where(eq(project.id, id))
   return { success: true }
@@ -484,4 +524,265 @@ export const getProjectStats = createServerFn({ method: 'GET' }).handler(async (
     meanHeight: 1050,
     extensionsData,
   }
+})
+
+// --- Roboflow BYOK Integration Functions ---
+
+/** Save/Update Roboflow configuration */
+export const saveRoboflowConfig = createServerFn({ method: 'POST' }).handler(async ({ data }) => {
+  const {
+    projectId,
+    apiKey,
+    workspace,
+    project: rfProject,
+  } = z
+    .object({
+      projectId: z.string(),
+      apiKey: z.string().min(1),
+      workspace: z.string().min(1),
+      project: z.string().min(1),
+    })
+    .parse(data)
+
+  const request = getRequest()
+  const [proj] = await db.select().from(project).where(eq(project.id, projectId)).limit(1)
+  if (!proj) throw new Error('Project not found')
+
+  const hasAccess = await checkProjectPermission(request, proj.organizationId, 'update')
+  if (!hasAccess) throw new Error('Unauthorized')
+
+  const secretKey = process.env.BETTER_AUTH_SECRET
+  if (!secretKey) throw new Error('Encryption secret is not configured on the server')
+
+  let encryptedKey = proj.roboflowApiKey
+  if (apiKey !== '••••••••') {
+    encryptedKey = encrypt(apiKey, secretKey)
+  }
+
+  await db
+    .update(project)
+    .set({
+      roboflowApiKey: encryptedKey,
+      roboflowWorkspace: workspace,
+      roboflowProject: rfProject,
+    })
+    .where(eq(project.id, projectId))
+
+  console.log(`[ROBOFLOW] Configured integration for project: ${projectId}`)
+  return { success: true }
+})
+
+/** Disconnect Roboflow configuration */
+export const disconnectRoboflow = createServerFn({ method: 'POST' }).handler(async ({ data }) => {
+  const { projectId } = z.object({ projectId: z.string() }).parse(data)
+  const request = getRequest()
+
+  const [proj] = await db.select().from(project).where(eq(project.id, projectId)).limit(1)
+  if (!proj) throw new Error('Project not found')
+
+  const hasAccess = await checkProjectPermission(request, proj.organizationId, 'update')
+  if (!hasAccess) throw new Error('Unauthorized')
+
+  await db
+    .update(project)
+    .set({
+      roboflowApiKey: null,
+      roboflowWorkspace: null,
+      roboflowProject: null,
+    })
+    .where(eq(project.id, projectId))
+
+  console.log(`[ROBOFLOW] Disconnected integration for project: ${projectId}`)
+  return { success: true }
+})
+
+/** Push labeled project files/images to Roboflow */
+export const pushProjectFilesToRoboflow = createServerFn({ method: 'POST' }).handler(
+  async ({ data }) => {
+    const { projectId } = z.object({ projectId: z.string() }).parse(data)
+    const request = getRequest()
+
+    const [proj] = await db.select().from(project).where(eq(project.id, projectId)).limit(1)
+    if (!proj) throw new Error('Project not found')
+
+    const hasAccess = await checkProjectPermission(request, proj.organizationId, 'update')
+    if (!hasAccess) throw new Error('Unauthorized')
+
+    if (!proj.roboflowApiKey || !proj.roboflowWorkspace || !proj.roboflowProject) {
+      throw new Error('Roboflow is not integrated for this project')
+    }
+
+    const secretKey = process.env.BETTER_AUTH_SECRET
+    if (!secretKey) throw new Error('Encryption secret is not configured on the server')
+
+    const apiKey = decrypt(proj.roboflowApiKey, secretKey)
+
+    // Fetch labeled files
+    const files = await db
+      .select()
+      .from(projectFile)
+      .where(and(eq(projectFile.projectId, projectId), eq(projectFile.labeled, true)))
+
+    // Fetch categories map
+    const categories = await db
+      .select()
+      .from(projectCategory)
+      .where(eq(projectCategory.projectId, projectId))
+
+    const categoryMap = new Map(categories.map((c) => [c.id, c.name]))
+
+    let successCount = 0
+    let failCount = 0
+
+    for (const file of files) {
+      if (!file.mimeType.startsWith('image/')) {
+        continue
+      }
+
+      try {
+        // Fetch binary image content
+        const imageResponse = await fetch(file.url)
+        if (!imageResponse.ok) {
+          console.error(`[ROBOFLOW] Failed to download image ${file.name} from storage`)
+          failCount++
+          continue
+        }
+
+        const arrayBuffer = await imageResponse.arrayBuffer()
+        const base64Data = Buffer.from(arrayBuffer).toString('base64')
+
+        const labelName = file.categoryId
+          ? categoryMap.get(file.categoryId) || 'unlabeled'
+          : 'unlabeled'
+
+        const uploadUrl = `https://api.roboflow.com/dataset/${proj.roboflowProject}/upload?api_key=${apiKey}&name=${encodeURIComponent(file.name)}&split=train&label=${encodeURIComponent(labelName)}`
+
+        const roboflowResponse = await fetch(uploadUrl, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/x-www-form-urlencoded',
+          },
+          body: base64Data,
+        })
+
+        if (!roboflowResponse.ok) {
+          const errText = await roboflowResponse.text()
+          console.error(`[ROBOFLOW] API upload error for file ${file.name}:`, errText)
+          failCount++
+        } else {
+          successCount++
+        }
+      } catch (err) {
+        console.error(`[ROBOFLOW] Exception uploading file ${file.name}:`, err)
+        failCount++
+      }
+    }
+
+    console.log(
+      `[ROBOFLOW] Labeled images push result: ${successCount} succeeded, ${failCount} failed`,
+    )
+    return { success: true, successCount, failCount }
+  },
+)
+
+/** Synchronize models and runs from Roboflow */
+export const syncRoboflowModels = createServerFn({ method: 'POST' }).handler(async ({ data }) => {
+  const { projectId } = z.object({ projectId: z.string() }).parse(data)
+  const request = getRequest()
+
+  const [proj] = await db.select().from(project).where(eq(project.id, projectId)).limit(1)
+  if (!proj) throw new Error('Project not found')
+
+  const hasAccess = await checkProjectPermission(request, proj.organizationId, 'read')
+  if (!hasAccess) throw new Error('Unauthorized')
+
+  if (!proj.roboflowApiKey || !proj.roboflowWorkspace || !proj.roboflowProject) {
+    throw new Error('Roboflow is not integrated for this project')
+  }
+
+  const secretKey = process.env.BETTER_AUTH_SECRET
+  if (!secretKey) throw new Error('Encryption secret is not configured on the server')
+
+  const apiKey = decrypt(proj.roboflowApiKey, secretKey)
+
+  // Seed global "roboflow" model in mlModel if missing
+  const globalModelId = 'roboflow'
+  const [existingGlobal] = await db
+    .select()
+    .from(mlModel)
+    .where(eq(mlModel.id, globalModelId))
+    .limit(1)
+  if (!existingGlobal) {
+    await db.insert(mlModel).values({
+      id: globalModelId,
+      name: 'Roboflow Model',
+      framework: 'Roboflow',
+      architecture: 'Roboflow',
+      version: 'v1.0',
+      description: 'Global placeholder model for Roboflow integrations',
+    })
+  }
+
+  // Fetch models from Roboflow
+  const url = `https://api.roboflow.com/${proj.roboflowWorkspace}/${proj.roboflowProject}/models?api_key=${apiKey}`
+  const response = await fetch(url)
+  if (!response.ok) {
+    throw new Error(`Failed to fetch models from Roboflow: ${response.statusText}`)
+  }
+
+  const responseData = await response.json()
+  const modelsList = Array.isArray(responseData) ? responseData : responseData?.models || []
+
+  // Fetch existing projectModel records
+  const existingModels = await db
+    .select()
+    .from(projectModel)
+    .where(and(eq(projectModel.projectId, projectId), eq(projectModel.modelId, globalModelId)))
+
+  let syncCount = 0
+
+  for (const model of modelsList) {
+    const versionStr = String(model.version || '')
+    if (!versionStr) continue
+
+    const metricsStr = model.metrics ? JSON.stringify(model.metrics) : null
+    const status =
+      model.train?.status === 'finished'
+        ? 'ready'
+        : model.train?.status === 'training'
+          ? 'training'
+          : 'ready'
+    const description = model.modelType || 'Synchronized from Roboflow'
+    const name = model.name || `Roboflow Model v${versionStr}`
+
+    const existing = existingModels.find((m) => m.version === versionStr)
+
+    if (existing) {
+      await db
+        .update(projectModel)
+        .set({
+          name,
+          status,
+          metrics: metricsStr,
+          description,
+          updatedAt: new Date(),
+        })
+        .where(eq(projectModel.id, existing.id))
+    } else {
+      await db.insert(projectModel).values({
+        id: nanoid(),
+        projectId,
+        modelId: globalModelId,
+        name,
+        status,
+        version: versionStr,
+        metrics: metricsStr,
+        description,
+      })
+    }
+    syncCount++
+  }
+
+  console.log(`[ROBOFLOW] Synchronized ${syncCount} models for project: ${projectId}`)
+  return { success: true, syncCount }
 })

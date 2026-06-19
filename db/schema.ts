@@ -287,6 +287,9 @@ export const project = pgTable(
     otherUrl: text('other_url'),
     slug: text('slug').notNull(),
     typeId: text('type_id').references(() => projectType.id, { onDelete: 'set null' }),
+    roboflowApiKey: text('roboflow_api_key'),
+    roboflowWorkspace: text('roboflow_workspace'),
+    roboflowProject: text('roboflow_project'),
     createdAt: timestamp('created_at').defaultNow().notNull(),
     updatedAt: timestamp('updated_at')
       .defaultNow()
