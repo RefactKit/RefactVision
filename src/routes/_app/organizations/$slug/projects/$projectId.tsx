@@ -1,20 +1,28 @@
 import { GithubIcon } from '@hugeicons/core-free-icons'
 import { HugeiconsIcon } from '@hugeicons/react'
-import { useQuery, useQueryClient } from '@tanstack/react-query'
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { createFileRoute, Link, useParams } from '@tanstack/react-router'
 import {
   ArrowLeft,
   BarChart,
+  CheckCircle2,
   Cpu,
   Database,
+  ExternalLink,
   Globe,
+  Key,
   LayoutGrid,
+  Link2Off,
   List,
   MoreHorizontal,
   Network,
   Pencil,
   Plus,
+  RefreshCw,
+  Send,
+  Settings2,
   Tags,
+  Upload,
 } from 'lucide-react'
 import { useState } from 'react'
 import { toast } from 'sonner'
@@ -24,6 +32,7 @@ import { LabelingGallery } from '@/components/projects/labeling-gallery'
 import { ModelsTable } from '@/components/projects/models-table'
 import { ProjectFilesTable } from '@/components/projects/project-files-table'
 import { ProjectStats } from '@/components/projects/project-stats'
+import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardDescription, CardHeader } from '@/components/ui/card'
 import {
@@ -34,6 +43,7 @@ import {
 } from '@/components/ui/dropdown-menu'
 import { Field, FieldLabel } from '@/components/ui/field'
 import { Input } from '@/components/ui/input'
+import { Separator } from '@/components/ui/separator'
 import { Skeleton } from '@/components/ui/skeleton'
 import { Spinner } from '@/components/ui/spinner'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
@@ -43,9 +53,13 @@ import {
   bulkLabelFiles,
   createCategory,
   deleteFiles,
+  disconnectRoboflow,
   getProjectById,
   getProjectStats,
   linkProjectFile,
+  pushProjectFilesToRoboflow,
+  saveRoboflowConfig,
+  syncRoboflowModels,
 } from '@/server/project-fns'
 import { orgBySlugQuery } from '@/server/query-keys'
 import { uploadFile } from '@/server/storage-fns'
@@ -76,9 +90,12 @@ function ProjectStudioPage() {
   const [isEditOpen, setIsEditOpen] = useState(false)
   const [activeTab, setActiveTab] = useState('dataset')
   const [ultraKey, setUltraKey] = useState('')
-  const [roboflowKey, setRoboflowKey] = useState('')
   const [isUltraImporting, setIsUltraImporting] = useState(false)
-  const [isRoboflowImporting, setIsRoboflowImporting] = useState(false)
+
+  // Roboflow BYOK state
+  const [rfApiKey, setRfApiKey] = useState('')
+  const [rfWorkspace, setRfWorkspace] = useState('')
+  const [rfProject, setRfProject] = useState('')
 
   const { data: project, isLoading } = useQuery({
     queryKey: ['project', projectId],
@@ -91,6 +108,72 @@ function ProjectStudioPage() {
   })
 
   const { data: org } = useQuery(orgBySlugQuery(slug))
+
+  // Roboflow mutations
+  const isRoboflowConfigured = !!(
+    project?.roboflowApiKey &&
+    project?.roboflowWorkspace &&
+    project?.roboflowProject
+  )
+
+  const saveConfigMutation = useMutation({
+    mutationFn: (formData: { apiKey: string; workspace: string; project: string }) =>
+      saveRoboflowConfig({
+        data: {
+          projectId,
+          apiKey: formData.apiKey,
+          workspace: formData.workspace,
+          project: formData.project,
+        },
+      }),
+    onSuccess: () => {
+      toast.success('Roboflow integration configured successfully!')
+      setRfApiKey('')
+      setRfWorkspace('')
+      setRfProject('')
+      queryClient.invalidateQueries({ queryKey: ['project', projectId] })
+    },
+    onError: (err: Error) => {
+      toast.error(err.message || 'Failed to save Roboflow configuration')
+    },
+  })
+
+  const disconnectMutation = useMutation({
+    mutationFn: () => disconnectRoboflow({ data: { projectId } }),
+    onSuccess: () => {
+      toast.success('Roboflow integration disconnected')
+      queryClient.invalidateQueries({ queryKey: ['project', projectId] })
+    },
+    onError: (err: Error) => {
+      toast.error(err.message || 'Failed to disconnect')
+    },
+  })
+
+  const pushImagesMutation = useMutation({
+    mutationFn: () => pushProjectFilesToRoboflow({ data: { projectId } }),
+    onSuccess: (result) => {
+      toast.success(
+        `Pushed ${result.successCount} images to Roboflow${result.failCount > 0 ? ` (${result.failCount} failed)` : ''}`,
+      )
+    },
+    onError: (err: Error) => {
+      toast.error(err.message || 'Failed to push images')
+    },
+  })
+
+  const syncModelsMutation = useMutation({
+    mutationFn: () => syncRoboflowModels({ data: { projectId } }),
+    onSuccess: (result) => {
+      toast.success(`Synchronized ${result.syncCount} models from Roboflow`)
+      queryClient.invalidateQueries({ queryKey: ['project', projectId] })
+    },
+    onError: (err: Error) => {
+      toast.error(err.message || 'Failed to sync models')
+    },
+  })
+
+  const labeledFileCount =
+    project?.files?.filter((f: { labeled: boolean }) => f.labeled).length || 0
 
   const handleUpload = async () => {
     const input = document.createElement('input')
@@ -572,65 +655,219 @@ function ProjectStudioPage() {
             </Card>
 
             {/* Roboflow Card */}
-            <Card className="flex flex-col gap-6">
-              <CardHeader className="flex flex-col items-center text-center gap-4 pb-0">
-                <div className="flex items-center justify-center h-20 w-full p-2 bg-white rounded-2xl border border-border/10 shadow-sm dark:bg-white dark:border-white/20">
-                  <img
-                    src="/roboflow.png"
-                    alt="Roboflow Logo"
-                    className="h-12 w-auto object-contain"
-                  />
-                </div>
-                <CardDescription className="text-center text-sm font-normal text-muted-foreground leading-relaxed max-w-sm">
-                  Import every dataset from your Roboflow workspace. Re-run to pull in new datasets.
-                </CardDescription>
-              </CardHeader>
-              <CardContent className="flex-1 flex flex-col justify-end">
-                <form
-                  onSubmit={(e) => {
-                    e.preventDefault()
-                    if (!roboflowKey) {
-                      toast.error('Please enter a Roboflow API Key')
-                      return
-                    }
-                    setIsRoboflowImporting(true)
-                    setTimeout(() => {
-                      setIsRoboflowImporting(false)
-                      toast.success('Roboflow integration configured successfully!')
-                      setRoboflowKey('')
-                    }, 2000)
-                  }}
-                  className="flex flex-col gap-4"
-                >
-                  <Field>
-                    <FieldLabel className="text-left font-medium text-foreground">
-                      Roboflow API Key
-                    </FieldLabel>
-                    <Input
-                      type="password"
-                      placeholder="Enter your Roboflow API key..."
-                      value={roboflowKey}
-                      onChange={(e) => setRoboflowKey(e.target.value)}
-                      className="rounded-xl h-10 w-full"
+            {isRoboflowConfigured ? (
+              <Card className="flex flex-col gap-6">
+                <CardHeader className="flex flex-col items-center text-center gap-4 pb-0">
+                  <div className="flex items-center justify-center h-20 w-full p-2 bg-white rounded-2xl border border-border/10 shadow-sm dark:bg-white dark:border-white/20">
+                    <img
+                      src="/roboflow.png"
+                      alt="Roboflow Logo"
+                      className="h-12 w-auto object-contain"
                     />
-                  </Field>
-                  <Button
-                    type="submit"
-                    className="rounded-xl h-10 w-full font-medium shadow-sm transition-all"
-                    disabled={isRoboflowImporting || !roboflowKey.trim()}
+                  </div>
+                  <div className="flex flex-col items-center gap-1.5 w-full">
+                    <div className="flex items-center justify-center gap-2">
+                      <h3 className="font-semibold text-foreground text-base">Roboflow BYOK</h3>
+                      <Badge
+                        variant="outline"
+                        className="flex items-center gap-1.5 py-0.5 px-2 bg-emerald-500/10 text-emerald-600 border-emerald-500/20 dark:text-emerald-400 text-xs"
+                      >
+                        <span className="relative flex h-1.5 w-1.5">
+                          <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+                          <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-emerald-500"></span>
+                        </span>
+                        Connected
+                      </Badge>
+                    </div>
+                    <CardDescription className="text-xs text-muted-foreground">
+                      Secure active integration
+                    </CardDescription>
+                  </div>
+                </CardHeader>
+
+                <CardContent className="flex-1 flex flex-col gap-5 justify-between">
+                  <div className="space-y-4">
+                    <div className="grid grid-cols-3 gap-2 py-1 text-xs border-b border-border/40 pb-2">
+                      <span className="text-muted-foreground font-medium text-left">Workspace</span>
+                      <span className="col-span-2 text-foreground font-semibold font-mono truncate text-right">
+                        {project.roboflowWorkspace}
+                      </span>
+                    </div>
+                    <div className="grid grid-cols-3 gap-2 py-1 text-xs border-b border-border/40 pb-2">
+                      <span className="text-muted-foreground font-medium text-left">
+                        Project ID
+                      </span>
+                      <span className="col-span-2 text-foreground font-semibold font-mono truncate text-right">
+                        {project.roboflowProject}
+                      </span>
+                    </div>
+                    <div className="grid grid-cols-3 gap-2 py-1 text-xs border-b border-border/40 pb-2">
+                      <span className="text-muted-foreground font-medium text-left">API Key</span>
+                      <span className="col-span-2 text-foreground font-mono text-right">
+                        {project.roboflowApiKey}
+                      </span>
+                    </div>
+                  </div>
+
+                  <div className="flex flex-col gap-3">
+                    <Button
+                      onClick={() => pushImagesMutation.mutate()}
+                      className="rounded-xl h-10 w-full font-medium shadow-sm transition-all flex items-center justify-center gap-2 bg-primary hover:bg-primary/95 text-primary-foreground"
+                      disabled={pushImagesMutation.isPending}
+                    >
+                      {pushImagesMutation.isPending ? (
+                        <>
+                          <Spinner
+                            data-icon="inline-start"
+                            className="h-4 w-4 text-primary-foreground animate-spin"
+                          />
+                          Pushing labeled data...
+                        </>
+                      ) : (
+                        <>
+                          <Send className="h-4 w-4" />
+                          Push Labeled Images ({labeledFileCount} pending)
+                        </>
+                      )}
+                    </Button>
+
+                    <div className="grid grid-cols-2 gap-3">
+                      <Button
+                        variant="outline"
+                        onClick={() => syncModelsMutation.mutate()}
+                        className="rounded-xl h-10 font-medium shadow-sm transition-all flex items-center justify-center gap-2 border-border/60 hover:bg-muted"
+                        disabled={syncModelsMutation.isPending}
+                      >
+                        {syncModelsMutation.isPending ? (
+                          <>
+                            <Spinner data-icon="inline-start" className="h-4 w-4 animate-spin" />
+                            Syncing...
+                          </>
+                        ) : (
+                          <>
+                            <RefreshCw className="h-4 w-4" />
+                            Sync Models
+                          </>
+                        )}
+                      </Button>
+
+                      <Button
+                        variant="outline"
+                        onClick={() => disconnectMutation.mutate()}
+                        className="rounded-xl h-10 font-medium shadow-sm transition-all flex items-center justify-center gap-2 border-red-200 text-red-600 hover:bg-red-50 hover:text-red-700 dark:border-red-500/30 dark:text-red-400 dark:hover:bg-red-950/30 dark:hover:text-red-300"
+                        disabled={disconnectMutation.isPending}
+                      >
+                        {disconnectMutation.isPending ? (
+                          <>
+                            <Spinner data-icon="inline-start" className="h-4 w-4 animate-spin" />
+                            Disconnecting...
+                          </>
+                        ) : (
+                          <>
+                            <Link2Off className="h-4 w-4" />
+                            Disconnect
+                          </>
+                        )}
+                      </Button>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+            ) : (
+              <Card className="flex flex-col gap-6">
+                <CardHeader className="flex flex-col items-center text-center gap-4 pb-0">
+                  <div className="flex items-center justify-center h-20 w-full p-2 bg-white rounded-2xl border border-border/10 shadow-sm dark:bg-white dark:border-white/20">
+                    <img
+                      src="/roboflow.png"
+                      alt="Roboflow Logo"
+                      className="h-12 w-auto object-contain"
+                    />
+                  </div>
+                  <CardDescription className="text-center text-sm font-normal text-muted-foreground leading-relaxed max-w-sm">
+                    Securely configure your own Roboflow credentials (BYOK) to push labeled images
+                    and synchronize models.
+                  </CardDescription>
+                </CardHeader>
+                <CardContent className="flex-1 flex flex-col justify-end">
+                  <form
+                    onSubmit={(e) => {
+                      e.preventDefault()
+                      if (!rfApiKey.trim() || !rfWorkspace.trim() || !rfProject.trim()) {
+                        toast.error('Please fill in all Roboflow integration fields')
+                        return
+                      }
+                      saveConfigMutation.mutate({
+                        apiKey: rfApiKey,
+                        workspace: rfWorkspace,
+                        project: rfProject,
+                      })
+                    }}
+                    className="flex flex-col gap-4"
                   >
-                    {isRoboflowImporting ? (
-                      <>
-                        <Spinner data-icon="inline-start" />
-                        Importing...
-                      </>
-                    ) : (
-                      'Import'
-                    )}
-                  </Button>
-                </form>
-              </CardContent>
-            </Card>
+                    <Field className="space-y-1">
+                      <FieldLabel className="text-left font-medium text-foreground text-xs">
+                        Roboflow API Key
+                      </FieldLabel>
+                      <Input
+                        type="password"
+                        placeholder="Enter private API Key..."
+                        value={rfApiKey}
+                        onChange={(e) => setRfApiKey(e.target.value)}
+                        className="rounded-xl h-9 text-sm w-full"
+                      />
+                    </Field>
+                    <div className="grid grid-cols-2 gap-3">
+                      <Field className="space-y-1">
+                        <FieldLabel className="text-left font-medium text-foreground text-xs">
+                          Workspace ID
+                        </FieldLabel>
+                        <Input
+                          type="text"
+                          placeholder="e.g. my-workspace"
+                          value={rfWorkspace}
+                          onChange={(e) => setRfWorkspace(e.target.value)}
+                          className="rounded-xl h-9 text-sm w-full"
+                        />
+                      </Field>
+                      <Field className="space-y-1">
+                        <FieldLabel className="text-left font-medium text-foreground text-xs">
+                          Project ID (slug)
+                        </FieldLabel>
+                        <Input
+                          type="text"
+                          placeholder="e.g. object-detection-xyz"
+                          value={rfProject}
+                          onChange={(e) => setRfProject(e.target.value)}
+                          className="rounded-xl h-9 text-sm w-full"
+                        />
+                      </Field>
+                    </div>
+                    <Button
+                      type="submit"
+                      className="rounded-xl h-10 w-full font-medium shadow-sm transition-all bg-primary text-primary-foreground hover:bg-primary/95"
+                      disabled={
+                        saveConfigMutation.isPending ||
+                        !rfApiKey.trim() ||
+                        !rfWorkspace.trim() ||
+                        !rfProject.trim()
+                      }
+                    >
+                      {saveConfigMutation.isPending ? (
+                        <>
+                          <Spinner
+                            data-icon="inline-start"
+                            className="text-primary-foreground animate-spin"
+                          />
+                          Connecting...
+                        </>
+                      ) : (
+                        'Save & Connect Integration'
+                      )}
+                    </Button>
+                  </form>
+                </CardContent>
+              </Card>
+            )}
           </div>
         </TabsContent>
 

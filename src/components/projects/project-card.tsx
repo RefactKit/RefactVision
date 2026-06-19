@@ -13,13 +13,13 @@ import {
   FileText,
   FileVideo,
   Folder,
-  Globe,
   MoreVertical,
   Pencil,
   Share2,
   Trash2,
   User,
 } from 'lucide-react'
+import { useState } from 'react'
 import { toast } from 'sonner'
 import {
   AlertDialog,
@@ -30,10 +30,7 @@ import {
   AlertDialogFooter,
   AlertDialogHeader,
   AlertDialogTitle,
-  AlertDialogTrigger,
 } from '@/components/ui/alert-dialog'
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
-import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import {
   Card,
@@ -96,10 +93,11 @@ export function ProjectCard({
   permissions,
 }: ProjectCardProps) {
   const { t, dateLocale } = useI18n()
+  const [showDeleteDialog, setShowDeleteDialog] = useState(false)
 
   const hasPermission = (resource: string, action: string) => {
     if (userRole === 'owner') return true
-    if (permissions && permissions[resource]) {
+    if (permissions?.[resource]) {
       return permissions[resource].includes(action)
     }
     // Fallback to static check if no dynamic permissions loaded
@@ -342,45 +340,48 @@ export function ProjectCard({
                 {canDelete && (
                   <>
                     <DropdownMenuSeparator />
-                    <AlertDialog>
-                      <AlertDialogTrigger asChild>
-                        <DropdownMenuItem
-                          onSelect={(e) => e.preventDefault()}
-                          className="text-destructive focus:bg-destructive/10 focus:text-destructive"
-                        >
-                          <Trash2 className="mr-2 size-4" />
-                          Delete Project
-                        </DropdownMenuItem>
-                      </AlertDialogTrigger>
-                      <AlertDialogContent onClick={(e) => e.stopPropagation()}>
-                        <AlertDialogHeader>
-                          <AlertDialogTitle>{t.projects.card.deleteTitle}</AlertDialogTitle>
-                          <AlertDialogDescription>
-                            {t.projects.card.deleteDesc}
-                          </AlertDialogDescription>
-                        </AlertDialogHeader>
-                        <AlertDialogFooter>
-                          <AlertDialogCancel onClick={(e) => e.stopPropagation()}>
-                            {t.common.cancel}
-                          </AlertDialogCancel>
-                          <AlertDialogAction
-                            onClick={(e) => {
-                              e.stopPropagation()
-                              onDelete?.()
-                            }}
-                            className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
-                          >
-                            {t.actions.delete}
-                          </AlertDialogAction>
-                        </AlertDialogFooter>
-                      </AlertDialogContent>
-                    </AlertDialog>
+                    <DropdownMenuItem
+                      onClick={(e) => {
+                        e.stopPropagation()
+                        setShowDeleteDialog(true)
+                      }}
+                      className="text-destructive focus:bg-destructive/10 focus:text-destructive"
+                    >
+                      <Trash2 className="mr-2 size-4" />
+                      Delete Project
+                    </DropdownMenuItem>
                   </>
                 )}
               </DropdownMenuContent>
             </DropdownMenu>
           </CardAction>
         </CardHeader>
+
+        {canDelete && (
+          <AlertDialog open={showDeleteDialog} onOpenChange={setShowDeleteDialog}>
+            <AlertDialogContent onClick={(e) => e.stopPropagation()}>
+              <AlertDialogHeader>
+                <AlertDialogTitle>{t.projects.card.deleteTitle}</AlertDialogTitle>
+                <AlertDialogDescription>{t.projects.card.deleteDesc}</AlertDialogDescription>
+              </AlertDialogHeader>
+              <AlertDialogFooter>
+                <AlertDialogCancel onClick={(e) => e.stopPropagation()}>
+                  {t.common.cancel}
+                </AlertDialogCancel>
+                <AlertDialogAction
+                  onClick={(e) => {
+                    e.stopPropagation()
+                    onDelete?.()
+                    setShowDeleteDialog(false)
+                  }}
+                  className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
+                >
+                  {t.actions.delete}
+                </AlertDialogAction>
+              </AlertDialogFooter>
+            </AlertDialogContent>
+          </AlertDialog>
+        )}
 
         <CardContent className="flex-1">
           <div className="flex flex-col gap-2">
