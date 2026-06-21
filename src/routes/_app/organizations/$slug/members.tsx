@@ -1,6 +1,6 @@
 import { Crown, Shield, User } from '@phosphor-icons/react'
 import { useQuery, useQueryClient } from '@tanstack/react-query'
-import { createFileRoute, redirect } from '@tanstack/react-router'
+import { createFileRoute } from '@tanstack/react-router'
 import { Link2, Mail, Plus, UserPlus } from 'lucide-react'
 import { useState } from 'react'
 import { toast } from 'sonner'

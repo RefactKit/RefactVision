@@ -1,19 +1,7 @@
-import { Link } from '@tanstack/react-router'
-import { Check, Languages, Monitor, Moon, Sun } from 'lucide-react'
-import { useTheme } from 'next-themes'
-import { useEffect, useState } from 'react'
-import { LanguageToggle, ThemeToggle } from '@/components/shared/auth-ui'
+import { Check } from 'lucide-react'
 import { Header } from '@/components/shared/header'
 import { Logo as SharedLogo } from '@/components/shared/logo'
 import { DotPattern } from '@/components/ui/dot-pattern'
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuRadioGroup,
-  DropdownMenuRadioItem,
-  DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu'
-import type { Locale } from '@/i18n'
 import { useI18n } from '@/i18n/context'
 
 export function AuthShell({

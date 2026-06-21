@@ -1,5 +1,5 @@
 import { useQuery } from '@tanstack/react-query'
-import { createFileRoute, Link, Outlet, redirect, useParams } from '@tanstack/react-router'
+import { createFileRoute, Outlet, redirect, useParams } from '@tanstack/react-router'
 import { useEffect, useState } from 'react'
 import { AppSidebar } from '@/components/dashboard/app-sidebar'
 import { HeaderBreadcrumb } from '@/components/dashboard/header-breadcrumb'

@@ -1,4 +1,4 @@
-import { ChevronDown, ChevronRight, MoreVertical, Pencil, Plus, Tag, Trash2 } from 'lucide-react'
+import { Plus, Tag, Trash2 } from 'lucide-react'
 import { useState } from 'react'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'

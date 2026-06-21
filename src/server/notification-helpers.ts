@@ -3,7 +3,7 @@
  * These functions are ONLY imported by lib/auth.ts (server-side hooks).
  * They must NEVER be imported from client-side code.
  */
-import { and, eq } from 'drizzle-orm'
+import { eq } from 'drizzle-orm'
 import { nanoid } from 'nanoid'
 import { db } from '../../db/index'
 import { member, notification, user } from '../../db/schema'

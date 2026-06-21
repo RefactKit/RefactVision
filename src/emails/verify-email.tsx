@@ -1,5 +1,4 @@
 import { Button, Heading, Img, Section, Text } from '@react-email/components'
-import React from 'react'
 import { EmailLayout } from './layout'
 
 interface VerifyEmailProps {

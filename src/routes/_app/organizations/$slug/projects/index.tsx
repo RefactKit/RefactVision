@@ -1,5 +1,5 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
-import { createFileRoute, Link, useParams } from '@tanstack/react-router'
+import { createFileRoute, useParams } from '@tanstack/react-router'
 import { useState } from 'react'
 import { toast } from 'sonner'
 import { CreateProjectDialog } from '@/components/projects/create-project-dialog'

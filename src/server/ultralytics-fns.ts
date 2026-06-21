@@ -1,8 +1,8 @@
-import { supabase } from '@/lib/supabase'
-import { getFileCategoryIds } from '@/lib/utils'
 import { createServerFn } from '@tanstack/react-start'
 import { eq, inArray } from 'drizzle-orm'
 import { z } from 'zod'
+import { supabase } from '@/lib/supabase'
+import { getFileCategoryIds } from '@/lib/utils'
 import { db } from '../../db/index'
 import { project, projectCategory, projectFile } from '../../db/schema'
 
@@ -108,7 +108,11 @@ export const exportToUltralytics = createServerFn({ method: 'POST' }).handler(as
     })
 
   if (uploadError) {
-    return { success: false, message: `Failed to prepare export: ${uploadError.message}`, exported: 0 }
+    return {
+      success: false,
+      message: `Failed to prepare export: ${uploadError.message}`,
+      exported: 0,
+    }
   }
 
   const {
@@ -155,7 +159,11 @@ export const exportToUltralytics = createServerFn({ method: 'POST' }).handler(as
       const listResult = await listRes.json()
       const existing = listResult.datasets?.[0]
       if (!existing) {
-        return { success: false, message: 'Dataset conflict but could not resolve existing dataset', exported: 0 }
+        return {
+          success: false,
+          message: 'Dataset conflict but could not resolve existing dataset',
+          exported: 0,
+        }
       }
       datasetId = existing._id
     } else if (!createRes.ok) {

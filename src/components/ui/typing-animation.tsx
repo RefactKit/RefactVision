@@ -84,7 +84,7 @@ export function TypingAnimation({
   const deletingSpeed = deleteSpeed ?? typingSpeed / 2
 
   const shouldStart = startOnView ? isInView : true
-  const animationSourceKey = useMemo(
+  const _animationSourceKey = useMemo(
     () => (words ? words.join('\u0000') : (children ?? '')),
     [words, children],
   )
@@ -94,7 +94,7 @@ export function TypingAnimation({
     setCurrentWordIndex(0)
     setCurrentCharIndex(0)
     setPhase('typing')
-  }, [animationSourceKey])
+  }, [])
 
   useEffect(() => {
     let timeout: ReturnType<typeof setTimeout> | null = null
@@ -184,7 +184,6 @@ export function TypingAnimation({
         return '▌'
       case 'underscore':
         return '_'
-      case 'line':
       default:
         return '|'
     }
