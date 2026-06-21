@@ -16,7 +16,8 @@
     "test:coverage": "vitest run --coverage",
     "lint": "biome lint .",
     "format": "biome format . --write",
-    "check": "biome check --write ."
+    "check": "biome check --write .",
+    "prepare": "echo '#!/bin/sh\npnpm test' > .git/hooks/pre-push && chmod +x .git/hooks/pre-push"
   },
   "dependencies": {
     "@aws-sdk/client-s3": "^3.1045.0",

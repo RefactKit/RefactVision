@@ -1,3 +1,18 @@
+import { AnimatePresence, motion } from 'framer-motion'
+import {
+  Check,
+  CheckCheck,
+  Download,
+  File as FileIcon,
+  FileSpreadsheet,
+  FileText,
+  Image as ImageIcon,
+  Plus,
+  Trash2,
+  X,
+} from 'lucide-react'
+import { useMemo, useState } from 'react'
+import { toast } from 'sonner'
 import { Button } from '@/components/ui/button'
 import { Field, FieldGroup } from '@/components/ui/field'
 import { Input } from '@/components/ui/input'
@@ -19,21 +34,6 @@ import {
 } from '@/components/ui/popover'
 import { useI18n } from '@/i18n/context'
 import { cn, getFileCategoryIds } from '@/lib/utils'
-import { AnimatePresence, motion } from 'framer-motion'
-import {
-  Check,
-  CheckCheck,
-  Download,
-  File as FileIcon,
-  FileSpreadsheet,
-  FileText,
-  Image as ImageIcon,
-  Plus,
-  Trash2,
-  X,
-} from 'lucide-react'
-import { useMemo, useState } from 'react'
-import { toast } from 'sonner'
 
 interface ProjectFile {
   id: string
@@ -370,7 +370,7 @@ export function LabelingGallery({
                           if (metaObj.categoryIds && Array.isArray(metaObj.categoryIds)) {
                             catIds = Array.from(new Set([...catIds, ...metaObj.categoryIds]))
                           }
-                        } catch (e) {}
+                        } catch (_e) {}
                       }
                       if (catIds.length === 0) return null
 

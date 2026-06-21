@@ -1,4 +1,4 @@
-import { CheckIcon, GlobeIcon } from 'lucide-react'
+import { CheckIcon } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import {
   DropdownMenu,

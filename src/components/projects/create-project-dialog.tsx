@@ -63,7 +63,7 @@ export function CreateProjectDialog({
         setTypeId('')
       }
     }
-  }, [open]) // Only run when 'open' changes
+  }, [open, projectTypes[0].id, projectTypes.length]) // Only run when 'open' changes
 
   // Update typeId if projectTypes load while the dialog is open and no typeId is set
   useEffect(() => {

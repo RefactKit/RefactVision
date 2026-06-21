@@ -11,7 +11,6 @@ import {
   FileSpreadsheet,
   FileText,
   FileVideo,
-  Image as ImageIcon,
   MoreHorizontal,
   Plus,
   Trash2,

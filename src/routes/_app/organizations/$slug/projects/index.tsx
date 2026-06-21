@@ -1,5 +1,5 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
-import { createFileRoute, Link, useParams } from '@tanstack/react-router'
+import { createFileRoute, useParams } from '@tanstack/react-router'
 import { useState } from 'react'
 import { toast } from 'sonner'
 import { CreateProjectDialog } from '@/components/projects/create-project-dialog'
@@ -30,13 +30,13 @@ function ProjectsPage() {
 
   const { data: projects, isLoading } = useQuery({
     queryKey: ['projects', org?.id],
-    queryFn: () => getProjects({ data: org?.id! }),
+    queryFn: () => getProjects({ data: org?.id as string }),
     enabled: !!org?.id,
   })
 
   const { data: projectTypes } = useQuery({
     queryKey: ['project-types', org?.id],
-    queryFn: () => getProjectTypes({ data: org?.id! }),
+    queryFn: () => getProjectTypes({ data: org?.id as string }),
     enabled: !!org?.id,
   })
 

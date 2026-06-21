@@ -176,7 +176,7 @@ export const deleteOrganization = createServerFn({ method: 'POST' }).handler(asy
     where: and(eq(member.organizationId, organizationId), eq(member.userId, session.user.id)),
   })
 
-  if (!userMembership || userMembership.role !== 'owner') {
+  if (userMembership?.role !== 'owner') {
     throw new Error('Only the owner can delete the organization')
   }
 

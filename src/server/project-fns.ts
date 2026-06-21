@@ -7,15 +7,15 @@ import { supabase } from '@/lib/supabase'
 import { db } from '../../db/index'
 import {
   member,
+  mlModel,
   project,
   projectCategory,
   projectFile,
-  projectType,
-  mlModel,
   projectModel,
+  projectType,
 } from '../../db/schema'
 import { auth } from '../../lib/auth'
-import { encrypt, decrypt } from './crypto-fns'
+import { decrypt, encrypt } from './crypto-fns'
 
 // --- Types & Schemas ---
 

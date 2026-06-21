@@ -1,7 +1,7 @@
 'use client'
 
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
-import { Brain, Cpu, GitBranch, Plus, Search, Settings2, Trash2 } from 'lucide-react'
+import { Brain, Cpu, GitBranch, Plus, Search, Trash2 } from 'lucide-react'
 import { useState } from 'react'
 import { toast } from 'sonner'
 import { Badge } from '@/components/ui/badge'
