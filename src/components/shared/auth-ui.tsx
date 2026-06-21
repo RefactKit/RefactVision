@@ -1,4 +1,4 @@
-import { Languages, Monitor, Moon, Paintbrush, Sun } from 'lucide-react'
+import { Monitor, Moon, Paintbrush, Sun } from 'lucide-react'
 import { useTheme } from 'next-themes'
 import { useEffect, useState } from 'react'
 import {

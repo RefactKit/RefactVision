@@ -5,12 +5,9 @@ import { createFileRoute, Link, useParams } from '@tanstack/react-router'
 import {
   ArrowLeft,
   BarChart,
-  CheckCircle2,
   Cpu,
   Database,
-  ExternalLink,
   Globe,
-  Key,
   LayoutGrid,
   Link2Off,
   List,
@@ -20,9 +17,7 @@ import {
   Plus,
   RefreshCw,
   Send,
-  Settings2,
   Tags,
-  Upload,
 } from 'lucide-react'
 import { useState } from 'react'
 import { toast } from 'sonner'
@@ -43,7 +38,6 @@ import {
 } from '@/components/ui/dropdown-menu'
 import { Field, FieldLabel } from '@/components/ui/field'
 import { Input } from '@/components/ui/input'
-import { Separator } from '@/components/ui/separator'
 import { Skeleton } from '@/components/ui/skeleton'
 import { Spinner } from '@/components/ui/spinner'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
@@ -63,6 +57,7 @@ import {
 } from '@/server/project-fns'
 import { orgBySlugQuery } from '@/server/query-keys'
 import { uploadFile } from '@/server/storage-fns'
+import { exportToUltralytics } from '@/server/ultralytics-fns'
 
 const colorsPalette = [
   'bg-emerald-500',
@@ -81,7 +76,7 @@ export const Route = createFileRoute('/_app/organizations/$slug/projects/$projec
   component: ProjectStudioPage,
 })
 
-function ProjectStudioPage() {
+export function ProjectStudioPage() {
   const { slug, projectId } = useParams({ from: '/_app/organizations/$slug/projects/$projectId' })
   const { t } = useI18n()
   const queryClient = useQueryClient()
@@ -609,18 +604,43 @@ function ProjectStudioPage() {
               </CardHeader>
               <CardContent className="flex-1 flex flex-col justify-end">
                 <form
-                  onSubmit={(e) => {
+                  onSubmit={async (e) => {
                     e.preventDefault()
                     if (!ultraKey) {
-                      toast.error('Please enter an Ultralytics HUB API Key')
+                      toast.error('Please enter an Ultralytics API Key')
                       return
                     }
+
+                    console.log('DEBUG payload:', {
+                      projectId,
+                      apiKey: ultraKey,
+                      datasetName: project.title,
+                    })
+
                     setIsUltraImporting(true)
-                    setTimeout(() => {
+                    try {
+                      const result = await exportToUltralytics({
+                        data: {
+                          projectId,
+                          apiKey: ultraKey,
+                          datasetName: project.title,
+                        },
+                      })
+
+                      console.log('DEBUG result:', result)
+
+                      if (result.success) {
+                        toast.success(result.message)
+                        setUltraKey('')
+                      } else {
+                        toast.error(result.message)
+                      }
+                    } catch (err: any) {
+                      console.error('DEBUG error:', err)
+                      toast.error(`Export failed: ${err.message}`)
+                    } finally {
                       setIsUltraImporting(false)
-                      toast.success('Ultralytics HUB integration configured successfully!')
-                      setUltraKey('')
-                    }, 2000)
+                    }
                   }}
                   className="flex flex-col gap-4"
                 >
@@ -805,10 +825,14 @@ function ProjectStudioPage() {
                     className="flex flex-col gap-4"
                   >
                     <Field className="space-y-1">
-                      <FieldLabel className="text-left font-medium text-foreground text-xs">
+                      <FieldLabel
+                        htmlFor="rf-api-key"
+                        className="text-left font-medium text-foreground text-xs"
+                      >
                         Roboflow API Key
                       </FieldLabel>
                       <Input
+                        id="rf-api-key"
                         type="password"
                         placeholder="Enter private API Key..."
                         value={rfApiKey}
@@ -818,10 +842,14 @@ function ProjectStudioPage() {
                     </Field>
                     <div className="grid grid-cols-2 gap-3">
                       <Field className="space-y-1">
-                        <FieldLabel className="text-left font-medium text-foreground text-xs">
+                        <FieldLabel
+                          htmlFor="rf-workspace"
+                          className="text-left font-medium text-foreground text-xs"
+                        >
                           Workspace ID
                         </FieldLabel>
                         <Input
+                          id="rf-workspace"
                           type="text"
                           placeholder="e.g. my-workspace"
                           value={rfWorkspace}
@@ -830,10 +858,14 @@ function ProjectStudioPage() {
                         />
                       </Field>
                       <Field className="space-y-1">
-                        <FieldLabel className="text-left font-medium text-foreground text-xs">
+                        <FieldLabel
+                          htmlFor="rf-project"
+                          className="text-left font-medium text-foreground text-xs"
+                        >
                           Project ID (slug)
                         </FieldLabel>
                         <Input
+                          id="rf-project"
                           type="text"
                           placeholder="e.g. object-detection-xyz"
                           value={rfProject}

@@ -1,5 +1,4 @@
 import { Font } from '@react-email/components'
-import React from 'react'
 
 export const EmailFonts = () => (
   <>

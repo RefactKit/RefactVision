@@ -55,7 +55,7 @@ export function ProjectList({
 
   const canCreate =
     userRole === 'owner' ||
-    (permissions && permissions.project?.includes('create')) ||
+    permissions?.project?.includes('create') ||
     (!permissions &&
       userRole &&
       authClient.organization.checkRolePermission({
