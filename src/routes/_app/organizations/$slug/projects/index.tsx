@@ -30,13 +30,13 @@ function ProjectsPage() {
 
   const { data: projects, isLoading } = useQuery({
     queryKey: ['projects', org?.id],
-    queryFn: () => getProjects({ data: org?.id! }),
+    queryFn: () => getProjects({ data: org?.id as string }),
     enabled: !!org?.id,
   })
 
   const { data: projectTypes } = useQuery({
     queryKey: ['project-types', org?.id],
-    queryFn: () => getProjectTypes({ data: org?.id! }),
+    queryFn: () => getProjectTypes({ data: org?.id as string }),
     enabled: !!org?.id,
   })
 

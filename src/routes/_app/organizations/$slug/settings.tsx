@@ -58,18 +58,6 @@ function OrgSettingsPage() {
   const [slug, setSlug] = useState(org.slug)
   const [logo, setLogo] = useState(org.logo)
 
-  // Explicitly sync state when org data changes (e.g. via Sidebar switch)
-  useEffect(() => {
-    setName(org.name)
-    setSlug(org.slug)
-    setLogo(org.logo)
-  }, [org.name, org.slug, org.logo])
-
-  // Render forbidden state if user is just a member
-  if (role === 'member') {
-    return <ForbiddenContent />
-  }
-
   const isOwner = role === 'owner'
   const canUpdate = role === 'admin' || role === 'owner'
 
@@ -121,6 +109,18 @@ function OrgSettingsPage() {
       toast.error(message)
     },
   })
+
+  // Explicitly sync state when org data changes (e.g. via Sidebar switch)
+  useEffect(() => {
+    setName(org.name)
+    setSlug(org.slug)
+    setLogo(org.logo)
+  }, [org.name, org.slug, org.logo])
+
+  // Render forbidden state if user is just a member
+  if (role === 'member') {
+    return <ForbiddenContent />
+  }
 
   const hasChanges = name !== org.name || slug !== org.slug || logo !== org.logo
 
