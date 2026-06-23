@@ -2,10 +2,10 @@ import type { Translations } from './en'
 
 export const zh: Translations = {
   common: {
-    RefactVision: 'RefactVision',
+    RefactKit: 'RefactKit',
     launch: 'Refact',
     kit: 'Kit',
-    copyright: '© {{year}} RefactVision. 保留所有权利。',
+    copyright: '© {{year}} RefactKit. 保留所有权利。',
     or: '或',
     save: '保存修改',
     saving: '保存中...',
@@ -80,7 +80,7 @@ export const zh: Translations = {
       heading: '在坚如磐石的基础上构建您的 SaaS',
       subheading: '为高性能多租户应用打造的高级架构。',
       title: '创建您的帐户',
-      subtitle: '立即使用 RefactVision 开始构建',
+      subtitle: '立即使用 RefactKit 开始构建',
       name: '全名',
       namePlaceholder: '张三',
       nameMin: '至少 2 个字符',
@@ -104,7 +104,7 @@ export const zh: Translations = {
   },
   onboarding: {
     title: '创建您的组织',
-    subtitle: '设置您的工作区以开始使用 RefactVision。',
+    subtitle: '设置您的工作区以开始使用 RefactKit。',
     badge: '即将完成',
     heading: '最后一步',
     subheading: '创建您的组织以开始与团队协作。',
@@ -139,6 +139,7 @@ export const zh: Translations = {
     workspaces: '工作区',
     workspace: '工作区',
     administration: '管理',
+    gallery: '媒体库',
     feedback: '反馈',
     support: '支持',
     documentation: '文档',
@@ -218,6 +219,11 @@ export const zh: Translations = {
     revoke: '撤销',
     revokeSessionSuccess: '会话已成功撤销',
   },
+  gallery: {
+    title: '媒体库',
+    subtitle: '管理和查看您的组织图片。',
+    noImages: '未找到图片。',
+  },
   notifications: {
     memberJoined: '加入了组织',
     invitationPending: '被邀请加入',
@@ -269,7 +275,7 @@ export const zh: Translations = {
     techStack: {
       title: '生态系统中最好的工具',
       subtitle:
-        'RefactVision 构建在现代化、经过实战检验的工具之上，确保您的 SaaS 快速、安全且可扩展。',
+        'RefactKit 构建在现代化、经过实战检验的工具之上，确保您的 SaaS 快速、安全且可扩展。',
     },
     dashboard: {
       title: '企业级仪表板',
@@ -281,7 +287,7 @@ export const zh: Translations = {
     },
     cta: {
       title: '准备好构建您的下一个伟大创意了吗？',
-      subtitle: '加入其他正在使用 RefactVision 构建高性能 SaaS 应用的开发者。',
+      subtitle: '加入其他正在使用 RefactKit 构建高性能 SaaS 应用的开发者。',
       button: '立即开始',
     },
     footer: {
@@ -294,60 +300,5 @@ export const zh: Translations = {
     description:
       '作为普通成员，您没有权限访问此部分。请联系管理员或所有者以管理组织设置或团队成员。',
     backToDashboard: '返回仪表板',
-  },
-  projects: {
-    title: '项目',
-    subtitle: '管理并标注用于 CNN 模型的数集。',
-    createNew: '创建项目',
-    search: '搜索项目...',
-    noProjects: '未找到项目。',
-    form: {
-      title: '标题',
-      description: '描述',
-      type: '项目类型',
-      github: 'GitHub 仓库',
-      other: '其他链接',
-    },
-    card: {
-      files: '文件',
-      files_plural: '文件',
-      lastUpdated: '最后更新',
-      deleteTitle: '删除项目？',
-      deleteDesc: '此操作是永久性的，将删除所有已标注的数据和文件。',
-    },
-    types: {
-      THESE: '论文',
-      STAGE: '实习',
-      AUTRE: '其他',
-    },
-    studio: {
-      labeling: '标注工作室',
-      classes: '类别',
-      addClass: '添加类别',
-      unlabeled: '未标注',
-      bulkLabel: '批量标注',
-      syncRoboflow: '同步到 Roboflow',
-      noFiles: '此项目中未找到图像。',
-      stats: '{{percent}}% 已标注',
-    },
-    errors: {
-      onlyAdminsDelete: '只有所有者或管理员可以删除项目。',
-    },
-  },
-  roles: {
-    title: '角色矩阵',
-    subtitle: '管理组织内的权限。',
-    resourceAction: '资源 / 操作',
-    addRole: '添加角色',
-    newRolePlaceholder: '新角色名称',
-    add: '添加',
-    deleteConfirm: '删除角色 {{role}}？',
-    deleteSuccess: '角色已删除',
-    createSuccess: '角色创建成功',
-    updateSuccess: '角色更新成功',
-    updateError: '更新时出错',
-    createError: '创建时出错',
-    systemRoleNote: '系统角色（所有者、管理员、成员）为只读。',
-    ownerNote: '所有者权限是固定的。',
   },
 }

@@ -1,6 +1,3 @@
-import { useQuery } from '@tanstack/react-query'
-import { createFileRoute, Outlet, redirect, useParams } from '@tanstack/react-router'
-import { useEffect, useState } from 'react'
 import { AppSidebar } from '@/components/dashboard/app-sidebar'
 import { HeaderBreadcrumb } from '@/components/dashboard/header-breadcrumb'
 import { NotificationsDropdown } from '@/components/dashboard/notifications-dropdown'
@@ -11,22 +8,18 @@ import { LangSwitcher } from '@/components/shared/lang-switcher'
 import { ThemeToggle } from '@/components/shared/theme-toggle'
 import { Separator } from '@/components/ui/separator'
 import { SidebarInset, SidebarProvider, SidebarTrigger } from '@/components/ui/sidebar'
-import { getServerSession } from '@/server/auth-fns'
 import { userOrgsQuery } from '@/server/query-keys'
+import { useQuery } from '@tanstack/react-query'
+import { createFileRoute, Outlet, useParams } from '@tanstack/react-router'
+import { useEffect, useState } from 'react'
 
 export const Route = createFileRoute('/_app')({
   loader: async ({ context, location }) => {
-    // Avoid redirecting to login if we are on the public landing page
     if (location.pathname === '/') {
       return { session: null, orgs: [] }
     }
-
-    const { session } = await getServerSession()
-    if (!session) throw redirect({ to: '/login' })
-
-    // Seed the cache — downstream routes read from it for free
     const { orgs } = await context.queryClient.ensureQueryData(userOrgsQuery())
-    return { session, orgs }
+    return { session: { user: { id: 'Z7TOkT4WXVVYeHwwxXZ2F2LkXG8ZWkQn', name: 'Demo User', email: 'demo@demo.com' } }, orgs }
   },
   component: AppLayout,
 })
@@ -85,12 +78,9 @@ function AppLayout() {
               slug={effectiveSlug}
               userRole={currentOrg?.role}
             >
-              <button
-                type="button"
-                className="ml-1 transition-opacity hover:opacity-80 cursor-pointer outline-none border-none bg-transparent p-0"
-              >
+              <div className="ml-1 transition-opacity hover:opacity-80 cursor-pointer">
                 <UserAvatar className="size-8 ring-1 ring-border" />
-              </button>
+              </div>
             </UserDropdown>
           </div>
         </header>

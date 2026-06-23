@@ -5,6 +5,7 @@ import { Building2, Check } from 'lucide-react'
 import { toast } from 'sonner'
 import { z } from 'zod'
 import { ThemeToggle } from '@/components/shared/auth-ui'
+import { LangSwitcher } from '@/components/shared/lang-switcher'
 import { Button } from '@/components/ui/button'
 import { DotPattern } from '@/components/ui/dot-pattern'
 import { Input } from '@/components/ui/input'
@@ -85,9 +86,7 @@ function OnboardingPage() {
               ))}
             </ul>
           </div>
-          <p className="text-sm text-muted-foreground/60">
-            © {new Date().getFullYear()} RefactVision
-          </p>
+          <p className="text-sm text-muted-foreground/60">© {new Date().getFullYear()} RefactKit</p>
         </div>
       </div>
 

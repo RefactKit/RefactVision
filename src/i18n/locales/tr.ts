@@ -1,9 +1,9 @@
 export const tr = {
   common: {
-    RefactVision: 'RefactVision',
+    RefactKit: 'RefactKit',
     launch: 'Refact',
     kit: 'Kit',
-    copyright: '© {{year}} RefactVision. Tüm hakları saklıdır.',
+    copyright: '© {{year}} RefactKit. Tüm hakları saklıdır.',
     or: 'veya',
     save: 'Değişiklikleri kaydet',
     saving: 'Kaydediliyor...',
@@ -80,7 +80,7 @@ export const tr = {
       heading: 'SaaS projenizi sağlam bir temel üzerine inşa edin',
       subheading: 'Yüksek performanslı çok kiracılı uygulamalar için premium mimari.',
       title: 'Hesabınızı oluşturun',
-      subtitle: 'RefactVision ile bugün inşa etmeye başlayın',
+      subtitle: 'RefactKit ile bugün inşa etmeye başlayın',
       name: 'Tam isim',
       namePlaceholder: 'John Doe',
       nameMin: 'En az 2 karakter',
@@ -108,7 +108,7 @@ export const tr = {
   },
   onboarding: {
     title: 'Organizasyonunuzu oluşturun',
-    subtitle: "RefactVision'e başlamak için çalışma alanınızı kurun.",
+    subtitle: "RefactKit'e başlamak için çalışma alanınızı kurun.",
     badge: 'Neredeyse bitti',
     heading: 'Son bir adım',
     subheading: 'Ekibinizle işbirliğine başlamak için organizasyonunuzu oluşturun.',
@@ -148,6 +148,7 @@ export const tr = {
     workspaces: 'Çalışma Alanları',
     workspace: 'Çalışma Alanı',
     administration: 'Yönetim',
+    gallery: 'Galeri',
     feedback: 'Geri Bildirim',
     support: 'Destek',
     documentation: 'Dokümantasyon',
@@ -228,6 +229,11 @@ export const tr = {
     revoke: 'İptal et',
     revokeSessionSuccess: 'Oturum başarıyla iptal edildi',
   },
+  gallery: {
+    title: 'Galeri',
+    subtitle: 'Organizasyon görsellerinizi yönetin ve görüntüleyin.',
+    noImages: 'Görsel bulunamadı.',
+  },
   notifications: {
     memberJoined: 'organizasyona katıldı',
     invitationPending: 'katılmaya davet edildi',
@@ -279,7 +285,7 @@ export const tr = {
     techStack: {
       title: 'Ekosistemdeki En İyi Araçlar',
       subtitle:
-        'RefactVision, SaaS projenizin hızlı, güvenli ve ölçeklenebilir olmasını sağlamak için modern ve kanıtlanmış araçlar üzerine inşa edilmiştir.',
+        'RefactKit, SaaS projenizin hızlı, güvenli ve ölçeklenebilir olmasını sağlamak için modern ve kanıtlanmış araçlar üzerine inşa edilmiştir.',
     },
     dashboard: {
       title: 'Kurumsal Düzeyde Panel',
@@ -294,7 +300,7 @@ export const tr = {
     cta: {
       title: 'Sıradaki büyük fikrinizi inşa etmeye hazır mısınız?',
       subtitle:
-        'RefactVision ile yüksek performanslı SaaS uygulamaları geliştiren diğer geliştiricilere katılın.',
+        'RefactKit ile yüksek performanslı SaaS uygulamaları geliştiren diğer geliştiricilere katılın.',
       button: 'Şimdi Başlayın',
     },
     footer: {
@@ -307,60 +313,5 @@ export const tr = {
     description:
       'Bir üye olarak bu bölüme erişim izniniz yok. Organizasyon ayarlarını veya ekip üyelerini yönetmek için lütfen bir yönetici veya sahiple iletişime geçin.',
     backToDashboard: 'Panele Dön',
-  },
-  projects: {
-    title: 'Projeler',
-    subtitle: 'CNN modelleri için veri setlerinizi yönetin ve etiketleyin.',
-    createNew: 'Proje Oluştur',
-    search: 'Projelerde ara...',
-    noProjects: 'Proje bulunamadı.',
-    form: {
-      title: 'Başlık',
-      description: 'Açıklama',
-      type: 'Proje tipi',
-      github: 'GitHub Deposu',
-      other: 'Diğer URL',
-    },
-    card: {
-      files: 'dosya',
-      files_plural: 'dosya',
-      lastUpdated: 'Son güncelleme',
-      deleteTitle: 'Projeyi Sil?',
-      deleteDesc: 'Bu işlem kalıcıdır ve tüm etiketlenmiş verileri ve dosyaları silecektir.',
-    },
-    types: {
-      THESE: 'Tez',
-      STAGE: 'Staj',
-      AUTRE: 'Diğer',
-    },
-    studio: {
-      labeling: 'Etiketleme Stüdyosu',
-      classes: 'Sınıflar',
-      addClass: 'Sınıf Ekle',
-      unlabeled: 'Etiketlenmemiş',
-      bulkLabel: 'Toplu Etiketleme',
-      syncRoboflow: 'Roboflow ile Senkronize Et',
-      noFiles: 'Bu projede resim bulunamadı.',
-      stats: '%{{percent}} etiketlendi',
-    },
-    errors: {
-      onlyAdminsDelete: 'Sadece sahipler veya yöneticiler projeleri silebilir.',
-    },
-  },
-  roles: {
-    title: 'Rol Matrisi',
-    subtitle: 'Organizasyonunuzdaki izinleri yönetin.',
-    resourceAction: 'Kaynak / Eylem',
-    addRole: 'Rol Ekle',
-    newRolePlaceholder: 'Yeni rol',
-    add: 'Ekle',
-    deleteConfirm: '{{role}} rolünü silmek istiyor musunuz?',
-    deleteSuccess: 'Rol silindi',
-    createSuccess: 'Rol başarıyla oluşturuldu',
-    updateSuccess: 'Rol başarıyla güncellendi',
-    updateError: 'Güncelleme sırasında hata',
-    createError: 'Oluşturma sırasında hata',
-    systemRoleNote: 'Sistem rolleri (sahip, yönetici, üye) salt okunurdur.',
-    ownerNote: 'Sahip izinleri sabittir.',
   },
 }

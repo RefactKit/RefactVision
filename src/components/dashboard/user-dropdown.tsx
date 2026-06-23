@@ -1,5 +1,4 @@
 import { useAuth } from '@better-auth-ui/react'
-import { useRouter } from '@tanstack/react-router'
 import {
   BadgeCheck,
   Bell,
@@ -11,6 +10,7 @@ import {
   Sparkles,
   Users,
 } from 'lucide-react'
+import { useRouter } from '@tanstack/react-router'
 import {
   DropdownMenu,
   DropdownMenuContent,

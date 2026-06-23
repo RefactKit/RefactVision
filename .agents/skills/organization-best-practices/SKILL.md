@@ -215,32 +215,6 @@ organization({
 
 ## Roles & Permissions
 
-RefactKit and Better Auth use `createAccessControl` to define a resource-action permission matrix.
-**CRITICAL:** Always import `createAccessControl` from `better-auth/plugins/access` (not `better-auth/plugins`) to prevent importing heavy server-side modules into the client bundle.
-
-```typescript
-import { createAccessControl } from "better-auth/plugins/access";
-
-// 1. Define resources and allowed actions
-const statement = {
-  user: ["ban", "list", "create"],
-  project: ["create", "share", "update", "delete"],
-} as const;
-
-// 2. Create the access control instance
-export const ac = createAccessControl(statement);
-
-// 3. Define roles with specific permissions
-export const adminRole = ac.newRole({
-  user: ["ban", "list", "create"],
-  project: ["create", "share", "update", "delete"],
-});
-
-export const memberRole = ac.newRole({
-  project: ["create"],
-});
-```
-
 Default roles: `owner` (full access), `admin` (manage members/invitations/settings), `member` (basic access).
 
 ### Checking Permissions

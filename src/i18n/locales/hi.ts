@@ -2,10 +2,10 @@ import type { Translations } from './en'
 
 export const hi: Translations = {
   common: {
-    RefactVision: 'RefactVision',
+    RefactKit: 'RefactKit',
     launch: 'Refact',
     kit: 'Kit',
-    copyright: '© {{year}} RefactVision. सर्वाधिकार सुरक्षित।',
+    copyright: '© {{year}} RefactKit. सर्वाधिकार सुरक्षित।',
     or: 'या',
     save: 'परिवर्तन सहेजें',
     saving: 'सहेजा जा रहा है...',
@@ -61,7 +61,7 @@ export const hi: Translations = {
       heading: 'अपने SaaS को एक मजबूत आधार पर बनाएं',
       subheading: 'उच्च-प्रदर्शन मल्टी-टेनेंट अनुप्रयोगों के लिए प्रीमियम आर्किटेक्चर।',
       title: 'अपना खाता बनाएं',
-      subtitle: 'आज ही RefactVision के साथ निर्माण शुरू करें',
+      subtitle: 'आज ही RefactKit के साथ निर्माण शुरू करें',
       name: 'पूरा नाम',
       namePlaceholder: 'जॉन डो',
       nameMin: 'न्यूनतम 2 अक्षर',
@@ -105,7 +105,7 @@ export const hi: Translations = {
   },
   onboarding: {
     title: 'अपना संगठन बनाएं',
-    subtitle: 'RefactVision के साथ शुरू करने के लिए अपना वर्कस्पेस सेटअप करें।',
+    subtitle: 'RefactKit के साथ शुरू करने के लिए अपना वर्कस्पेस सेटअप करें।',
     badge: 'आप लगभग पहुँच गए हैं',
     heading: 'एक अंतिम कदम',
     subheading: 'अपनी टीम के साथ सहयोग शुरू करने के लिए अपना संगठन बनाएं।',
@@ -140,6 +140,7 @@ export const hi: Translations = {
     workspaces: 'वर्कस्पेस',
     workspace: 'वर्कस्पेस',
     administration: 'प्रशासन',
+    gallery: 'गैलरी',
     feedback: 'फीडबैक',
     support: 'सहायता',
     documentation: 'दस्तावेज़',
@@ -219,6 +220,11 @@ export const hi: Translations = {
     revoke: 'रद्द करें',
     revokeSessionSuccess: 'सत्र सफलतापूर्वक रद्द कर दिया गया',
   },
+  gallery: {
+    title: 'गैलरी',
+    subtitle: 'अपने संगठन की छवियों को प्रबंधित करें और देखें।',
+    noImages: 'कोई छवि नहीं मिली।',
+  },
   notifications: {
     memberJoined: 'संगठन में शामिल हुए',
     invitationPending: 'को शामिल होने का निमंत्रण दिया गया',
@@ -270,7 +276,7 @@ export const hi: Translations = {
     techStack: {
       title: 'पारिस्थितिकी तंत्र में सबसे अच्छे उपकरण',
       subtitle:
-        'RefactVision आधुनिक, परीक्षण किए गए उपकरणों के शीर्ष पर बनाया गया है ताकि यह सुनिश्चित हो सके कि आपका SaaS तेज़, सुरक्षित और स्केलेबल है।',
+        'RefactKit आधुनिक, परीक्षण किए गए उपकरणों के शीर्ष पर बनाया गया है ताकि यह सुनिश्चित हो सके कि आपका SaaS तेज़, सुरक्षित और स्केलेबल है।',
     },
     dashboard: {
       title: 'एंटरप्राइज-ग्रेड डैशबोर्ड',
@@ -284,7 +290,7 @@ export const hi: Translations = {
     },
     cta: {
       title: 'अपना अगला बड़ा विचार बनाने के लिए तैयार हैं?',
-      subtitle: 'RefactVision के साथ उच्च-प्रदर्शन SaaS अनुप्रयोग बनाने वाले अन्य डेवलपर्स के साथ जुड़ें।',
+      subtitle: 'RefactKit के साथ उच्च-प्रदर्शन SaaS अनुप्रयोग बनाने वाले अन्य डेवलपर्स के साथ जुड़ें।',
       button: 'अभी शुरू करें',
     },
     footer: {
@@ -297,60 +303,5 @@ export const hi: Translations = {
     description:
       'एक सदस्य के रूप में, आपके पास इस अनुभाग तक पहुँचने की अनुमति नहीं है। कृपया संगठन सेटिंग्स या टीम के सदस्यों को प्रबंधित करने के लिए किसी व्यवस्थापक या मालिक से संपर्क करें।',
     backToDashboard: 'डैशबोर्ड पर वापस जाएं',
-  },
-  projects: {
-    title: 'परियोजनाएं',
-    subtitle: 'CNN मॉडल के लिए अपने डेटासेट प्रबंधित और लेबल करें।',
-    createNew: 'परियोजना बनाएं',
-    search: 'परियोजनाएं खोजें...',
-    noProjects: 'कोई परियोजना नहीं मिली।',
-    form: {
-      title: 'शीर्षक',
-      description: 'विवरण',
-      type: 'परियोजना का प्रकार',
-      github: 'GitHub रिपॉजिटरी',
-      other: 'अन्य URL',
-    },
-    card: {
-      files: 'फ़ाइल',
-      files_plural: 'फ़ाइलें',
-      lastUpdated: 'अंतिम अपडेट',
-      deleteTitle: 'परियोजना हटाएं?',
-      deleteDesc: 'यह कार्रवाई स्थायी है और सभी लेबल किए गए डेटा और फ़ाइलों को हटा देगी।',
-    },
-    types: {
-      THESE: 'थीसिस',
-      STAGE: 'इंटर्नशिप',
-      AUTRE: 'अन्य',
-    },
-    studio: {
-      labeling: 'लेबलिंग स्टूडियो',
-      classes: 'वर्ग',
-      addClass: 'वर्ग जोड़ें',
-      unlabeled: 'बिना लेबल वाला',
-      bulkLabel: 'बल्क लेबल',
-      syncRoboflow: 'Roboflow के साथ सिंक करें',
-      noFiles: 'इस परियोजना में कोई चित्र नहीं मिला।',
-      stats: '{{percent}}% लेबल किया गया',
-    },
-    errors: {
-      onlyAdminsDelete: 'केवल मालिक या व्यवस्थापक ही परियोजनाओं को हटा सकते हैं।',
-    },
-  },
-  roles: {
-    title: 'भूमिका मैट्रिक्स',
-    subtitle: 'अपने संगठन के भीतर अनुमतियां प्रबंधित करें।',
-    resourceAction: 'संसाधन / क्रिया',
-    addRole: 'भूमिका जोड़ें',
-    newRolePlaceholder: 'नई भूमिका',
-    add: 'जोड़ें',
-    deleteConfirm: 'भूमिका {{role}} हटाएं?',
-    deleteSuccess: 'भूमिका हटा दी गई',
-    createSuccess: 'भूमिका सफलतापूर्वक बनाई गई',
-    updateSuccess: 'भूमिका सफलतापूर्वक अपडेट की गई',
-    updateError: 'अपडेट के दौरान त्रुटि',
-    createError: 'निर्माण के दौरान त्रुटि',
-    systemRoleNote: 'सिस्टम भूमिकाएं (मालिक, एडमिन, सदस्य) केवल पढ़ने के लिए हैं।',
-    ownerNote: 'मालिक की अनुमतियां तय हैं।',
   },
 }

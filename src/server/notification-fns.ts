@@ -7,8 +7,8 @@ import { createServerFn } from '@tanstack/react-start'
 import { getRequest } from '@tanstack/react-start/server'
 import { and, desc, eq, lt } from 'drizzle-orm'
 import { z } from 'zod'
-import { db } from '../../db/index'
 import { notification } from '../../db/schema'
+import { db } from '../../db/index'
 
 // ── Shared type (safe for client import) ─────────────────────────────────────
 
@@ -57,16 +57,6 @@ export const getUserNotifications = createServerFn({ method: 'GET' }).handler(as
     limit: 20,
   })
 
-  // Fetch pending invitations for the user
-  const { invitation } = await import('../../db/schema')
-  const pendingInvitations = await db.query.invitation.findMany({
-    where: and(eq(invitation.email, session.user.email), eq(invitation.status, 'pending')),
-    with: {
-      organization: true,
-      user: true, // Inviter
-    },
-  })
-
   const unreadCount = items.filter((n) => !n.read).length
 
   return {
@@ -80,14 +70,7 @@ export const getUserNotifications = createServerFn({ method: 'GET' }).handler(as
       read: n.read,
       createdAt: n.createdAt.toISOString(),
     })),
-    invitations: pendingInvitations.map((inv) => ({
-      id: inv.id,
-      organizationName: inv.organization?.name || 'Unknown',
-      inviterName: inv.user?.name || 'Someone',
-      inviterImage: inv.user?.image || null,
-      createdAt: inv.createdAt.toISOString(),
-    })),
-    unreadCount: unreadCount + pendingInvitations.length, // Treat pending invitations as unread
+    unreadCount,
   }
 })
 

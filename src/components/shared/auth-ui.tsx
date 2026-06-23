@@ -1,6 +1,8 @@
-import { Monitor, Moon, Paintbrush, Sun } from 'lucide-react'
+import { Languages, Monitor, Moon, Paintbrush, Sun } from 'lucide-react'
 import { useTheme } from 'next-themes'
 import { useEffect, useState } from 'react'
+import { type ColorTheme, useColorTheme } from '@/hooks/use-color-theme'
+import { cn } from '@/lib/utils'
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -8,10 +10,8 @@ import {
   DropdownMenuRadioItem,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
-import { type ColorTheme, useColorTheme } from '@/hooks/use-color-theme'
 import type { Locale } from '@/i18n'
 import { useI18n } from '@/i18n/context'
-import { cn } from '@/lib/utils'
 
 const languageMap: Record<Locale, { label: string; flag: string }> = {
   en: { label: 'English', flag: '🇺🇸' },

@@ -2,10 +2,10 @@ import type { Translations } from './en'
 
 export const es: Translations = {
   common: {
-    RefactVision: 'RefactVision',
+    RefactKit: 'RefactKit',
     launch: 'Refact',
     kit: 'Kit',
-    copyright: '© {{year}} RefactVision. Todos los derechos reservados.',
+    copyright: '© {{year}} RefactKit. Todos los derechos reservados.',
     or: 'o',
     save: 'Guardar cambios',
     saving: 'Guardando...',
@@ -59,7 +59,7 @@ export const es: Translations = {
       heading: 'Construye tu SaaS sobre una base sólida como una roca',
       subheading: 'Arquitectura premium para aplicaciones multi-tenant de alto rendimiento.',
       title: 'Crear cuenta',
-      subtitle: 'Empieza a construir con RefactVision hoy',
+      subtitle: 'Empieza a construir con RefactKit hoy',
       name: 'Nombre completo',
       namePlaceholder: 'Juan Pérez',
       nameMin: 'Mínimo 2 caracteres',
@@ -118,6 +118,7 @@ export const es: Translations = {
     workspaces: 'Espacios',
     workspace: 'Espacio',
     administration: 'Administración',
+    gallery: 'Galería',
     feedback: 'Feedback',
     support: 'Soporte',
     documentation: 'Documentación',
@@ -196,6 +197,11 @@ export const es: Translations = {
     revoke: 'Revocar',
     revokeSessionSuccess: 'Sesión revocada con éxito',
   },
+  gallery: {
+    title: 'Galería',
+    subtitle: 'Gestiona las imágenes de tu organización.',
+    noImages: 'No hay imágenes.',
+  },
   notifications: {
     memberJoined: 'se unió a la organización',
     invitationPending: 'fue invitado(a) a unirse a',
@@ -251,7 +257,7 @@ export const es: Translations = {
     techStack: {
       title: 'Las mejores herramientas del ecosistema',
       subtitle:
-        'RefactVision está construido sobre herramientas modernas y probadas para asegurar que tu SaaS sea rápido, seguro y escalable.',
+        'RefactKit está construido sobre herramientas modernas y probadas para asegurar que tu SaaS sea rápido, seguro y escalable.',
     },
     dashboard: {
       title: 'Panel de control de nivel empresarial',
@@ -266,7 +272,7 @@ export const es: Translations = {
     cta: {
       title: '¿Listo para construir tu próxima gran idea?',
       subtitle:
-        'Únete a otros desarrolladores que construyen aplicaciones SaaS de alto rendimiento con RefactVision.',
+        'Únete a otros desarrolladores que construyen aplicaciones SaaS de alto rendimiento con RefactKit.',
       button: 'Empezar ahora',
     },
     footer: {
@@ -279,60 +285,5 @@ export const es: Translations = {
     description:
       'Como miembro, no tienes permiso para acceder a esta sección. Ponte en contacto con un administrador o propietario para gestionar la configuración de la organización o los miembros del equipo.',
     backToDashboard: 'Volver al Panel',
-  },
-  projects: {
-    title: 'Proyectos',
-    subtitle: 'Administre y etiquete sus conjuntos de datos para modelos CNN.',
-    createNew: 'Crear Proyecto',
-    search: 'Buscar proyectos...',
-    noProjects: 'No se encontraron proyectos.',
-    form: {
-      title: 'Título',
-      description: 'Descripción',
-      type: 'Tipo de proyecto',
-      github: 'Repositorio GitHub',
-      other: 'Otra URL',
-    },
-    card: {
-      files: 'archivo',
-      files_plural: 'archivos',
-      lastUpdated: 'Última actualización',
-      deleteTitle: '¿Eliminar Proyecto?',
-      deleteDesc: 'Esta acción es permanente y eliminará todos los datos y archivos etiquetados.',
-    },
-    types: {
-      THESE: 'Tesis',
-      STAGE: 'Prácticas',
-      AUTRE: 'Otro',
-    },
-    studio: {
-      labeling: 'Studio de Etiquetado',
-      classes: 'Clases',
-      addClass: 'Agregar Clase',
-      unlabeled: 'Sin etiquetar',
-      bulkLabel: 'Etiquetado masivo',
-      syncRoboflow: 'Sincronizar con Roboflow',
-      noFiles: 'No se encontraron imágenes en este proyecto.',
-      stats: '{{percent}}% etiquetado',
-    },
-    errors: {
-      onlyAdminsDelete: 'Solo los propietarios o administradores pueden eliminar proyectos.',
-    },
-  },
-  roles: {
-    title: 'Matriz de Roles',
-    subtitle: 'Gestiona los permisos dentro de tu organización.',
-    resourceAction: 'Recurso / Acción',
-    addRole: 'Añadir rol',
-    newRolePlaceholder: 'Nuevo rol',
-    add: 'Añadir',
-    deleteConfirm: '¿Eliminar el rol {{role}}?',
-    deleteSuccess: 'Rol eliminado',
-    createSuccess: 'Rol creado con éxito',
-    updateSuccess: 'Rol actualizado con éxito',
-    updateError: 'Error durante la actualización',
-    createError: 'Error durante la creación',
-    systemRoleNote: 'Los roles del sistema (propietario, admin, miembro) son de solo lectura.',
-    ownerNote: 'Los permisos del propietario son fijos.',
   },
 }

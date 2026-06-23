@@ -1,6 +1,6 @@
 import { Crown, Shield, User } from '@phosphor-icons/react'
 import { useQuery, useQueryClient } from '@tanstack/react-query'
-import { createFileRoute } from '@tanstack/react-router'
+import { createFileRoute, redirect } from '@tanstack/react-router'
 import { Link2, Mail, Plus, UserPlus } from 'lucide-react'
 import { useState } from 'react'
 import { toast } from 'sonner'
@@ -91,29 +91,6 @@ function MembersPage() {
     }
 
     toast.success('Role updated successfully')
-    queryClient.invalidateQueries({ queryKey: ['org-members', org.id] })
-  }
-
-  const handleRemove = async (id: string, status: string) => {
-    if (status === 'invited') {
-      const { error } = await authClient.organization.cancelInvitation({
-        invitationId: id,
-      })
-      if (error) {
-        toast.error(error.message || 'Failed to cancel invitation')
-        return
-      }
-      toast.success('Invitation cancelled successfully')
-    } else {
-      const { error } = await authClient.organization.removeMember({
-        memberIdOrEmail: id,
-      })
-      if (error) {
-        toast.error(error.message || 'Failed to remove member')
-        return
-      }
-      toast.success('Member removed successfully')
-    }
     queryClient.invalidateQueries({ queryKey: ['org-members', org.id] })
   }
 
@@ -354,11 +331,7 @@ function MembersPage() {
                       <TableCell className="text-right">
                         {(role === 'owner' || (role === 'admin' && member.role !== 'owner')) &&
                           !isSelf && (
-                            <Button
-                              variant="ghost"
-                              size="sm"
-                              onClick={() => handleRemove(member.id, member.status)}
-                            >
+                            <Button variant="ghost" size="sm">
                               Remove
                             </Button>
                           )}

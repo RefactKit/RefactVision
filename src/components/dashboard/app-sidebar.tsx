@@ -1,13 +1,11 @@
-import { useQuery } from '@tanstack/react-query'
 import {
   Building2,
   ExternalLink,
-  FolderIcon,
+  Image,
   LayoutGrid,
   LifeBuoy,
   MessageSquareText,
   Settings,
-  ShieldCheck,
   Users,
 } from 'lucide-react'
 import {
@@ -19,7 +17,6 @@ import {
   SidebarSeparator,
 } from '@/components/ui/sidebar'
 import { useI18n } from '@/i18n/context'
-import { projectsCountQuery } from '@/server/query-keys'
 import { NavMain } from './nav-main'
 import { NavSecondary } from './nav-secondary'
 import { NavUser } from './nav-user'
@@ -42,13 +39,9 @@ interface AppSidebarProps {
 export function AppSidebar({ orgs, currentSlug }: AppSidebarProps) {
   const { t, dir } = useI18n()
   const slug = currentSlug ?? orgs[0]?.slug ?? ''
+
   const currentOrg = orgs?.find((o) => o.slug === slug)
   const userRole = currentOrg?.role
-
-  const { data: projectsCount } = useQuery({
-    ...projectsCountQuery(currentOrg?.id || ''),
-    enabled: !!currentOrg?.id,
-  })
 
   // Group 1: Workspace Core items (Always visible)
   const platformItems = slug
@@ -59,10 +52,9 @@ export function AppSidebar({ orgs, currentSlug }: AppSidebarProps) {
           icon: LayoutGrid,
         },
         {
-          title: t.projects.title,
-          to: `/organizations/${slug}/projects`,
-          icon: FolderIcon,
-          badge: projectsCount ?? 0,
+          title: t.sidebar.gallery,
+          to: `/organizations/${slug}/gallery`,
+          icon: Image,
         },
       ]
     : []
@@ -81,15 +73,6 @@ export function AppSidebar({ orgs, currentSlug }: AppSidebarProps) {
             to: `/organizations/${slug}/settings`,
             icon: Settings,
           },
-          ...(userRole === 'owner'
-            ? [
-                {
-                  title: 'Rôles & Permissions',
-                  to: `/organizations/${slug}/roles`,
-                  icon: ShieldCheck,
-                },
-              ]
-            : []),
         ]
       : []
 

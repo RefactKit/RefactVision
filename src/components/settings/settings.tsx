@@ -4,10 +4,9 @@ import { useI18n } from '@/i18n/context'
 import { cn } from '@/lib/utils'
 import { AccountSettings } from './account/account-settings'
 import { Appearance } from './account/appearance'
-import { GlobalModelsSettings } from './global-models-settings'
 import { SecuritySettings } from './security/security-settings'
 
-export type SettingsView = 'account' | 'security' | 'appearance' | 'models'
+export type SettingsView = 'account' | 'security' | 'appearance'
 
 interface SettingsProps {
   className?: string
@@ -39,9 +38,6 @@ export function Settings({ className, view = 'account' }: SettingsProps) {
           <TabsTrigger value="appearance" className="px-4 py-2">
             {t.settings.appearance}
           </TabsTrigger>
-          <TabsTrigger value="models" className="px-4 py-2">
-            ML Models
-          </TabsTrigger>
         </TabsList>
 
         <TabsContent value="account" className="mt-0">
@@ -52,9 +48,6 @@ export function Settings({ className, view = 'account' }: SettingsProps) {
         </TabsContent>
         <TabsContent value="appearance" className="mt-0">
           <Appearance />
-        </TabsContent>
-        <TabsContent value="models" className="mt-0">
-          <GlobalModelsSettings />
         </TabsContent>
       </Tabs>
     </div>

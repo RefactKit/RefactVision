@@ -224,7 +224,7 @@ function LoginPage() {
           {l.noAccount}{' '}
           <Link
             to="/signup"
-            search={{ callbackURL: callbackURL }}
+            search={{ callbackURL }}
             className="font-semibold text-teal-600 dark:text-teal-400 hover:opacity-80"
           >
             {l.signUpLink}

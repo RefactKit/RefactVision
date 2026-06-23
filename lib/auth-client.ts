@@ -1,6 +1,5 @@
 import { sentinelClient } from '@better-auth/infra/client'
 import {
-  adminClient,
   inferAdditionalFields,
   multiSessionClient,
   organizationClient,
@@ -12,10 +11,7 @@ import type { auth } from './auth'
 export const authClient = createAuthClient({
   baseURL: getBaseURL(),
   plugins: [
-    adminClient(),
-    organizationClient({
-      dynamicAccessControl: { enabled: true },
-    }),
+    organizationClient(),
     sentinelClient(),
     multiSessionClient(),
     inferAdditionalFields<typeof auth>(),

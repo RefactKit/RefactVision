@@ -130,12 +130,8 @@ CLI looks for `auth.ts` in: `./`, `./lib`, `./utils`, or under `./src`. Use `--c
 **Import from dedicated paths for tree-shaking:**
 ```
 import { twoFactor } from "better-auth/plugins/two-factor"
-import { createAccessControl } from "better-auth/plugins/access" // CRITICAL for bundle size
 ```
 NOT `from "better-auth/plugins"`.
-
-**Critical Note for RBAC (`createAccessControl`):**
-To prevent massive bundle size explosions on the client, you must import `createAccessControl` from `better-auth/plugins/access` and not `better-auth/plugins`.
 
 **Popular plugins:** `twoFactor`, `organization`, `passkey`, `magicLink`, `emailOtp`, `username`, `phoneNumber`, `admin`, `apiKey`, `bearer`, `jwt`, `multiSession`, `sso`, `oauthProvider`, `oidcProvider`, `openAPI`, `genericOAuth`.
 

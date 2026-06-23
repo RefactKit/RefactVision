@@ -16,11 +16,9 @@
     "test:coverage": "vitest run --coverage",
     "lint": "biome lint .",
     "format": "biome format . --write",
-    "check": "biome check --write .",
-    "prepare": "echo '#!/bin/sh\npnpm test' > .git/hooks/pre-push && chmod +x .git/hooks/pre-push"
+    "check": "biome check --write ."
   },
   "dependencies": {
-    "@aws-sdk/client-s3": "^3.1045.0",
     "@base-ui/react": "^1.4.1",
     "@better-auth-ui/react": "^1.6.3",
     "@better-auth/infra": "^0.2.6",
@@ -37,14 +35,14 @@
     "@scalar/api-reference": "^1.55.2",
     "@scalar/api-reference-react": "^0.9.33",
     "@supabase/supabase-js": "^2.104.0",
-    "@tanstack/react-devtools": "0.10.2",
-    "@tanstack/react-form": "1.29.1",
-    "@tanstack/react-query": "5.100.9",
-    "@tanstack/react-router": "1.169.1",
-    "@tanstack/react-router-devtools": "1.166.13",
-    "@tanstack/react-start": "1.167.62",
+    "@tanstack/react-devtools": "latest",
+    "@tanstack/react-form": "^1.29.0",
+    "@tanstack/react-query": "^5.100.1",
+    "@tanstack/react-router": "latest",
+    "@tanstack/react-router-devtools": "latest",
+    "@tanstack/react-start": "latest",
     "@tanstack/react-table": "^8.21.3",
-    "@tanstack/router-plugin": "1.167.35",
+    "@tanstack/router-plugin": "^1.132.0",
     "better-auth": "^1.6.5",
     "bowser": "^2.14.1",
     "class-variance-authority": "^0.7.1",
@@ -66,7 +64,6 @@
     "react-dom": "^19.2.0",
     "react-email": "latest",
     "react-i18next": "^17.0.4",
-    "recharts": "^3.8.1",
     "shadcn": "^4.7.0",
     "sonner": "^2.0.7",
     "tailwind-merge": "^3.5.0",
@@ -80,7 +77,7 @@
     "@rsbuild/core": "^2.0.1",
     "@tailwindcss/typography": "^0.5.16",
     "@tailwindcss/vite": "^4.1.18",
-    "@tanstack/devtools-vite": "0.6.0",
+    "@tanstack/devtools-vite": "latest",
     "@testing-library/dom": "^10.4.1",
     "@testing-library/jest-dom": "^6.9.1",
     "@testing-library/react": "^16.3.0",
@@ -105,9 +102,7 @@
   "pnpm": {
     "onlyBuiltDependencies": [
       "esbuild",
-      "lightningcss",
-      "msw",
-      "vue-demi"
+      "lightningcss"
     ]
   }
 }

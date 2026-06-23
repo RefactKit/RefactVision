@@ -2,10 +2,10 @@ import type { Translations } from './en'
 
 export const de: Translations = {
   common: {
-    RefactVision: 'RefactVision',
+    RefactKit: 'RefactKit',
     launch: 'Refact',
     kit: 'Kit',
-    copyright: '© {{year}} RefactVision. Alle Rechte vorbehalten.',
+    copyright: '© {{year}} RefactKit. Alle Rechte vorbehalten.',
     or: 'oder',
     save: 'Änderungen speichern',
     saving: 'Wird gespeichert...',
@@ -62,7 +62,7 @@ export const de: Translations = {
       heading: 'Bauen Sie Ihr SaaS auf einem soliden Fundament auf',
       subheading: 'Premium-Architektur für hochperformante Multi-Tenant-Anwendungen.',
       title: 'Konto erstellen',
-      subtitle: 'Beginnen Sie noch heute mit RefactVision',
+      subtitle: 'Beginnen Sie noch heute mit RefactKit',
       name: 'Vollständiger Name',
       namePlaceholder: 'Max Mustermann',
       nameMin: 'Mindestens 2 Zeichen',
@@ -106,7 +106,7 @@ export const de: Translations = {
   },
   onboarding: {
     title: 'Organisation erstellen',
-    subtitle: 'Richten Sie Ihren Workspace ein, um mit RefactVision zu starten.',
+    subtitle: 'Richten Sie Ihren Workspace ein, um mit RefactKit zu starten.',
     badge: 'Fast geschafft',
     heading: 'Ein letzter Schritt',
     subheading: 'Erstellen Sie Ihre Organisation, um mit Ihrem Team zusammenzuarbeiten.',
@@ -145,6 +145,7 @@ export const de: Translations = {
     workspaces: 'Workspaces',
     workspace: 'Workspace',
     administration: 'Verwaltung',
+    gallery: 'Galerie',
     feedback: 'Feedback',
     support: 'Support',
     documentation: 'Dokumentation',
@@ -226,6 +227,11 @@ export const de: Translations = {
     revoke: 'Widerrufen',
     revokeSessionSuccess: 'Sitzung erfolgreich widerrufen',
   },
+  gallery: {
+    title: 'Galerie',
+    subtitle: 'Verwalten und betrachten Sie Ihre Organisationsbilder.',
+    noImages: 'Keine Bilder gefunden.',
+  },
   notifications: {
     memberJoined: 'ist der Organisation beigetreten',
     invitationPending: 'wurde eingeladen beizutreten',
@@ -281,7 +287,7 @@ export const de: Translations = {
     techStack: {
       title: 'Die besten Tools im Ökosystem',
       subtitle:
-        'RefactVision basiert auf modernen, praxiserprobten Tools, um sicherzustellen, dass Ihr SaaS schnell, sicher und skalierbar ist.',
+        'RefactKit basiert auf modernen, praxiserprobten Tools, um sicherzustellen, dass Ihr SaaS schnell, sicher und skalierbar ist.',
     },
     dashboard: {
       title: 'Enterprise-Dashboard',
@@ -296,7 +302,7 @@ export const de: Translations = {
     cta: {
       title: 'Bereit für Ihre nächste große Idee?',
       subtitle:
-        'Schließen Sie sich anderen Entwicklern an, die hochperformante SaaS-Anwendungen mit RefactVision bauen.',
+        'Schließen Sie sich anderen Entwicklern an, die hochperformante SaaS-Anwendungen mit RefactKit bauen.',
       button: 'Jetzt loslegen',
     },
     footer: {
@@ -309,60 +315,5 @@ export const de: Translations = {
     description:
       'Als Mitglied haben Sie keine Berechtigung, auf diesen Bereich zuzugreifen. Bitte kontaktieren Sie einen Administrator oder Besitzer.',
     backToDashboard: 'Zurück zum Dashboard',
-  },
-  projects: {
-    title: 'Projekte',
-    subtitle: 'Verwalten und kennzeichnen Sie Ihre Datensätze für CNN-Modelle.',
-    createNew: 'Projekt erstellen',
-    search: 'Projekte suchen...',
-    noProjects: 'Keine Projekte gefunden.',
-    form: {
-      title: 'Titel',
-      description: 'Beschreibung',
-      type: 'Projekttyp',
-      github: 'GitHub-Repository',
-      other: 'Andere URL',
-    },
-    card: {
-      files: 'Datei',
-      files_plural: 'Dateien',
-      lastUpdated: 'Zuletzt aktualisiert',
-      deleteTitle: 'Projekt löschen?',
-      deleteDesc: 'Diese Aktion ist dauerhaft und löscht alle gekennzeichneten Daten und Dateien.',
-    },
-    types: {
-      THESE: 'Thesis',
-      STAGE: 'Praktikum',
-      AUTRE: 'Sonstiges',
-    },
-    studio: {
-      labeling: 'Labeling Studio',
-      classes: 'Klassen',
-      addClass: 'Klasse hinzufügen',
-      unlabeled: 'Unbeschriftet',
-      bulkLabel: 'Massenbeschriftung',
-      syncRoboflow: 'Mit Roboflow synchronisieren',
-      noFiles: 'Keine Bilder in diesem Projekt gefunden.',
-      stats: '{{percent}}% beschriftet',
-    },
-    errors: {
-      onlyAdminsDelete: 'Nur Eigentümer oder Admins können Projekte löschen.',
-    },
-  },
-  roles: {
-    title: 'Rollen-Matrix',
-    subtitle: 'Verwalten Sie Berechtigungen innerhalb Ihrer Organisation.',
-    resourceAction: 'Ressource / Aktion',
-    addRole: 'Rolle hinzufügen',
-    newRolePlaceholder: 'Neue Rolle',
-    add: 'Hinzufügen',
-    deleteConfirm: 'Rolle {{role}} löschen?',
-    deleteSuccess: 'Rolle gelöscht',
-    createSuccess: 'Rolle erfolgreich erstellt',
-    updateSuccess: 'Rolle erfolgreich aktualisiert',
-    updateError: 'Fehler bei der Aktualisierung',
-    createError: 'Fehler bei der Erstellung',
-    systemRoleNote: 'Systemrollen (Besitzer, Admin, Mitglied) sind schreibgeschützt.',
-    ownerNote: 'Die Berechtigungen des Besitzers sind fest vorgegeben.',
   },
 }

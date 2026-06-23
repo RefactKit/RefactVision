@@ -4,7 +4,7 @@ import { Settings } from '@/components/settings/settings'
 import { useI18n } from '@/i18n/context'
 
 const settingsSearchSchema = z.object({
-  view: z.enum(['account', 'security', 'appearance', 'models']).optional().default('account'),
+  view: z.enum(['account', 'security', 'appearance']).optional().default('account'),
 })
 
 export const Route = createFileRoute('/_app/settings')({

@@ -2,10 +2,10 @@ import type { Translations } from './en'
 
 export const pt: Translations = {
   common: {
-    RefactVision: 'RefactVision',
+    RefactKit: 'RefactKit',
     launch: 'Refact',
     kit: 'Kit',
-    copyright: '© {{year}} RefactVision. Todos os direitos reservados.',
+    copyright: '© {{year}} RefactKit. Todos os direitos reservados.',
     or: 'ou',
     save: 'Salvar alterações',
     saving: 'Salvando...',
@@ -80,7 +80,7 @@ export const pt: Translations = {
       heading: 'Construa seu SaaS sobre uma base sólida como uma rocha',
       subheading: 'Arquitetura premium para aplicativos multi-tenant de alto desempenho.',
       title: 'Crie sua conta',
-      subtitle: 'Comece a construir com o RefactVision hoje',
+      subtitle: 'Comece a construir com o RefactKit hoje',
       name: 'Nome completo',
       namePlaceholder: 'João Silva',
       nameMin: 'Mínimo de 2 caracteres',
@@ -104,7 +104,7 @@ export const pt: Translations = {
   },
   onboarding: {
     title: 'Crie sua organização',
-    subtitle: 'Configure seu espaço de trabalho para começar com o RefactVision.',
+    subtitle: 'Configure seu espaço de trabalho para começar com o RefactKit.',
     badge: 'Quase lá',
     heading: 'Um último passo',
     subheading: 'Crie sua organização para começar a colaborar com sua equipe.',
@@ -143,6 +143,7 @@ export const pt: Translations = {
     workspaces: 'Espaços de Trabalho',
     workspace: 'Espaço de Trabalho',
     administration: 'Administração',
+    gallery: 'Galeria',
     feedback: 'Feedback',
     support: 'Suporte',
     documentation: 'Documentação',
@@ -220,6 +221,11 @@ export const pt: Translations = {
     fontDescription: 'Defina a fonte que deseja usar no painel.',
     fontDefault: 'Padrão (Automático)',
   },
+  gallery: {
+    title: 'Galeria',
+    subtitle: 'Gerencie e visualize as imagens da sua organização.',
+    noImages: 'Nenhuma imagem encontrada.',
+  },
   notifications: {
     memberJoined: 'entrou na organização',
     invitationPending: 'foi convidado(a) a juntar-se a',
@@ -275,7 +281,7 @@ export const pt: Translations = {
     techStack: {
       title: 'As melhores ferramentas do ecossistema',
       subtitle:
-        'O RefactVision é construído sobre ferramentas modernas e testadas para garantir que seu SaaS seja rápido, seguro e escalável.',
+        'O RefactKit é construído sobre ferramentas modernas e testadas para garantir que seu SaaS seja rápido, seguro e escalável.',
     },
     dashboard: {
       title: 'Painel de controle de nível empresarial',
@@ -290,7 +296,7 @@ export const pt: Translations = {
     cta: {
       title: 'Pronto para construir sua próxima grande ideia?',
       subtitle:
-        'Junte-se a outros desenvolvedores que constroem aplicações SaaS de alto desempenho com o RefactVision.',
+        'Junte-se a outros desenvolvedores que constroem aplicações SaaS de alto desempenho com o RefactKit.',
       button: 'Começar Agora',
     },
     footer: {
@@ -303,60 +309,5 @@ export const pt: Translations = {
     description:
       'Como membro, você não tem permissão para acessar esta seção. Entre em contato com um administrador ou proprietário para gerenciar as configurações da organização ou os membros da equipe.',
     backToDashboard: 'Voltar ao Painel',
-  },
-  projects: {
-    title: 'Projetos',
-    subtitle: 'Gerencie e rotule seus conjuntos de dados para modelos CNN.',
-    createNew: 'Criar Projeto',
-    search: 'Buscar projetos...',
-    noProjects: 'Nenhum projeto encontrado.',
-    form: {
-      title: 'Título',
-      description: 'Descrição',
-      type: 'Tipo de projeto',
-      github: 'Repositório GitHub',
-      other: 'Outra URL',
-    },
-    card: {
-      files: 'arquivo',
-      files_plural: 'arquivos',
-      lastUpdated: 'Última atualização',
-      deleteTitle: 'Excluir Projeto?',
-      deleteDesc: 'Esta ação é permanente e excluirá todos os dados e arquivos rotulados.',
-    },
-    types: {
-      THESE: 'Tese',
-      STAGE: 'Estágio',
-      AUTRE: 'Outro',
-    },
-    studio: {
-      labeling: 'Estúdio de Rotulagem',
-      classes: 'Classes',
-      addClass: 'Adicionar Classe',
-      unlabeled: 'Sem rótulo',
-      bulkLabel: 'Rotulagem em massa',
-      syncRoboflow: 'Sincronizar com Roboflow',
-      noFiles: 'Nenhuma imagem encontrada neste projeto.',
-      stats: '{{percent}}% rotulado',
-    },
-    errors: {
-      onlyAdminsDelete: 'Apenas proprietários ou administradores podem excluir projetos.',
-    },
-  },
-  roles: {
-    title: 'Matriz de Funções',
-    subtitle: 'Gerencie permissões dentro da sua organização.',
-    resourceAction: 'Recurso / Ação',
-    addRole: 'Adicionar função',
-    newRolePlaceholder: 'Nova função',
-    add: 'Adicionar',
-    deleteConfirm: 'Excluir a função {{role}}?',
-    deleteSuccess: 'Função excluída',
-    createSuccess: 'Função criada com sucesso',
-    updateSuccess: 'Função atualizada com sucesso',
-    updateError: 'Erro durante a atualização',
-    createError: 'Erro durante a criação',
-    systemRoleNote: 'As funções do sistema (proprietário, admin, membro) são apenas leitura.',
-    ownerNote: 'As permissões do proprietário são fixas.',
   },
 }

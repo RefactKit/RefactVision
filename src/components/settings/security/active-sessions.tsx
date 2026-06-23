@@ -1,9 +1,11 @@
 import { useAuth } from '@better-auth-ui/react'
-import { useQuery } from '@tanstack/react-query'
 import { toast } from 'sonner'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent } from '@/components/ui/card'
+import { Separator } from '@/components/ui/separator'
 import { Skeleton } from '@/components/ui/skeleton'
+import { cn } from '@/lib/utils'
+import { useQuery } from '@tanstack/react-query'
 import { authClient, useSession } from '../../../../lib/auth-client'
 import { ActiveSession } from './active-session'
 

@@ -1,8 +1,7 @@
-import { dash, sentinel } from '@better-auth/infra'
 import { betterAuth } from 'better-auth'
 import { drizzleAdapter } from 'better-auth/adapters/drizzle'
-import { admin, multiSession, openAPI, organization } from 'better-auth/plugins'
-import { createAccessControl } from 'better-auth/plugins/access'
+import { dash, sentinel } from '@better-auth/infra'
+import { createAccessControl, multiSession, organization, openAPI } from 'better-auth/plugins'
 import { tanstackStartCookies } from 'better-auth/tanstack-start'
 import { eq } from 'drizzle-orm'
 import React from 'react'
@@ -12,43 +11,34 @@ import { InvitationEmail } from '../src/emails/invitation'
 import { ResetPassword } from '../src/emails/reset-password'
 import { SecurityAlert } from '../src/emails/security-alert'
 import { VerifyEmail } from '../src/emails/verify-email'
-import { createNotification, notifyOrgAdmins } from '../src/server/notification-helpers'
 import { sendEmail } from './email'
 import { getBaseURL } from './env'
+import { createNotification, notifyOrgAdmins } from '../src/server/notification-helpers'
 
 const ac = createAccessControl({
   dashboard: ['read'],
   member: ['read', 'create', 'update', 'delete'],
-  invitation: ['read', 'create', 'update', 'delete', 'cancel'],
+  invitation: ['read', 'create', 'update', 'delete'],
   organization: ['update', 'delete'],
-  project: ['create', 'read', 'update', 'delete'],
-  role: ['create', 'read', 'update', 'delete'],
-  ac: ['create', 'read', 'update', 'delete'],
 })
 
 const memberRole = ac.newRole({
   dashboard: ['read'],
   member: [],
   invitation: [],
-  project: ['create', 'read', 'update'],
 })
 
 const adminRole = ac.newRole({
   dashboard: ['read'],
   member: ['read', 'create', 'update'],
-  invitation: ['read', 'create', 'delete', 'cancel'],
-  project: ['create', 'read', 'update', 'delete'],
-  ac: ['read'],
+  invitation: ['read', 'create', 'delete'],
 })
 
 const ownerRole = ac.newRole({
   dashboard: ['read'],
   member: ['read', 'create', 'update', 'delete'],
-  invitation: ['read', 'create', 'update', 'delete', 'cancel'],
+  invitation: ['read', 'create', 'update', 'delete'],
   organization: ['update', 'delete'],
-  project: ['create', 'read', 'update', 'delete'],
-  role: ['create', 'read', 'update', 'delete'],
-  ac: ['create', 'read', 'update', 'delete'],
 })
 
 export const auth = betterAuth({
@@ -86,16 +76,7 @@ export const auth = betterAuth({
 
   emailAndPassword: {
     enabled: true,
-    requireEmailVerification: process.env.ENABLE_EMAIL_VERIFICATION !== 'false',
-    customSyntheticUser: ({ coreFields, additionalFields, id }) => ({
-      ...coreFields,
-      role: 'user',
-      banned: false,
-      banReason: null,
-      banExpires: null,
-      ...additionalFields,
-      id,
-    }),
+    requireEmailVerification: true,
     revokeSessionsOnPasswordReset: true,
     minPasswordLength: 11,
     maxPasswordLength: 128, // Prevent DoS via bcrypt long-password attacks
@@ -183,6 +164,21 @@ export const auth = betterAuth({
     },
   },
 
+  databaseHooks: {
+    session: {
+      create: {
+        before: async (session) => {
+          return {
+            data: {
+              ...session,
+              provider: session.provider || 'password',
+            },
+          }
+        },
+      },
+    },
+  },
+
   // Session with encrypted cookie cache — reduces DB queries, JWE = encrypted
   session: {
     expiresIn: 60 * 60 * 24 * 7, // 7 days
@@ -204,14 +200,6 @@ export const auth = betterAuth({
   databaseHooks: {
     session: {
       create: {
-        before: async (session) => {
-          return {
-            data: {
-              ...session,
-              provider: session.provider || 'password',
-            },
-          }
-        },
         after: async (session) => {
           if (session?.userId) {
             console.log(`[AUDIT] New session created for user: ${session.userId}`)
@@ -233,7 +221,7 @@ export const auth = betterAuth({
       },
       update: {
         after: async ({ data, oldData }) => {
-          if (data && oldData?.email !== data.email) {
+          if (oldData?.email !== data.email) {
             console.log(
               `[AUDIT] Email changed for user ${data.id}: ${oldData?.email} → ${data.email}`,
             )
@@ -261,10 +249,9 @@ export const auth = betterAuth({
   },
 
   emailVerification: {
-    sendOnSignUp: process.env.ENABLE_EMAIL_VERIFICATION !== 'false',
+    sendOnSignUp: true,
     autoSignIn: true,
     sendVerificationEmail: async ({ user, url }) => {
-      if (process.env.ENABLE_EMAIL_VERIFICATION === 'false') return
       console.log(`Sending verification email to: ${user.email}`)
       sendEmail({
         to: user.email,
@@ -276,9 +263,7 @@ export const auth = betterAuth({
 
   plugins: [
     dash(),
-    admin(),
     organization({
-      dynamicAccessControl: { enabled: true },
       organizationLimit: 5,
       membershipLimit: 100,
       allowUserToCreateOrganization: false, // Enforced via server-side logic in org-fns.ts
@@ -294,7 +279,7 @@ export const auth = betterAuth({
         const acceptUrl = `${getBaseURL()}/accept-invite?id=${data.invitation.id}`
         sendEmail({
           to: data.email,
-          subject: `Join ${data.organization.name} on RefactVision`,
+          subject: `Join ${data.organization.name} on RefactKit`,
           template: React.createElement(InvitationEmail, {
             orgName: data.organization.name,
             inviterName: data.inviter.user.name || 'Someone',
@@ -309,9 +294,9 @@ export const auth = betterAuth({
           await createNotification({
             recipientEmail: invitation.email,
             type: 'invitation_received',
-            actorId: inviter?.user?.id,
-            actorName: inviter?.user?.name,
-            actorImage: inviter?.user?.image,
+            actorId: inviter.user.id,
+            actorName: inviter.user.name,
+            actorImage: inviter.user.image,
             organizationId: organization.id,
             organizationName: organization.name,
             metadata: { role: invitation.role || 'member' },
@@ -372,7 +357,7 @@ export const auth = betterAuth({
     }),
     openAPI({
       path: '/openapi.json',
-      nonce: process.env.OPENAPI_NONCE || 'refactVision-openapi-nonce',
+      nonce: process.env.OPENAPI_NONCE || 'refactkit-openapi-nonce',
     }),
     multiSession(),
     sentinel(),

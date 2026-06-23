@@ -1,9 +1,8 @@
-import type { User } from 'better-auth'
-import { User2 } from 'lucide-react'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { Skeleton } from '@/components/ui/skeleton'
 import { cn } from '@/lib/utils'
-import { useSession } from '../../../lib/auth-client'
+import type { User } from 'better-auth'
+import { User2 } from 'lucide-react'
 
 interface UserAvatarProps {
   className?: string
@@ -12,7 +11,8 @@ interface UserAvatarProps {
 }
 
 export function UserAvatar({ className, isPending, user }: UserAvatarProps) {
-  const { data: session, isPending: sessionPending } = useSession()
+  const session = { user: { name: 'Demo User', email: 'demo@demo.com', image: null } }
+  const sessionPending = false
 
   if ((isPending || sessionPending) && !user) {
     return <Skeleton className={cn('size-8 rounded-full', className)} />

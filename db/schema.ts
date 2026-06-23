@@ -29,10 +29,6 @@ export const user = pgTable('user', {
     .$onUpdate(() => /* @__PURE__ */ new Date())
     .notNull(),
   imageUrl: text('image_url').default(''),
-  role: text('role').default('user'),
-  banned: boolean('banned').default(false),
-  banReason: text('ban_reason'),
-  banExpires: timestamp('ban_expires'),
 })
 
 export const session = pgTable(
@@ -52,7 +48,6 @@ export const session = pgTable(
       .references(() => user.id, { onDelete: 'cascade' }),
     activeOrganizationId: text('active_organization_id'),
     provider: text('provider'),
-    impersonatedBy: text('impersonated_by'),
   },
   (table) => [index('session_userId_idx').on(table.userId)],
 )
@@ -152,23 +147,6 @@ export const invitation = pgTable(
   ],
 )
 
-export const organizationRole = pgTable(
-  'organization_role',
-  {
-    id: text('id').primaryKey(),
-    organizationId: text('organization_id')
-      .notNull()
-      .references(() => organization.id, { onDelete: 'cascade' }),
-    role: text('role').notNull(),
-    permission: text('permission').notNull(),
-    createdAt: timestamp('created_at').defaultNow().notNull(),
-    updatedAt: timestamp('updated_at')
-      .$onUpdate(() => new Date())
-      .notNull(),
-  },
-  (table) => [index('organization_role_organizationId_idx').on(table.organizationId)],
-)
-
 export const userRelations = relations(user, ({ many }) => ({
   sessions: many(session),
   accounts: many(account),
@@ -219,6 +197,28 @@ export const invitationRelations = relations(invitation, ({ one }) => ({
   }),
 }))
 
+export const galleryImage = pgTable(
+  'gallery_image',
+  {
+    id: text('id').primaryKey(),
+    name: text('name').notNull(),
+    url: text('url').notNull(),
+    size: text('size').default('0').notNull(), // size in bytes
+    organizationId: text('organization_id')
+      .notNull()
+      .references(() => organization.id, { onDelete: 'cascade' }),
+    createdAt: timestamp('created_at').defaultNow().notNull(),
+  },
+  (table) => [index('gallery_image_organizationId_idx').on(table.organizationId)],
+)
+
+export const galleryImageRelations = relations(galleryImage, ({ one }) => ({
+  organization: one(organization, {
+    fields: [galleryImage.organizationId],
+    references: [organization.id],
+  }),
+}))
+
 // ── Notification System ──────────────────────────────────────────────────────
 export const notification = pgTable(
   'notification',
@@ -259,197 +259,5 @@ export const notificationRelations = relations(notification, ({ one }) => ({
   organization: one(organization, {
     fields: [notification.organizationId],
     references: [organization.id],
-  }),
-}))
-
-// ── Project & Labeling Studio ────────────────────────────────────────────────
-export const projectType = pgTable('project_type', {
-  id: text('id').primaryKey(),
-  name: text('name').notNull(),
-  organizationId: text('organization_id')
-    .notNull()
-    .references(() => organization.id, { onDelete: 'cascade' }),
-})
-
-export const project = pgTable(
-  'project',
-  {
-    id: text('id').primaryKey(),
-    organizationId: text('organization_id')
-      .notNull()
-      .references(() => organization.id, { onDelete: 'cascade' }),
-    userId: text('user_id')
-      .notNull()
-      .references(() => user.id, { onDelete: 'cascade' }),
-    title: text('title').notNull(),
-    description: text('description'),
-    githubUrl: text('github_url'),
-    otherUrl: text('other_url'),
-    slug: text('slug').notNull(),
-    typeId: text('type_id').references(() => projectType.id, { onDelete: 'set null' }),
-    roboflowApiKey: text('roboflow_api_key'),
-    roboflowWorkspace: text('roboflow_workspace'),
-    roboflowProject: text('roboflow_project'),
-    ultralyticsApiKey: text('ultralytics_api_key'),
-    createdAt: timestamp('created_at').defaultNow().notNull(),
-    updatedAt: timestamp('updated_at')
-      .defaultNow()
-      .$onUpdate(() => new Date())
-      .notNull(),
-  },
-  (table) => [index('project_organizationId_idx').on(table.organizationId)],
-)
-
-export const projectCategory = pgTable(
-  'project_category',
-  {
-    id: text('id').primaryKey(),
-    name: text('name').notNull(),
-    projectId: text('project_id')
-      .notNull()
-      .references(() => project.id, { onDelete: 'cascade' }),
-    parentId: text('parent_id'), // Self reference for subcategories
-  },
-  (table) => [index('project_category_projectId_idx').on(table.projectId)],
-)
-
-export const projectFile = pgTable(
-  'project_file',
-  {
-    id: text('id').primaryKey(),
-    projectId: text('project_id')
-      .notNull()
-      .references(() => project.id, { onDelete: 'cascade' }),
-    categoryId: text('category_id').references(() => projectCategory.id, { onDelete: 'set null' }),
-    name: text('name').notNull(),
-    path: text('path').notNull(),
-    url: text('url').notNull(),
-    mimeType: text('mime_type').notNull(),
-    size: integer('size').notNull(),
-    uploadedBy: text('uploaded_by')
-      .notNull()
-      .references(() => user.id, { onDelete: 'cascade' }),
-    labeled: boolean('labeled').default(false).notNull(),
-    uploadedAt: timestamp('uploaded_at').defaultNow().notNull(),
-    metadata: text('metadata'), // JSON string for COCO attributes
-  },
-  (table) => [
-    index('project_file_projectId_idx').on(table.projectId),
-    index('project_file_categoryId_idx').on(table.categoryId),
-  ],
-)
-
-export const projectTypeRelations = relations(projectType, ({ one }) => ({
-  organization: one(organization, {
-    fields: [projectType.organizationId],
-    references: [organization.id],
-  }),
-}))
-
-export const projectRelations = relations(project, ({ one, many }) => ({
-  organization: one(organization, {
-    fields: [project.organizationId],
-    references: [organization.id],
-  }),
-  user: one(user, {
-    fields: [project.userId],
-    references: [user.id],
-  }),
-  type: one(projectType, {
-    fields: [project.typeId],
-    references: [projectType.id],
-  }),
-  categories: many(projectCategory),
-  files: many(projectFile),
-  models: many(projectModel),
-}))
-
-export const projectCategoryRelations = relations(projectCategory, ({ one, many }) => ({
-  project: one(project, {
-    fields: [projectCategory.projectId],
-    references: [project.id],
-  }),
-  parent: one(projectCategory, {
-    fields: [projectCategory.parentId],
-    references: [projectCategory.id],
-    relationName: 'subcategory',
-  }),
-  subcategories: many(projectCategory, { relationName: 'subcategory' }),
-  files: many(projectFile),
-}))
-
-export const projectFileRelations = relations(projectFile, ({ one }) => ({
-  project: one(project, {
-    fields: [projectFile.projectId],
-    references: [project.id],
-  }),
-  category: one(projectCategory, {
-    fields: [projectFile.categoryId],
-    references: [projectCategory.id],
-  }),
-  user: one(user, {
-    fields: [projectFile.uploadedBy],
-    references: [user.id],
-  }),
-}))
-
-// ── ML Models Catalog ────────────────────────────────────────────────────────
-export const mlModel = pgTable('ml_model', {
-  id: text('id').primaryKey(),
-  name: text('name').notNull(),
-  framework: text('framework').notNull(), // e.g. "yolov8", "detectron2", "pytorch", "tensorflow"
-  architecture: text('architecture').notNull(), // e.g. "Object Detection", "Image Classification", "Segmentation"
-  description: text('description'),
-  version: text('version').notNull(), // e.g. "v1.0" or "v8.0"
-  createdAt: timestamp('created_at').defaultNow().notNull(),
-  updatedAt: timestamp('updated_at')
-    .defaultNow()
-    .$onUpdate(() => new Date())
-    .notNull(),
-})
-
-// ── Project-specific Models ──────────────────────────────────────────────────
-export const projectModel = pgTable(
-  'project_model',
-  {
-    id: text('id').primaryKey(),
-    projectId: text('project_id')
-      .notNull()
-      .references(() => project.id, { onDelete: 'cascade' }),
-    modelId: text('model_id')
-      .notNull()
-      .references(() => mlModel.id, { onDelete: 'cascade' }),
-    name: text('name').notNull(), // Custom name for this project model
-    status: text('status').default('draft').notNull(), // 'draft' | 'training' | 'ready' | 'deployed' | 'archived'
-    version: text('version').notNull(), // Project-specific model version
-    metrics: text('metrics'), // JSON string: { mAP, precision, recall, f1, loss, accuracy }
-    description: text('description'),
-    fileUrl: text('file_url'),
-    fileSize: integer('file_size'),
-    createdAt: timestamp('created_at').defaultNow().notNull(),
-    updatedAt: timestamp('updated_at')
-      .defaultNow()
-      .$onUpdate(() => new Date())
-      .notNull(),
-  },
-  (table) => [
-    index('project_model_projectId_idx').on(table.projectId),
-    index('project_model_modelId_idx').on(table.modelId),
-  ],
-)
-
-// Relations
-export const mlModelRelations = relations(mlModel, ({ many }) => ({
-  projectModels: many(projectModel),
-}))
-
-export const projectModelRelations = relations(projectModel, ({ one }) => ({
-  project: one(project, {
-    fields: [projectModel.projectId],
-    references: [project.id],
-  }),
-  model: one(mlModel, {
-    fields: [projectModel.modelId],
-    references: [mlModel.id],
   }),
 }))

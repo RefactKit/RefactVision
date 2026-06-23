@@ -1,14 +1,19 @@
-import { useQueryClient } from '@tanstack/react-query'
-import { Link, useLocation, useParams } from '@tanstack/react-router'
-import { Home, LayoutDashboard, LayoutGrid, Settings, Users } from 'lucide-react'
+import { Link, useLocation, useNavigate, useParams } from '@tanstack/react-router'
+import { ChevronDown, Home, LayoutDashboard, Image, Users, Settings } from 'lucide-react'
+import { Badge } from '@/components/ui/badge'
 import {
   Breadcrumb,
   BreadcrumbItem,
-  BreadcrumbLink,
   BreadcrumbList,
   BreadcrumbPage,
   BreadcrumbSeparator,
 } from '@/components/ui/breadcrumb'
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu'
 import { useI18n } from '@/i18n/context'
 
 interface HeaderBreadcrumbProps {
@@ -18,14 +23,8 @@ interface HeaderBreadcrumbProps {
 export function HeaderBreadcrumb({ orgName }: HeaderBreadcrumbProps) {
   const { t } = useI18n()
   const { pathname } = useLocation()
-  const params = useParams({ strict: false }) as { slug?: string; projectId?: string }
-  const { slug, projectId } = params
-  const queryClient = useQueryClient()
-
-  // Read the project title from cache if we're on a project detail page
-  const cachedProject = projectId
-    ? queryClient.getQueryData<{ title?: string }>(['project', projectId])
-    : null
+  const navigate = useNavigate()
+  const { slug } = useParams({ strict: false }) as { slug?: string }
 
   // Break down the path to determine current page
   const segments = pathname.split('/').filter(Boolean)
@@ -34,18 +33,9 @@ export function HeaderBreadcrumb({ orgName }: HeaderBreadcrumbProps) {
   // Detect current view/page for titles
   const getPageConfig = () => {
     if (lastSegment === 'dashboard') return { title: t.sidebar.dashboard, icon: LayoutDashboard }
+    if (lastSegment === 'gallery') return { title: t.sidebar.gallery, icon: Image }
     if (lastSegment === 'members') return { title: t.sidebar.members, icon: Users }
     if (lastSegment === 'settings') return { title: t.sidebar.settings, icon: Settings }
-    if (lastSegment === 'projects') return { title: t.projects.title, icon: LayoutGrid }
-
-    // Individual Project Page — use cached project title
-    if (pathname.includes('/projects/') && lastSegment !== 'projects') {
-      return {
-        parent: { title: t.projects.title, to: `/organizations/${slug}/projects` },
-        title: cachedProject?.title ?? t.projects.studio.labeling,
-        icon: LayoutGrid,
-      }
-    }
 
     // Global Settings Page
     if (pathname.includes('/settings')) {
@@ -64,50 +54,80 @@ export function HeaderBreadcrumb({ orgName }: HeaderBreadcrumbProps) {
     return { title: '' }
   }
 
-  const { title: pageTitle, icon: PageIcon, parent } = getPageConfig()
+  const { title: pageTitle, parent, icon: PageIcon } = getPageConfig()
 
-  const isDashboard = lastSegment === 'dashboard'
+  const quickNav = [
+    { title: t.sidebar.dashboard, to: `/organizations/${slug}/dashboard`, icon: LayoutDashboard },
+    { title: t.sidebar.gallery, to: `/organizations/${slug}/gallery`, icon: Image },
+    { title: t.sidebar.members, to: `/organizations/${slug}/members`, icon: Users },
+    { title: t.sidebar.settings, to: `/organizations/${slug}/settings`, icon: Settings },
+  ]
 
   return (
     <Breadcrumb>
       <BreadcrumbList>
-        <BreadcrumbItem>
-          <BreadcrumbLink
-            render={
-              <Link
-                to={slug ? '/organizations/$slug/dashboard' : '/'}
-                params={slug ? { slug } : {}}
-                className="flex items-center gap-1.5"
-              />
-            }
-          >
-            <Home className="size-3.5" />
-            {orgName || 'Home'}
-          </BreadcrumbLink>
-        </BreadcrumbItem>
-
-        {parent && (
+        {/* Organization Name (Link to Dashboard) */}
+        {slug && (
           <>
-            <BreadcrumbSeparator> / </BreadcrumbSeparator>
             <BreadcrumbItem>
-              <BreadcrumbLink
-                render={<Link to={parent.to} className="flex items-center gap-1.5" />}
-              >
-                {parent.title}
-              </BreadcrumbLink>
+              <Link to={`/organizations/${slug}/dashboard`}>
+                <Badge
+                  variant="outline"
+                  className="gap-1.5 px-2 py-0.5 font-medium text-muted-foreground transition-colors hover:bg-accent hover:text-foreground"
+                >
+                  <Home className="size-3" />
+                  {orgName ?? slug}
+                </Badge>
+              </Link>
             </BreadcrumbItem>
+            <BreadcrumbSeparator />
           </>
         )}
 
-        {pageTitle && !isDashboard && (
+        {/* Parent Page (if defined) */}
+        {parent && (
           <>
-            <BreadcrumbSeparator> / </BreadcrumbSeparator>
             <BreadcrumbItem>
-              <BreadcrumbPage className="flex items-center gap-1.5 text-sm font-medium text-foreground">
-                {pageTitle}
-              </BreadcrumbPage>
+              <Link to={parent.to} search={{ view: 'account' }}>
+                <Badge
+                  variant="outline"
+                  className="px-2 py-0.5 font-medium text-muted-foreground transition-colors hover:bg-accent hover:text-foreground"
+                >
+                  {parent.title}
+                </Badge>
+              </Link>
             </BreadcrumbItem>
+            <BreadcrumbSeparator />
           </>
+        )}
+
+        {/* Current Page with Dropdown */}
+        {pageTitle && (
+          <BreadcrumbItem>
+            <DropdownMenu>
+              <DropdownMenuTrigger className="flex items-center gap-1 text-sm font-semibold transition-colors hover:text-primary outline-hidden">
+                <BreadcrumbPage className="flex items-center gap-1.5 transition-colors group-hover:text-primary">
+                  {PageIcon && <PageIcon className="size-3.5" />}
+                  {pageTitle}
+                  {slug && <ChevronDown className="size-3.5 opacity-50" />}
+                </BreadcrumbPage>
+              </DropdownMenuTrigger>
+              {slug && (
+                <DropdownMenuContent align="start" className="w-48">
+                  {quickNav.map((item) => (
+                    <DropdownMenuItem
+                      key={item.to}
+                      onClick={() => navigate({ to: item.to as any })}
+                      className="gap-2 cursor-pointer"
+                    >
+                      <item.icon className="size-4 opacity-70" />
+                      {item.title}
+                    </DropdownMenuItem>
+                  ))}
+                </DropdownMenuContent>
+              )}
+            </DropdownMenu>
+          </BreadcrumbItem>
         )}
       </BreadcrumbList>
     </Breadcrumb>

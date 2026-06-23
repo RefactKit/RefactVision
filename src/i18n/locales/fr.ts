@@ -2,10 +2,10 @@ import type { Translations } from './en'
 
 export const fr: Translations = {
   common: {
-    RefactVision: 'RefactVision',
+    RefactKit: 'RefactKit',
     launch: 'Refact',
     kit: 'Kit',
-    copyright: '© {{year}} RefactVision. Tous droits réservés.',
+    copyright: '© {{year}} RefactKit. Tous droits réservés.',
     or: 'ou',
     save: 'Enregistrer',
     saving: 'Enregistrement...',
@@ -81,7 +81,7 @@ export const fr: Translations = {
       heading: 'Construisez votre SaaS sur des bases solides',
       subheading: 'Une architecture premium pour des applications multi-tenant haute performance.',
       title: 'Créez votre compte',
-      subtitle: "Commencez avec RefactVision aujourd'hui",
+      subtitle: "Commencez avec RefactKit aujourd'hui",
       name: 'Nom complet',
       namePlaceholder: 'Jean Dupont',
       nameMin: 'Min. 2 caractères',
@@ -109,7 +109,7 @@ export const fr: Translations = {
   },
   onboarding: {
     title: 'Créez votre organisation',
-    subtitle: 'Configurez votre espace de travail pour démarrer avec RefactVision.',
+    subtitle: 'Configurez votre espace de travail pour démarrer avec RefactKit.',
     badge: 'Presque terminé',
     heading: 'Une dernière étape',
     subheading: 'Créez votre organisation pour commencer à collaborer.',
@@ -145,6 +145,7 @@ export const fr: Translations = {
     workspaces: 'Mes Espaces',
     workspace: 'Espace de travail',
     administration: 'Administration',
+    gallery: 'Galerie',
     feedback: 'Feedback',
     support: 'Support',
     documentation: 'Documentation',
@@ -225,6 +226,11 @@ export const fr: Translations = {
     revoke: 'Révoquer',
     revokeSessionSuccess: 'Session révoquée avec succès',
   },
+  gallery: {
+    title: 'Galerie',
+    subtitle: 'Gérez et visualisez les images de votre organisation.',
+    noImages: 'Aucune image trouvée.',
+  },
   notifications: {
     memberJoined: "a rejoint l'organisation",
     invitationPending: 'a été invité(e) à rejoindre',
@@ -246,138 +252,57 @@ export const fr: Translations = {
       getStarted: 'Commencer',
     },
     hero: {
-      badge: "Plateforme Open-Source d'Étiquetage de Données",
-      title: 'Étiquetez, Révisez, Exportez.',
+      badge: 'Gagnez plus de 100 heures de développement',
+      title: 'Construisez votre SaaS,',
       titleWords: [
-        'pour les équipes de Computer Vision',
-        'avec des flux collaboratifs',
-        'en jeux de données prêts pour la prod',
+        'avec un kit full-stack moderne',
+        'à la vitesse de la lumière',
+        'avec un code prêt pour la prod',
       ],
       subheading:
-        "La plateforme d'étiquetage de données collaborative et open-source pour la vision par ordinateur. Annotez les images, révisez avec votre équipe et exportez des jeux de données propres vers Ultralytics et Roboflow — le tout dans des espaces de travail multi-locataires sécurisés.",
-      getStarted: 'Commencer à Étiqueter',
+        'Le starter full-stack ultime pour les fondateurs, devs et indie hackers. Propulsé par React 19 & TanStack, avec une API backend, une multi-location sécurisée et un dashboard de niveau entreprise.',
+      getStarted: 'Commencer',
       viewDocs: 'Voir la Documentation',
       security: {
-        owasp: 'Conception Axée sur la Confidentialité',
-        encrypted: 'Sécurisé de Bout en Bout',
-        tenant: 'Multi-Locataire Isolé',
+        owasp: 'Conforme OWASP ASVS',
+        encrypted: 'Chiffré en AES-256',
+        tenant: 'Isolation Multi-Tenant',
       },
     },
     features: {
-      collaborative: {
-        title: 'Étiquetage Collaboratif',
-        description:
-          'Annotez les images sur des jeux de données partagés avec une attribution par équipe et des flux de révision structurés.',
-      },
       multiTenant: {
-        title: 'Espaces de Travail Multi-Locataires',
-        description:
-          'Isolez les organisations, équipes, jeux de données et permissions par espace de travail. Idéal pour le B2B et le multi-client.',
+        title: 'Multi-Locataire',
+        description: 'Gestion d’organisation sécurisée et évolutive prête à l’emploi.',
       },
-      reviewGovernance: {
-        title: 'Révision & Gouvernance',
-        description:
-          "Créez des flux de validation avec des états d'approbation et un contrôle de qualité des annotations avant l'export.",
+      tanstack: {
+        title: 'Propulsé par TanStack',
+        description: 'Construit avec TanStack Start, Router et Query pour une performance ultime.',
       },
-      exportReady: {
-        title: "Interopérabilité d'Export",
-        description:
-          "Exportez vos jeux de données vers des pipelines orientés YOLO, Roboflow ou des flux d'entraînement personnalisés.",
-      },
-      privacyFirst: {
-        title: 'Confidentialité Prioritaire',
-        description:
-          "Gardez le contrôle sur vos jeux de données sensibles. Adapté à l'auto-hébergement avec contrôle total pour les développeurs.",
-      },
-      openSource: {
-        title: 'Open Source',
-        description:
-          'Inspectez, adaptez, étendez et auto-hébergez la plateforme. Vos données ne doivent jamais être une boîte noire.',
+      modernUI: {
+        title: 'Interface Moderne',
+        description: 'Conçu avec Base UI et Tailwind CSS pour une expérience premium.',
       },
     },
-    workflow: {
-      title: 'Des Images Brutes aux Jeux de Données Prêts',
+    techStack: {
+      title: "Les meilleurs outils de l'écosystème",
       subtitle:
-        "Un flux de travail simplifié qui maintient la traçabilité et la collaboration du jeu de données avant l'entraînement.",
-      steps: [
-        {
-          title: 'Créer un Espace',
-          description: "Configurez votre organisation avec un contrôle d'accès basé sur les rôles.",
-        },
-        {
-          title: 'Téléverser & Classer',
-          description:
-            "Téléversez vos images et définissez vos catégories d'étiquetage personnalisées.",
-        },
-        {
-          title: 'Annoter & Réviseur',
-          description:
-            "Étiquetez les données en collaboration avec des flux d'assurance qualité structurés.",
-        },
-        {
-          title: 'Exporter & Entraîner',
-          description:
-            'Exportez des jeux de données vers Ultralytics, Roboflow ou des pipelines sur mesure.',
-        },
-      ],
-    },
-    useCases: {
-      title: 'Conçu pour la Vision Réelle',
-      subtitle:
-        "De l'agriculture au contrôle qualité industriel, RefactVision alimente la couche de données de vos systèmes de vision.",
-      items: [
-        {
-          title: 'Agriculture',
-          description:
-            "Étiquetez les maladies des cultures, les parasites et l'état des fruits pour détection mobile ou embarquée.",
-          emoji: '🌾',
-        },
-        {
-          title: 'Commerce & Intelligence de Rayon',
-          description:
-            'Construisez des jeux de données pour la détection de produits, la conformité des rayons et la surveillance.',
-          emoji: '🏪',
-        },
-        {
-          title: 'Contrôle Qualité Industriel',
-          description:
-            "Étiquetez les défauts, composants et catégories d'inspection dans vos usines.",
-          emoji: '🏭',
-        },
-        {
-          title: 'Logistics & Entreposage',
-          description: 'Annotez les cartons, palettes, articles endommagés et états des colis.',
-          emoji: '📦',
-        },
-        {
-          title: 'Imagerie Médicale',
-          description:
-            "Créez des couches d'annotation privées pour vos jeux de données cliniques sensibles.",
-          emoji: '🏥',
-        },
-        {
-          title: 'Équipes de Recherche',
-          description:
-            "Une couche collaborative privée d'annotation pour vos expérimentations internes.",
-          emoji: '🔬',
-        },
-      ],
-    },
-    integrations: {
-      title: "Pipeline d'Exportation Fluide",
-      subtitle:
-        "Vos étiquettes vont là où vos modèles s'entraînent. Pas de verrouillage propriétaire.",
+        'RefactKit est construit sur des outils modernes et éprouvés pour garantir que votre SaaS est rapide, sécurisé et évolutif.',
     },
     dashboard: {
-      title: "Interface d'Étiquetage Puissante",
+      title: 'Tableau de bord de niveau entreprise',
       subtitle:
-        'Un espace de travail intuitif où les experts métier non-techniques peuvent facilement annoter des images.',
+        'Tout ce dont vous avez besoin pour gérer vos organisations et utilisateurs en un seul endroit.',
+    },
+    detailedFeatures: {
+      title: 'Tout ce dont vous avez besoin pour lancer',
+      subtitle:
+        'Concentrez-vous sur vos fonctionnalités de base pendant que nous gérons les complexités du multi-tenant, de l’authentification et de la performance.',
     },
     cta: {
-      title: 'Prêt à créer des jeux de données de haute qualité ?',
+      title: 'Prêt à construire votre prochaine grande idée ?',
       subtitle:
-        'Rejoignez les équipes qui utilisent RefactVision pour annoter, réviser et exporter en toute confiance.',
-      button: 'Commencer à Étiqueter',
+        'Rejoignez d’autres développeurs qui construisent des applications SaaS haute performance avec RefactKit.',
+      button: 'Commencer maintenant',
     },
     footer: {
       madeWith: 'Fait avec ❤️ par',
@@ -389,93 +314,5 @@ export const fr: Translations = {
     description:
       'En tant que membre, vous n’avez pas l’autorisation d’accéder à cette section. Veuillez contacter un administrateur ou le propriétaire pour gérer les paramètres de l’organisation ou les membres de l’équipe.',
     backToDashboard: 'Retour au Tableau de Bord',
-  },
-  projects: {
-    title: 'Projets',
-    subtitle: 'Gérez et étiquetez vos jeux de données pour les modèles CNN.',
-    createNew: 'Créer un projet',
-    search: 'Rechercher des projets...',
-    noProjects: 'Aucun projet trouvé.',
-    emptyDesc: 'Essayez d’ajuster votre recherche ou vos filtres.',
-    tabs: {
-      dataset: 'Données',
-      classes: 'Classes',
-      models: 'Modèles',
-      integration: 'Intégration',
-      stats: 'Statistiques',
-    },
-    form: {
-      title: 'Titre',
-      description: 'Description',
-      type: 'Type de projet',
-      github: 'Dépôt GitHub',
-      other: 'Autre URL',
-      configureDesc: 'Configurez votre nouveau projet. Cliquez sur créer une fois terminé.',
-      placeholderTitle: 'Dataset IRM Cérébrale',
-      placeholderDesc: 'Jeu de données pour la classification CNN...',
-      selectType: 'Sélectionner un type',
-      sortNewest: 'Plus récent',
-      sortOldest: 'Plus ancien',
-      sortAZ: 'A-Z',
-      sortZA: 'Z-A',
-      filterAll: 'Tous les projets',
-      noDescription: 'Aucune description fournie.',
-    },
-    card: {
-      files: 'fichier',
-      files_plural: 'fichiers',
-      lastUpdated: 'Mis à jour le',
-      deleteTitle: 'Supprimer le Projet ?',
-      deleteDesc:
-        'Cette action est définitive et supprimera toutes les données labellisées et les fichiers.',
-    },
-    types: {
-      THESE: 'Thèse',
-      STAGE: 'Stage',
-      AUTRE: 'Autre',
-    },
-    studio: {
-      labeling: 'Studio de Labellisation',
-      classes: 'Classes',
-      addClass: 'Ajouter une Classe',
-      unlabeled: 'Non labellisés',
-      bulkLabel: 'Labellisation en masse',
-      syncRoboflow: 'Synchroniser avec Roboflow',
-      noFiles: 'Aucune image trouvée dans ce projet.',
-      stats: '{{percent}}% Labellisés',
-    },
-    errors: {
-      onlyAdminsDelete: 'Seuls les propriétaires ou admins peuvent supprimer des projets.',
-    },
-  },
-  roles: {
-    title: 'Matrice des Rôles',
-    subtitle: 'Gérez les permissions au sein de votre organisation.',
-    resourceAction: 'Ressource / Action',
-    addRole: 'Ajouter un rôle',
-    newRolePlaceholder: 'Nouveau rôle',
-    add: 'Ajouter',
-    deleteConfirm: 'Supprimer le rôle {{role}} ?',
-    deleteSuccess: 'Rôle supprimé',
-    createSuccess: 'Rôle créé avec succès',
-    updateSuccess: 'Rôle mis à jour avec succès',
-    updateError: 'Erreur lors de la mise à jour',
-    createError: 'Erreur lors de la création',
-    systemRoleNote: 'Les rôles système (owner, admin, member) sont en lecture seule.',
-    ownerNote: 'Les permissions du rôle owner sont fixes.',
-  },
-  resources: {
-    project: 'Projet',
-    member: 'Membre',
-    invitation: 'Invitation',
-    organization: 'Organisation',
-    dashboard: 'Tableau de bord',
-    ac: 'Gestion des Rôles',
-  },
-  actions: {
-    create: 'Créer',
-    read: 'Lire',
-    update: 'Modifier',
-    delete: 'Supprimer',
   },
 }

@@ -1,7 +1,18 @@
-import { Check } from 'lucide-react'
+import { Link } from '@tanstack/react-router'
+import { Check, Languages, Monitor, Moon, Sun } from 'lucide-react'
+import { useTheme } from 'next-themes'
+import { useEffect, useState } from 'react'
+import { LanguageToggle, ThemeToggle } from '@/components/shared/auth-ui'
 import { Header } from '@/components/shared/header'
-import { Logo as SharedLogo } from '@/components/shared/logo'
 import { DotPattern } from '@/components/ui/dot-pattern'
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuRadioGroup,
+  DropdownMenuRadioItem,
+  DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu'
+import type { Locale } from '@/i18n'
 import { useI18n } from '@/i18n/context'
 
 export function AuthShell({
@@ -53,7 +64,7 @@ export function AuthShell({
           </div>
           <div className="absolute bottom-12 left-12">
             <p className="text-sm text-muted-foreground/60">
-              © {new Date().getFullYear()} RefactVision
+              © {new Date().getFullYear()} RefactKit
             </p>
           </div>
         </div>
@@ -70,7 +81,20 @@ export function AuthShell({
 }
 
 export function Logo() {
-  return <SharedLogo textSize="text-2xl" iconClassName="size-10" iconSize={22} />
+  return (
+    <Link to="/" className="flex items-center gap-2">
+      <img
+        src="/logo.png"
+        alt="RefactKit"
+        className="h-8 w-auto object-contain sm:h-12 dark:hidden"
+      />
+      <img
+        src="/logo-dark.png"
+        alt="RefactKit"
+        className="h-8 w-auto object-contain sm:h-12 hidden dark:block"
+      />
+    </Link>
+  )
 }
 
 export function Divider() {

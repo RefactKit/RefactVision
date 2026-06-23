@@ -33,11 +33,7 @@
       "a11y": {
         "noLabelWithoutControl": "warn",
         "useButtonType": "warn",
-        "useSemanticElements": "warn",
-        "useAnchorContent": "warn",
-        "noStaticElementInteractions": "warn",
-        "useKeyWithClickEvents": "warn",
-        "useValidAnchor": "warn"
+        "useSemanticElements": "warn"
       },
       "style": {
         "useBlockStatements": "off",

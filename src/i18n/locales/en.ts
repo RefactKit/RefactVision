@@ -1,9 +1,9 @@
 export const en = {
   common: {
-    RefactVision: 'RefactVision',
+    RefactKit: 'RefactKit',
     launch: 'Refact',
     kit: 'Kit',
-    copyright: '© {{year}} RefactVision. All rights reserved.',
+    copyright: '© {{year}} RefactKit. All rights reserved.',
     or: 'or',
     save: 'Save changes',
     saving: 'Saving...',
@@ -79,7 +79,7 @@ export const en = {
       heading: 'Construct your SaaS on a rock-solid foundation',
       subheading: 'Premium architecture for high-performance multi-tenant apps.',
       title: 'Create your account',
-      subtitle: 'Start building with RefactVision today',
+      subtitle: 'Start building with RefactKit today',
       name: 'Full name',
       namePlaceholder: 'John Doe',
       nameMin: 'Min 2 characters',
@@ -107,7 +107,7 @@ export const en = {
   },
   onboarding: {
     title: 'Create your organization',
-    subtitle: 'Set up your workspace to get started with RefactVision.',
+    subtitle: 'Set up your workspace to get started with RefactKit.',
     badge: 'Almost there',
     heading: 'One last step',
     subheading: 'Create your organization to start collaborating with your team.',
@@ -143,6 +143,7 @@ export const en = {
     workspaces: 'Workspaces',
     workspace: 'Workspace',
     administration: 'Administration',
+    gallery: 'Gallery',
     feedback: 'Feedback',
     support: 'Support',
     documentation: 'Documentation',
@@ -156,7 +157,7 @@ export const en = {
     activeMembers: 'Active Members',
     storageTotal: 'Storage Total',
     pendingInvites: 'Pending invites',
-    totalFiles: 'Project Files',
+    uploadedImages: 'Images uploaded',
     totalOf: 'of {{total}} total',
     currentSessions: 'Current sessions',
   },
@@ -223,6 +224,11 @@ export const en = {
     revoke: 'Revoke',
     revokeSessionSuccess: 'Session revoked successfully',
   },
+  gallery: {
+    title: 'Gallery',
+    subtitle: 'Manage and view your organization images.',
+    noImages: 'No images found.',
+  },
   notifications: {
     memberJoined: 'joined the organization',
     invitationPending: 'was invited to join',
@@ -244,131 +250,55 @@ export const en = {
       getStarted: 'Get Started',
     },
     hero: {
-      badge: 'Open-Source Data Labeling Platform',
-      title: 'Label, Review, Export.',
+      badge: 'Save 100+ hours of development',
+      title: 'Build your SaaS,',
       titleWords: [
-        'for Computer Vision teams',
-        'with collaborative workflows',
-        'to production-ready datasets',
+        'with a modern full-stack kit',
+        'at the speed of light',
+        'with production-ready code',
       ],
       subheading:
-        'The open-source, collaborative data labeling platform for computer vision. Annotate images, review with your team, and export clean datasets to Ultralytics & Roboflow — all in secure, multi-tenant workspaces.',
-      getStarted: 'Start Labeling',
+        'The ultimate full-stack starter for founders, devs, and indie hackers. Built with React 19 & TanStack, featuring a production-ready backend API, secure multi-tenancy, and an enterprise-grade dashboard.',
+      getStarted: 'Get Started',
       viewDocs: 'View Documentation',
       security: {
-        owasp: 'Privacy-First Design',
-        encrypted: 'End-to-End Secure',
+        owasp: 'OWASP ASVS Compliant',
+        encrypted: 'AES-256 Encrypted',
         tenant: 'Multi-Tenant Isolated',
       },
     },
     features: {
-      collaborative: {
-        title: 'Collaborative Labeling',
-        description:
-          'Annotate images across shared datasets with team-based ownership, assignment, and structured review workflows.',
-      },
       multiTenant: {
-        title: 'Multi-Tenant Workspaces',
-        description:
-          'Isolate organizations, teams, datasets, and permissions by workspace. Built for B2B, agency, and multi-client setups.',
+        title: 'Multi-Tenant',
+        description: 'Secure and scalable organization management out of the box.',
       },
-      reviewGovernance: {
-        title: 'Review & Governance',
-        description:
-          'Create reviewer flows with approval states, audit visibility, and annotation quality control before export.',
+      tanstack: {
+        title: 'TanStack Powered',
+        description: 'Built with TanStack Start, Router, and Query for ultimate performance.',
       },
-      exportReady: {
-        title: 'Export Interoperability',
-        description:
-          'Export datasets into YOLO-oriented pipelines, Roboflow, or custom training workflows. No vendor lock-in.',
-      },
-      privacyFirst: {
-        title: 'Privacy-First',
-        description:
-          'Keep sensitive datasets under organizational control. Self-hosted friendly with developer-controlled workflows.',
-      },
-      openSource: {
-        title: 'Open Source',
-        description:
-          'Inspect, adapt, extend, and self-host the platform. Dataset operations should never be a black box.',
+      modernUI: {
+        title: 'Modern UI',
+        description: 'Crafted with Base UI and Tailwind CSS for a premium experience.',
       },
     },
-    workflow: {
-      title: 'From Raw Images to Production Datasets',
+    techStack: {
+      title: 'The Best Tools in the Ecosystem',
       subtitle:
-        'A streamlined workflow that keeps dataset preparation traceable and collaborative before training begins.',
-      steps: [
-        {
-          title: 'Create Workspace',
-          description: 'Set up your organization with role-based access control.',
-        },
-        {
-          title: 'Upload & Classify',
-          description: 'Upload images and define your custom labeling categories.',
-        },
-        {
-          title: 'Annotate & Review',
-          description: 'Label data collaboratively with structured QA workflows.',
-        },
-        {
-          title: 'Export & Train',
-          description: 'Export curated datasets to Ultralytics, Roboflow, or custom pipelines.',
-        },
-      ],
-    },
-    useCases: {
-      title: 'Built for Real-World Vision',
-      subtitle:
-        'From agriculture to industrial QA, RefactVision powers the data layer behind production CV systems.',
-      items: [
-        {
-          title: 'Agriculture',
-          description:
-            'Label crop diseases, pests, and fruit conditions for mobile or edge detection.',
-          emoji: '🌾',
-        },
-        {
-          title: 'Retail & Shelf Intelligence',
-          description:
-            'Build datasets for product detection, shelf compliance, and store monitoring.',
-          emoji: '🏪',
-        },
-        {
-          title: 'Industrial QA',
-          description: 'Label defects, components, and inspection categories across factories.',
-          emoji: '🏭',
-        },
-        {
-          title: 'Logistics & Warehousing',
-          description: 'Annotate boxes, pallets, damaged items, and package states.',
-          emoji: '📦',
-        },
-        {
-          title: 'Medical Imaging',
-          description: 'Create private annotation layers for sensitive clinical datasets.',
-          emoji: '🏥',
-        },
-        {
-          title: 'Research Teams',
-          description: 'A private collaborative annotation layer for internal experimentation.',
-          emoji: '🔬',
-        },
-      ],
-    },
-    integrations: {
-      title: 'Seamless Export Pipeline',
-      subtitle: 'Your labels go where your models train. No lock-in, no friction.',
+        'RefactKit is built on top of modern, battle-tested tools to ensure your SaaS is fast, secure, and scalable.',
     },
     dashboard: {
-      title: 'Powerful Labeling Interface',
+      title: 'Enterprise-grade Dashboard',
+      subtitle: 'Everything you need to manage your organizations and users in one place.',
+    },
+    detailedFeatures: {
+      title: 'Everything you need to launch',
       subtitle:
-        'An intuitive workspace where non-ML domain experts can easily annotate datasets using custom categories.',
+        'Focus on your core features while we handle the complexities of multi-tenancy, authentication, and performance.',
     },
     cta: {
-      title: 'Ready to build production-ready datasets?',
-      subtitle:
-        'Join computer vision teams using RefactVision to annotate, review, and export with confidence.',
-      button: 'Start Labeling Now',
+      title: 'Ready to build your next big idea?',
+      subtitle: 'Join other developers building high-performance SaaS applications with RefactKit.',
+      button: 'Get Started Now',
     },
     footer: {
       madeWith: 'Made with ❤️ by',
@@ -380,93 +310,6 @@ export const en = {
     description:
       'As a member, you do not have permission to access this section. Please contact an administrator or owner to manage organization settings or team members.',
     backToDashboard: 'Back to Dashboard',
-  },
-  projects: {
-    title: 'Projects',
-    subtitle: 'Manage and label your datasets for CNN models.',
-    createNew: 'Create Project',
-    search: 'Search projects...',
-    noProjects: 'No projects found.',
-    emptyDesc: 'Try adjusting your search or filters.',
-    tabs: {
-      dataset: 'Dataset',
-      classes: 'Classes',
-      models: 'Models',
-      integration: 'Integration',
-      stats: 'Stats',
-    },
-    form: {
-      title: 'Title',
-      description: 'Description',
-      type: 'Project Type',
-      github: 'GitHub Repository',
-      other: 'Other URL',
-      configureDesc: "Configure your new dataset project. Click create when you're done.",
-      placeholderTitle: 'Brain MRI Dataset',
-      placeholderDesc: 'Dataset for CNN classification...',
-      selectType: 'Select type',
-      sortNewest: 'Newest',
-      sortOldest: 'Oldest',
-      sortAZ: 'A-Z',
-      sortZA: 'Z-A',
-      filterAll: 'All Projects',
-      noDescription: 'No description provided.',
-    },
-    card: {
-      files: 'file',
-      files_plural: 'files',
-      lastUpdated: 'Last updated',
-      deleteTitle: 'Delete Project?',
-      deleteDesc: 'This action is permanent and will delete all labeled data and files.',
-    },
-    types: {
-      THESE: 'Thèse',
-      STAGE: 'Stage',
-      AUTRE: 'Autre',
-    },
-    studio: {
-      labeling: 'Labeling Studio',
-      classes: 'Classes',
-      addClass: 'Add Class',
-      unlabeled: 'Unlabeled',
-      bulkLabel: 'Bulk Label',
-      syncRoboflow: 'Sync to Roboflow',
-      noFiles: 'No images found in this project.',
-      stats: '{{percent}}% Labeled',
-    },
-    errors: {
-      onlyAdminsDelete: 'Only owners or admins can delete projects.',
-    },
-  },
-  roles: {
-    title: 'Roles Matrix',
-    subtitle: 'Manage permissions within your organization.',
-    resourceAction: 'Resource / Action',
-    addRole: 'Add Role',
-    newRolePlaceholder: 'New role',
-    add: 'Add',
-    deleteConfirm: 'Delete role {{role}}?',
-    deleteSuccess: 'Role deleted',
-    createSuccess: 'Role created successfully',
-    updateSuccess: 'Role updated successfully',
-    updateError: 'Error during update',
-    createError: 'Error during creation',
-    systemRoleNote: 'System roles (owner, admin, member) are read-only.',
-    ownerNote: 'Owner permissions are fixed.',
-  },
-  resources: {
-    project: 'Project',
-    member: 'Member',
-    invitation: 'Invitation',
-    organization: 'Organization',
-    dashboard: 'Dashboard',
-    ac: 'Role Management',
-  },
-  actions: {
-    create: 'Create',
-    read: 'Read',
-    update: 'Update',
-    delete: 'Delete',
   },
 }
 

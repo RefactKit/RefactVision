@@ -1,9 +1,9 @@
 export const it = {
   common: {
-    RefactVision: 'RefactVision',
+    RefactKit: 'RefactKit',
     launch: 'Refact',
     kit: 'Kit',
-    copyright: '© {{year}} RefactVision. Tutti i diritti riservati.',
+    copyright: '© {{year}} RefactKit. Tutti i diritti riservati.',
     or: 'o',
     save: 'Salva modifiche',
     saving: 'Salvataggio...',
@@ -78,7 +78,7 @@ export const it = {
       heading: 'Costruisci il tuo SaaS su fondamenta solide',
       subheading: 'Architettura premium per app multi-tenant ad alte prestazioni.',
       title: 'Crea il tuo account',
-      subtitle: 'Inizia a creare con RefactVision oggi stesso',
+      subtitle: 'Inizia a creare con RefactKit oggi stesso',
       name: 'Nome completo',
       namePlaceholder: 'Mario Rossi',
       nameMin: 'Minimo 2 caratteri',
@@ -102,7 +102,7 @@ export const it = {
   },
   onboarding: {
     title: 'Crea la tua organizzazione',
-    subtitle: 'Imposta il tuo spazio di lavoro per iniziare con RefactVision.',
+    subtitle: 'Imposta il tuo spazio di lavoro per iniziare con RefactKit.',
     badge: 'Quasi fatto',
     heading: 'Un ultimo passo',
     subheading: 'Crea la tua organizzazione per iniziare a collaborare con il tuo team.',
@@ -137,6 +137,7 @@ export const it = {
     workspaces: 'Spazi di lavoro',
     workspace: 'Spazio di lavoro',
     administration: 'Amministrazione',
+    gallery: 'Galleria',
     feedback: 'Feedback',
     support: 'Supporto',
     documentation: 'Documentazione',
@@ -219,6 +220,11 @@ export const it = {
     revoke: 'Revoca',
     revokeSessionSuccess: 'Sessione revocata con successo',
   },
+  gallery: {
+    title: 'Galleria',
+    subtitle: 'Gestisci e visualizza le immagini della tua organizzazione.',
+    noImages: 'Nessuna immagine trovata.',
+  },
   notifications: {
     memberJoined: "si è unito all'organizzazione",
     invitationPending: 'è stato invitato a unirsi a',
@@ -274,7 +280,7 @@ export const it = {
     techStack: {
       title: "I migliori strumenti nell'ecosistema",
       subtitle:
-        'RefactVision è costruito sui moderni strumenti consolidati per garantire che il tuo SaaS sia veloce, sicuro e scalabile.',
+        'RefactKit è costruito sui moderni strumenti consolidati per garantire che il tuo SaaS sia veloce, sicuro e scalabile.',
     },
     dashboard: {
       title: 'Dashboard di livello enterprise',
@@ -289,7 +295,7 @@ export const it = {
     cta: {
       title: 'Pronto per costruire la tua prossima grande idea?',
       subtitle:
-        'Unisciti ad altri sviluppatori che costruiscono applicazioni SaaS ad alte prestazioni con RefactVision.',
+        'Unisciti ad altri sviluppatori che costruiscono applicazioni SaaS ad alte prestazioni con RefactKit.',
       button: 'Inizia Ora',
     },
     footer: {
@@ -302,60 +308,5 @@ export const it = {
     description:
       "Come membro, non hai il permesso di accedere a questa sezione. Contatta un amministratore o il proprietario per gestire le impostazioni dell'organizzazione o i membri del team.",
     backToDashboard: 'Torna alla Dashboard',
-  },
-  projects: {
-    title: 'Progetti',
-    subtitle: 'Gestisci ed etichetta i tuoi dataset per i modelli CNN.',
-    createNew: 'Crea Progetto',
-    search: 'Cerca progetti...',
-    noProjects: 'Nessun progetto trovato.',
-    form: {
-      title: 'Titolo',
-      description: 'Descrizione',
-      type: 'Tipo di progetto',
-      github: 'Repository GitHub',
-      other: 'Altro URL',
-    },
-    card: {
-      files: 'file',
-      files_plural: 'file',
-      lastUpdated: 'Ultimo aggiornamento',
-      deleteTitle: 'Eliminare il progetto?',
-      deleteDesc: 'Questa azione è permanente e cancellerà tutti i dati e i file etichettati.',
-    },
-    types: {
-      THESE: 'Tesi',
-      STAGE: 'Stage',
-      AUTRE: 'Altro',
-    },
-    studio: {
-      labeling: 'Studio di Etichettatura',
-      classes: 'Classi',
-      addClass: 'Aggiungi Classe',
-      unlabeled: 'Non etichettato',
-      bulkLabel: 'Etichettatura massiva',
-      syncRoboflow: 'Sincronizza con Roboflow',
-      noFiles: 'Nessuna immagine trovata in questo progetto.',
-      stats: '{{percent}}% etichettato',
-    },
-    errors: {
-      onlyAdminsDelete: 'Solo i proprietari o gli amministratori possono eliminare i progetti.',
-    },
-  },
-  roles: {
-    title: 'Matrice dei Ruoli',
-    subtitle: 'Gestisci i permessi all’interno della tua organizzazione.',
-    resourceAction: 'Risorsa / Azione',
-    addRole: 'Aggiungi ruolo',
-    newRolePlaceholder: 'Nuovo ruolo',
-    add: 'Aggiungi',
-    deleteConfirm: 'Eliminare il ruolo {{role}}?',
-    deleteSuccess: 'Ruolo eliminato',
-    createSuccess: 'Ruolo creato con successo',
-    updateSuccess: 'Ruolo aggiornato con successo',
-    updateError: 'Errore durante l’aggiornamento',
-    createError: 'Errore durante la creazione',
-    systemRoleNote: 'I ruoli di sistema (proprietario, admin, membro) sono in sola lettura.',
-    ownerNote: 'I permessi del proprietario sono fissi.',
   },
 }

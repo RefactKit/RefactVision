@@ -26,7 +26,7 @@ export const Route = createRootRouteWithContext<{
   head: (_ctx) => {
     const baseUrl = getBaseURL()
     const ogImage = `${baseUrl}/og.png`
-    const title = 'Build your SaaS, with production-ready code — RefactVision'
+    const title = 'Build your SaaS, with production-ready code — RefactKit'
     const description =
       'The ultimate full-stack starter for founders, devs, and indie hackers. Built with React 19 & TanStack, featuring a production-ready backend API, secure multi-tenancy, and an enterprise-grade dashboard.'
 
@@ -42,7 +42,7 @@ export const Route = createRootRouteWithContext<{
         { property: 'og:title', content: title },
         { property: 'og:description', content: description },
         { property: 'og:image', content: ogImage },
-        { property: 'og:site_name', content: 'RefactVision' },
+        { property: 'og:site_name', content: 'RefactKit' },
         // Twitter
         { name: 'twitter:card', content: 'summary_large_image' },
         { name: 'twitter:url', content: baseUrl },
@@ -119,12 +119,12 @@ function RootDocument({ children }: { children: React.ReactNode }) {
             __html: `
               (function() {
                 try {
-                  const font = localStorage.getItem('RefactVision-font');
+                  const font = localStorage.getItem('RefactKit-font');
                   if (font && font !== 'default') {
                     document.documentElement.setAttribute('data-font', font);
                   }
                   
-                  const colorTheme = localStorage.getItem('RefactVision-color-theme');
+                  const colorTheme = localStorage.getItem('RefactKit-color-theme');
                   if (colorTheme && colorTheme !== 'default') {
                     document.documentElement.setAttribute('data-theme', colorTheme);
                   }

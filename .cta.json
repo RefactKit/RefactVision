@@ -1,5 +1,5 @@
 {
-  "projectName": "RefactKit-Multitenancy",
+  "projectName": "launch-kit",
   "mode": "file-router",
   "typescript": true,
   "packageManager": "pnpm",

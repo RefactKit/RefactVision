@@ -23,7 +23,6 @@ interface NavItem {
     to: string
     search?: Record<string, any>
   }[]
-  badge?: string | number
 }
 
 export function NavMain({
@@ -96,7 +95,7 @@ export function NavMain({
         }
 
         return (
-          <SidebarMenuItem key={item.to} className="group/menu-item">
+          <SidebarMenuItem key={item.to}>
             <SidebarMenuButton
               isActive={isActive}
               tooltip={item.title}
@@ -110,18 +109,6 @@ export function NavMain({
                 )}
               />
               <span>{item.title}</span>
-              {item.badge !== undefined && (
-                <span
-                  className={cn(
-                    'ms-auto flex h-5 min-w-5 items-center justify-center rounded-full px-1.5 text-[11px] font-bold tabular-nums transition-colors shadow-sm',
-                    isActive
-                      ? 'bg-primary text-primary-foreground'
-                      : 'bg-primary/15 text-primary group-hover/menu-item:bg-primary/25',
-                  )}
-                >
-                  {item.badge}
-                </span>
-              )}
             </SidebarMenuButton>
           </SidebarMenuItem>
         )

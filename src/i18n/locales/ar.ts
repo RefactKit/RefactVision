@@ -2,10 +2,10 @@ import type { Translations } from './en'
 
 export const ar: Translations = {
   common: {
-    RefactVision: 'RefactVision',
+    RefactKit: 'RefactKit',
     launch: 'Refact',
     kit: 'Kit',
-    copyright: '© {{year}} RefactVision. جميع الحقوق محفوظة.',
+    copyright: '© {{year}} RefactKit. جميع الحقوق محفوظة.',
     or: 'أو',
     save: 'حفظ التغييرات',
     saving: 'جاري الحفظ...',
@@ -61,7 +61,7 @@ export const ar: Translations = {
       heading: 'ابنِ الـ SaaS الخاص بك على أساس صلب كالصخر',
       subheading: 'بنية تحتية متميزة لتطبيقات الـ multi-tenant عالية الأداء.',
       title: 'إنشاء حسابك',
-      subtitle: 'ابدأ البناء مع RefactVision اليوم',
+      subtitle: 'ابدأ البناء مع RefactKit اليوم',
       name: 'الاسم الكامل',
       namePlaceholder: 'جون دو',
       nameMin: 'يجب أن يكون حرفين على الأقل',
@@ -85,7 +85,7 @@ export const ar: Translations = {
   },
   onboarding: {
     title: 'أنشئ منظمتك',
-    subtitle: 'قم بإعداد مساحة عملك للبدء مع RefactVision.',
+    subtitle: 'قم بإعداد مساحة عملك للبدء مع RefactKit.',
     badge: 'لقد اقتربت',
     heading: 'خطوة أخيرة',
     subheading: 'أنشئ منظمتك للبدء بالتعاون مع فريقك.',
@@ -120,6 +120,7 @@ export const ar: Translations = {
     workspaces: 'مساحات العمل',
     workspace: 'مساحة العمل',
     administration: 'الإدارة',
+    gallery: 'المعرض',
     feedback: 'تعليقات',
     support: 'الدعم',
     documentation: 'التوثيق',
@@ -133,7 +134,7 @@ export const ar: Translations = {
     activeMembers: 'الأعضاء النشطون',
     storageTotal: 'إجمالي التخزين',
     pendingInvites: 'دعوات معلقة',
-    totalFiles: 'ملفات المشروع',
+    uploadedImages: 'صور مرفوعة',
     totalOf: 'من إجمالي {{total}}',
     currentSessions: 'جلسات حالية',
   },
@@ -199,6 +200,11 @@ export const ar: Translations = {
     revoke: 'إلغاء',
     revokeSessionSuccess: 'تم إلغاء الجلسة بنجاح',
   },
+  gallery: {
+    title: 'المعرض',
+    subtitle: 'إدارة وعرض صور منظمتك.',
+    noImages: 'لم يتم العثور على صور.',
+  },
   notifications: {
     memberJoined: 'انضم إلى المنظمة',
     invitationPending: 'تمت دعوته للانضمام إلى',
@@ -249,8 +255,7 @@ export const ar: Translations = {
     },
     techStack: {
       title: 'أفضل الأدوات في النظام البيئي',
-      subtitle:
-        'تم بناء RefactVision على أدوات حديثة وموثوقة لضمان سرعة وأمان وقابلية توسع مشروعك.',
+      subtitle: 'تم بناء RefactKit على أدوات حديثة وموثوقة لضمان سرعة وأمان وقابلية توسع مشروعك.',
     },
     dashboard: {
       title: 'لوحة تحكم بمستوى المؤسسات',
@@ -264,7 +269,7 @@ export const ar: Translations = {
     cta: {
       title: 'جاهز لبناء فكرتك الكبيرة القادمة؟',
       subtitle:
-        'انضم إلى المطورين الآخرين الذين يبنون تطبيقات SaaS عالية الأداء باستخدام RefactVision.',
+        'انضم إلى المطورين الآخرين الذين يبنون تطبيقات SaaS عالية الأداء باستخدام RefactKit.',
       button: 'ابدأ الآن',
     },
     footer: {
@@ -277,74 +282,5 @@ export const ar: Translations = {
     description:
       'بصفتك عضواً، ليس لديك الإذن للوصول إلى هذا القسم. يرجى الاتصال بالمسؤول أو المالك لإدارة إعدادات المنظمة أو أعضاء الفريق.',
     backToDashboard: 'العودة إلى لوحة القيادة',
-  },
-  projects: {
-    title: 'المشاريع',
-    subtitle: 'إدارة وتصنيف مجموعات البيانات لنماذج CNN.',
-    createNew: 'إنشاء مشروع',
-    search: 'البحث عن مشاريع...',
-    noProjects: 'لم يتم العثور على مشاريع.',
-    form: {
-      title: 'العنوان',
-      description: 'الوصف',
-      type: 'نوع المشروع',
-      github: 'مستودع GitHub',
-      other: 'رابط آخر',
-    },
-    card: {
-      files: 'ملف',
-      files_plural: 'ملفات',
-      lastUpdated: 'آخر تحديث',
-      deleteTitle: 'حذف المشروع؟',
-      deleteDesc: 'هذا الإجراء دائم وسيؤدي إلى حذف جميع البيانات والملفات المصنفة.',
-    },
-    types: {
-      THESE: 'أطروحة',
-      STAGE: 'تدريب',
-      AUTRE: 'آخر',
-    },
-    studio: {
-      labeling: 'استوديو التصنيف',
-      classes: 'الفئات',
-      addClass: 'إضافة فئة',
-      unlabeled: 'غير مصنف',
-      bulkLabel: 'تصنيف جماعي',
-      syncRoboflow: 'مزامنة مع Roboflow',
-      noFiles: 'لم يتم العثور على صور في هذا المشروع.',
-      stats: '{{percent}}% مصنف',
-    },
-    errors: {
-      onlyAdminsDelete: 'يمكن للمالكين أو المسؤولين فقط حذف المشاريع.',
-    },
-  },
-  roles: {
-    title: 'مصفوفة الأدوار',
-    subtitle: 'إدارة الصلاحيات داخل منظمتك.',
-    resourceAction: 'المورد / الإجراء',
-    addRole: 'إضافة دور',
-    newRolePlaceholder: 'دور جديد',
-    add: 'إضافة',
-    deleteConfirm: 'حذف الدور {{role}}؟',
-    deleteSuccess: 'تم حذف الدور',
-    createSuccess: 'تم إنشاء الدور بنجاح',
-    updateSuccess: 'تم تحديث الدور بنجاح',
-    updateError: 'خطأ أثناء التحديث',
-    createError: 'خطأ أثناء الإنشاء',
-    systemRoleNote: 'أدوار النظام (مالك، مسؤول، عضو) للقراءة فقط.',
-    ownerNote: 'صلاحيات المالك ثابتة.',
-  },
-  resources: {
-    project: 'مشروع',
-    member: 'عضو',
-    invitation: 'دعوة',
-    organization: 'منظمة',
-    dashboard: 'لوحة القيادة',
-    ac: 'إدارة الأدوار',
-  },
-  actions: {
-    create: 'إنشاء',
-    read: 'قراءة',
-    update: 'تحديث',
-    delete: 'حذف',
   },
 }
