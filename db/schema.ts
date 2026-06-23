@@ -290,6 +290,7 @@ export const project = pgTable(
     roboflowApiKey: text('roboflow_api_key'),
     roboflowWorkspace: text('roboflow_workspace'),
     roboflowProject: text('roboflow_project'),
+    ultralyticsApiKey: text('ultralytics_api_key'),
     createdAt: timestamp('created_at').defaultNow().notNull(),
     updatedAt: timestamp('updated_at')
       .defaultNow()

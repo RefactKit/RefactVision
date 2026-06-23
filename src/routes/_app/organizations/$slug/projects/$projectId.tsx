@@ -1,26 +1,3 @@
-import { GithubIcon } from '@hugeicons/core-free-icons'
-import { HugeiconsIcon } from '@hugeicons/react'
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
-import { createFileRoute, Link, useParams } from '@tanstack/react-router'
-import {
-  ArrowLeft,
-  BarChart,
-  Cpu,
-  Database,
-  Globe,
-  LayoutGrid,
-  Link2Off,
-  List,
-  MoreHorizontal,
-  Network,
-  Pencil,
-  Plus,
-  RefreshCw,
-  Send,
-  Tags,
-} from 'lucide-react'
-import { useState } from 'react'
-import { toast } from 'sonner'
 import { ClassesTable } from '@/components/projects/classes-table'
 import { EditProjectDialog } from '@/components/projects/edit-project-dialog'
 import { LabelingGallery } from '@/components/projects/labeling-gallery'
@@ -57,7 +34,31 @@ import {
 } from '@/server/project-fns'
 import { orgBySlugQuery } from '@/server/query-keys'
 import { uploadFile } from '@/server/storage-fns'
-import { exportToUltralytics } from '@/server/ultralytics-fns'
+import { disconnectUltralytics, exportToUltralytics, saveUltralyticsConfig } from '@/server/ultralytics-fns'
+import { GithubIcon } from '@hugeicons/core-free-icons'
+import { HugeiconsIcon } from '@hugeicons/react'
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
+import { createFileRoute, Link, useParams } from '@tanstack/react-router'
+import {
+  ArrowLeft,
+  BarChart,
+  Cpu,
+  Database,
+  Globe,
+  LayoutGrid,
+  Link2Off,
+  List,
+  MoreHorizontal,
+  Network,
+  Pencil,
+  Plus,
+  RefreshCw,
+  Send,
+  Tags,
+} from 'lucide-react'
+import { useState } from 'react'
+import { toast } from 'sonner'
+
 
 const colorsPalette = [
   'bg-emerald-500',
@@ -85,7 +86,7 @@ export function ProjectStudioPage() {
   const [isEditOpen, setIsEditOpen] = useState(false)
   const [activeTab, setActiveTab] = useState('dataset')
   const [ultraKey, setUltraKey] = useState('')
-  const [isUltraImporting, setIsUltraImporting] = useState(false)
+
 
   // Roboflow BYOK state
   const [rfApiKey, setRfApiKey] = useState('')
@@ -100,6 +101,46 @@ export function ProjectStudioPage() {
   const { data: stats } = useQuery({
     queryKey: ['project-stats', projectId],
     queryFn: () => getProjectStats({ data: projectId }),
+  })
+
+  const isUltralyticsConfigured = !!project?.ultralyticsApiKey
+
+  const saveUltraMutation = useMutation({
+    mutationFn: (apiKey: string) =>
+      saveUltralyticsConfig({ data: { projectId, apiKey } }),
+    onSuccess: () => {
+      toast.success('Ultralytics integration configured successfully!')
+      setUltraKey('')
+      queryClient.invalidateQueries({ queryKey: ['project', projectId] })
+    },
+    onError: (err: Error) => {
+      toast.error(err.message || 'Failed to save Ultralytics configuration')
+    },
+  })
+
+  const disconnectUltraMutation = useMutation({
+    mutationFn: () => disconnectUltralytics({ data: { projectId } }),
+    onSuccess: () => {
+      toast.success('Ultralytics integration disconnected')
+      queryClient.invalidateQueries({ queryKey: ['project', projectId] })
+    },
+    onError: (err: Error) => {
+      toast.error(err.message || 'Failed to disconnect')
+    },
+  })
+
+  const exportUltraMutation = useMutation({
+    mutationFn: () => exportToUltralytics({ data: { projectId } }),
+    onSuccess: (result) => {
+      if (result.success) {
+        toast.success(result.message)
+      } else {
+        toast.error(result.message)
+      }
+    },
+    onError: (err: Error) => {
+      toast.error(`Export failed: ${err.message}`)
+    },
   })
 
   const { data: org } = useQuery(orgBySlugQuery(slug))
@@ -589,90 +630,132 @@ export function ProjectStudioPage() {
         <TabsContent value="integration" className="mt-0">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6 w-full">
             {/* Ultralytics Card */}
-            <Card className="flex flex-col gap-6">
-              <CardHeader className="flex flex-col items-center text-center gap-4 pb-0">
-                <div className="flex items-center justify-center h-20 w-full p-2 bg-white rounded-2xl border border-border/10 shadow-sm dark:bg-white dark:border-white/20">
-                  <img
-                    src="/ultra.jpeg"
-                    alt="Ultralytics Hub Logo"
-                    className="h-12 w-auto object-contain"
-                  />
-                </div>
-                <CardDescription className="text-center text-sm font-normal text-muted-foreground leading-relaxed max-w-sm">
-                  Transfer your datasets, projects, models, and account balance.
-                </CardDescription>
-              </CardHeader>
-              <CardContent className="flex-1 flex flex-col justify-end">
-                <form
-                  onSubmit={async (e) => {
-                    e.preventDefault()
-                    if (!ultraKey) {
-                      toast.error('Please enter an Ultralytics API Key')
-                      return
-                    }
+            {isUltralyticsConfigured ? (
+              <Card className="flex flex-col gap-6">
+                <CardHeader className="flex flex-col items-center text-center gap-4 pb-0">
+                  <div className="flex items-center justify-center h-20 w-full p-2 bg-white rounded-2xl border border-border/10 shadow-sm dark:bg-white dark:border-white/20">
+                    <img src="/ultra.jpeg" alt="Ultralytics Logo" className="h-12 w-auto object-contain" />
+                  </div>
+                  <div className="flex flex-col items-center gap-1.5 w-full">
+                    <div className="flex items-center justify-center gap-2">
+                      <h3 className="font-semibold text-foreground text-base">Ultralytics BYOK</h3>
+                      <Badge
+                        variant="outline"
+                        className="flex items-center gap-1.5 py-0.5 px-2 bg-emerald-500/10 text-emerald-600 border-emerald-500/20 dark:text-emerald-400 text-xs"
+                      >
+                        <span className="relative flex h-1.5 w-1.5">
+                          <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75" />
+                          <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-emerald-500" />
+                        </span>
+                        Connected
+                      </Badge>
+                    </div>
+                    <CardDescription className="text-xs text-muted-foreground">
+                      Secure active integration
+                    </CardDescription>
+                  </div>
+                </CardHeader>
 
-                    console.log('DEBUG payload:', {
-                      projectId,
-                      apiKey: ultraKey,
-                      datasetName: project.title,
-                    })
+                <CardContent className="flex-1 flex flex-col gap-5 justify-between">
+                  <div className="space-y-4">
+                    <div className="grid grid-cols-3 gap-2 py-1 text-xs border-b border-border/40 pb-2">
+                      <span className="text-muted-foreground font-medium text-left">API Key</span>
+                      <span className="col-span-2 text-foreground font-mono text-right">••••••••</span>
+                    </div>
+                  </div>
 
-                    setIsUltraImporting(true)
-                    try {
-                      const result = await exportToUltralytics({
-                        data: {
-                          projectId,
-                          apiKey: ultraKey,
-                          datasetName: project.title,
-                        },
-                      })
+                  <div className="flex flex-col gap-3">
+                    <Button
+                      onClick={() => exportUltraMutation.mutate()}
+                      className="rounded-xl h-10 w-full font-medium shadow-sm transition-all flex items-center justify-center gap-2 bg-primary hover:bg-primary/95 text-primary-foreground"
+                      disabled={exportUltraMutation.isPending}
+                    >
+                      {exportUltraMutation.isPending ? (
+                        <>
+                          <Spinner data-icon="inline-start" className="h-4 w-4 text-primary-foreground animate-spin" />
+                          Exporting...
+                        </>
+                      ) : (
+                        <>
+                          <Send className="h-4 w-4" />
+                          Export Labeled Images ({labeledFileCount} images)
+                        </>
+                      )}
+                    </Button>
 
-                      console.log('DEBUG result:', result)
-
-                      if (result.success) {
-                        toast.success(result.message)
-                        setUltraKey('')
-                      } else {
-                        toast.error(result.message)
+                    <Button
+                      variant="outline"
+                      onClick={() => disconnectUltraMutation.mutate()}
+                      className="rounded-xl h-10 font-medium shadow-sm transition-all flex items-center justify-center gap-2 border-red-200 text-red-600 hover:bg-red-50 hover:text-red-700 dark:border-red-500/30 dark:text-red-400 dark:hover:bg-red-950/30 dark:hover:text-red-300"
+                      disabled={disconnectUltraMutation.isPending}
+                    >
+                      {disconnectUltraMutation.isPending ? (
+                        <>
+                          <Spinner data-icon="inline-start" className="h-4 w-4 animate-spin" />
+                          Disconnecting...
+                        </>
+                      ) : (
+                        <>
+                          <Link2Off className="h-4 w-4" />
+                          Disconnect
+                        </>
+                      )}
+                    </Button>
+                  </div>
+                </CardContent>
+              </Card>
+            ) : (
+              <Card className="flex flex-col gap-6">
+                <CardHeader className="flex flex-col items-center text-center gap-4 pb-0">
+                  <div className="flex items-center justify-center h-20 w-full p-2 bg-white rounded-2xl border border-border/10 shadow-sm dark:bg-white dark:border-white/20">
+                    <img src="/ultra.jpeg" alt="Ultralytics Logo" className="h-12 w-auto object-contain" />
+                  </div>
+                  <CardDescription className="text-center text-sm font-normal text-muted-foreground leading-relaxed max-w-sm">
+                    Securely configure your Ultralytics API key (BYOK) to export labeled images as NDJSON.
+                  </CardDescription>
+                </CardHeader>
+                <CardContent className="flex-1 flex flex-col justify-end">
+                  <form
+                    onSubmit={(e) => {
+                      e.preventDefault()
+                      if (!ultraKey.trim()) {
+                        toast.error('Please enter an Ultralytics API Key')
+                        return
                       }
-                    } catch (err: any) {
-                      console.error('DEBUG error:', err)
-                      toast.error(`Export failed: ${err.message}`)
-                    } finally {
-                      setIsUltraImporting(false)
-                    }
-                  }}
-                  className="flex flex-col gap-4"
-                >
-                  <Field>
-                    <FieldLabel className="text-left font-medium text-foreground">
-                      Ultralytics HUB API Key
-                    </FieldLabel>
-                    <Input
-                      type="password"
-                      placeholder="Enter your Ultralytics HUB API Key"
-                      value={ultraKey}
-                      onChange={(e) => setUltraKey(e.target.value)}
-                      className="rounded-xl h-10 w-full"
-                    />
-                  </Field>
-                  <Button
-                    type="submit"
-                    className="rounded-xl h-10 w-full font-medium shadow-sm transition-all"
-                    disabled={isUltraImporting || !ultraKey.trim()}
+                      saveUltraMutation.mutate(ultraKey)
+                    }}
+                    className="flex flex-col gap-4"
                   >
-                    {isUltraImporting ? (
-                      <>
-                        <Spinner data-icon="inline-start" />
-                        Importing...
-                      </>
-                    ) : (
-                      'Import'
-                    )}
-                  </Button>
-                </form>
-              </CardContent>
-            </Card>
+                    <Field className="space-y-1">
+                      <FieldLabel className="text-left font-medium text-foreground text-xs">
+                        Ultralytics API Key
+                      </FieldLabel>
+                      <Input
+                        type="password"
+                        placeholder="Enter your Ultralytics API Key..."
+                        value={ultraKey}
+                        onChange={(e) => setUltraKey(e.target.value)}
+                        className="rounded-xl h-9 text-sm w-full"
+                      />
+                    </Field>
+                    <Button
+                      type="submit"
+                      className="rounded-xl h-10 w-full font-medium shadow-sm transition-all bg-primary text-primary-foreground hover:bg-primary/95"
+                      disabled={saveUltraMutation.isPending || !ultraKey.trim()}
+                    >
+                      {saveUltraMutation.isPending ? (
+                        <>
+                          <Spinner data-icon="inline-start" className="text-primary-foreground animate-spin" />
+                          Connecting...
+                        </>
+                      ) : (
+                        'Save & Connect Integration'
+                      )}
+                    </Button>
+                  </form>
+                </CardContent>
+              </Card>
+            )}
 
             {/* Roboflow Card */}
             {isRoboflowConfigured ? (
