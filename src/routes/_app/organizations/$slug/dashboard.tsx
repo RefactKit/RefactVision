@@ -23,14 +23,13 @@ import {
   XCircleIcon,
   ZapIcon,
 } from 'lucide-react'
-import { useCallback, useRef, useState } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 import { toast } from 'sonner'
 import { Route as OrgRoute } from './route'
 
 export const Route = createFileRoute('/_app/organizations/$slug/dashboard')({
   component: DashboardPage,
 })
-
 
 const MODELS = [
   {
@@ -77,8 +76,6 @@ const MODELS = [
   },
 ]
 
-
-
 function drawDetections(
   canvas: HTMLCanvasElement,
   img: HTMLImageElement,
@@ -121,7 +118,6 @@ function drawDetections(
   }
 }
 
-
 function DashboardPage() {
   const { org } = OrgRoute.useLoaderData()
 
@@ -137,8 +133,28 @@ function DashboardPage() {
 
   const fileInputRef = useRef<HTMLInputElement>(null)
   const canvasRef = useRef<HTMLCanvasElement>(null)
+  const lastDetectionsRef = useRef<DetectionResult['detections']>([])
 
   const selectedModelInfo = MODELS.find((m) => m.id === selectedModel) ?? MODELS[1]
+
+  // Re-filtrer et redessiner localement quand confidence change — zéro appel API
+  useEffect(() => {
+    if (!previewUrl || !canvasRef.current || lastDetectionsRef.current.length === 0) return
+
+    const filtered = lastDetectionsRef.current.filter(
+      (det) => det.confidence >= confidence / 100,
+    )
+
+    const img = new Image()
+    img.onload = () => {
+      if (canvasRef.current) {
+        drawDetections(canvasRef.current, img, filtered)
+        setResultImageUrl(canvasRef.current.toDataURL('image/jpeg', 0.9))
+        setResult((prev) => (prev ? { ...prev, detections: filtered } : null))
+      }
+    }
+    img.src = previewUrl
+  }, [confidence, previewUrl])
 
   const handleFile = useCallback((file: File) => {
     if (!file.type.startsWith('image/')) {
@@ -152,6 +168,7 @@ function DashboardPage() {
     setSelectedFile(file)
     setResult(null)
     setResultImageUrl(null)
+    lastDetectionsRef.current = []
     setPreviewUrl(URL.createObjectURL(file))
   }, [])
 
@@ -190,6 +207,9 @@ function DashboardPage() {
 
       const detectionResult = await runDetection({ data: formData })
 
+      // Sauvegarder TOUTES les détections brutes — le slider filtrera localement
+      lastDetectionsRef.current = detectionResult.detections
+
       const filteredDetections = detectionResult.detections.filter(
         (det) => det.confidence >= confidence / 100,
       )
@@ -226,6 +246,7 @@ function DashboardPage() {
     setPreviewUrl(null)
     setResult(null)
     setResultImageUrl(null)
+    lastDetectionsRef.current = []
     if (fileInputRef.current) fileInputRef.current.value = ''
   }
 
@@ -279,8 +300,6 @@ function DashboardPage() {
 
         {/* Left col — Upload (2/3) */}
         <div className="lg:col-span-2 flex flex-col gap-6">
-
-          {/* Upload zone */}
           <Card>
             <CardHeader>
               <CardTitle>Uploader une Image</CardTitle>
@@ -342,7 +361,6 @@ function DashboardPage() {
                 </div>
               ) : (
                 <div className="flex flex-col gap-4">
-                  {/* Preview */}
                   <div className="relative rounded-xl overflow-hidden border border-border/50 bg-muted/20">
                     <img
                       src={resultImageUrl ?? previewUrl}
@@ -364,7 +382,6 @@ function DashboardPage() {
 
                   <canvas ref={canvasRef} className="hidden" />
 
-                  {/* Result */}
                   {result && (
                     <div
                       className={cn(
@@ -415,7 +432,6 @@ function DashboardPage() {
                     </div>
                   )}
 
-                  {/* Actions */}
                   <div className="flex gap-2">
                     <Button onClick={handleDetect} disabled={isLoading} className="flex-1">
                       {isLoading ? (
@@ -443,7 +459,7 @@ function DashboardPage() {
         {/* Right col (1/3) */}
         <div className="flex flex-col gap-4">
 
-          {/* Model selector via Collapsible */}
+          {/* Model selector */}
           <Card>
             <CardHeader>
               <CardTitle>Modèle de Détection</CardTitle>
@@ -514,7 +530,7 @@ function DashboardPage() {
             </CardContent>
           </Card>
 
-          {/* Confidence threshold — native range input */}
+          {/* Confidence threshold */}
           <Card>
             <CardHeader>
               <CardTitle>Seuil de Confiance</CardTitle>
@@ -539,6 +555,7 @@ function DashboardPage() {
               </p>
             </CardContent>
           </Card>
+
         </div>
       </div>
     </div>
