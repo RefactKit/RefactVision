@@ -1,5 +1,5 @@
 import { useMutation, useQuery } from '@tanstack/react-query'
-import { fireEvent, render, screen } from '@testing-library/react'
+import { fireEvent, render, screen, within } from '@testing-library/react'
 import { beforeEach, describe, expect, it, vi } from 'vitest'
 import { ProjectStudioPage } from './$projectId'
 
@@ -191,8 +191,9 @@ describe('ProjectStudioPage tab routing and integration', () => {
       expect(screen.getByLabelText('Workspace ID')).toBeInTheDocument()
       expect(screen.getByLabelText('Project ID (slug)')).toBeInTheDocument()
 
-      // Button should be disabled by default
-      const connectButton = screen.getByRole('button', { name: 'Save & Connect Integration' })
+      // Button should be disabled by default (scope to Roboflow card to avoid collision with Ultralytics card)
+      const roboflowCard = screen.getByAltText('Roboflow Logo').closest('[data-slot="card"]') as HTMLElement
+      const connectButton = within(roboflowCard).getByRole('button', { name: 'Save & Connect Integration' })
       expect(connectButton).toBeInTheDocument()
       expect(connectButton).toBeDisabled()
     })
@@ -242,7 +243,9 @@ describe('ProjectStudioPage tab routing and integration', () => {
       fireEvent.change(workspaceInput, { target: { value: 'my-space' } })
       fireEvent.change(projectInput, { target: { value: 'my-proj' } })
 
-      const connectButton = screen.getByRole('button', { name: 'Save & Connect Integration' })
+      // Scope to Roboflow card to avoid collision with Ultralytics card
+      const roboflowCard = screen.getByAltText('Roboflow Logo').closest('[data-slot="card"]') as HTMLElement
+      const connectButton = within(roboflowCard).getByRole('button', { name: 'Save & Connect Integration' })
       expect(connectButton).toBeEnabled()
       fireEvent.click(connectButton)
 
