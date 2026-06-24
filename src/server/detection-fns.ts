@@ -14,6 +14,7 @@ export type DetectionResult = {
 }
 
 export const runDetection = createServerFn({ method: 'POST' }).handler(
+  // @ts-expect-error — TanStack Start ne type pas encore correctement FormData
   async ({ data }: { data: FormData }) => {
     const modelName = data.get('model_name') as string
     const file = data.get('file') as File

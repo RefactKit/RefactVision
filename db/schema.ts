@@ -4,10 +4,12 @@ import {
   boolean,
   index,
   integer,
+  jsonb,
   pgTable,
   text,
   timestamp,
   uniqueIndex,
+  uuid,
 } from 'drizzle-orm/pg-core'
 
 export const rateLimit = pgTable('rate_limit', {
@@ -261,3 +263,27 @@ export const notificationRelations = relations(notification, ({ one }) => ({
     references: [organization.id],
   }),
 }))
+
+export const products = pgTable(
+  'products',
+  {
+    id: uuid('id').defaultRandom().primaryKey().notNull(),
+    nomCommercial: jsonb('nom_commercial'),
+    numeroHomologation: text('numero_homologation').unique(),
+    detenteur: jsonb('detenteur'),
+    fournisseur: jsonb('fournisseur'),
+    categorie: jsonb('categorie'),
+    formulation: jsonb('formulation'),
+    tableauToxicologique: text('tableau_toxicologique'),
+    matieresActives: jsonb('matieres_actives'),
+    imageUrl: text('image_url'),
+    usages: jsonb('usages'),
+    createdAt: timestamp('created_at', { mode: 'date' }).defaultNow(),
+  },
+  (table) => [
+    index('idx_products_name').using('gin', table.nomCommercial),
+    index('idx_products_usages').using('gin', table.usages),
+    index('idx_products_matieres').using('gin', table.matieresActives),
+    uniqueIndex('products_numero_homologation_key').on(table.numeroHomologation),
+  ],
+)

@@ -1,3 +1,4 @@
+import { ProductsSheet } from '@/components/dashboard/products-sheet'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
@@ -130,6 +131,8 @@ function DashboardPage() {
   const [isLoading, setIsLoading] = useState(false)
   const [result, setResult] = useState<DetectionResult | null>(null)
   const [resultImageUrl, setResultImageUrl] = useState<string | null>(null)
+
+  const [sheetDisease, setSheetDisease] = useState<string | null>(null)
 
   const fileInputRef = useRef<HTMLInputElement>(null)
   const canvasRef = useRef<HTMLCanvasElement>(null)
@@ -413,9 +416,11 @@ function DashboardPage() {
                                 count) *
                               100
                             return (
-                              <div
+                              <button
                                 key={cls}
-                                className="flex items-center gap-1.5 rounded-lg border border-destructive/20 bg-background px-3 py-1.5"
+                                type="button"
+                                onClick={() => setSheetDisease(cls)}
+                                className="flex items-center gap-1.5 rounded-lg border border-destructive/20 bg-background px-3 py-1.5 transition-colors hover:border-destructive/40 hover:bg-destructive/5"
                               >
                                 <span className="text-xs font-semibold">{cls}</span>
                                 <Badge variant="destructive" className="text-[10px]">
@@ -424,7 +429,10 @@ function DashboardPage() {
                                 <span className="text-xs text-muted-foreground">
                                   {avgConf.toFixed(1)}% moy.
                                 </span>
-                              </div>
+                                <span className="text-[10px] font-medium bg-primary/10 text-primary px-2 py-0.5 rounded-full ml-1">
+                                  Voir traitements →
+                                </span>
+                              </button>
                             )
                           })}
                         </div>
@@ -558,6 +566,12 @@ function DashboardPage() {
 
         </div>
       </div>
+      {/* Products Sheet */}
+        <ProductsSheet
+          open={sheetDisease !== null}
+          onOpenChange={(open) => { if (!open) setSheetDisease(null) }}
+          diseaseName={sheetDisease ?? ''}
+        />
     </div>
   )
 }
