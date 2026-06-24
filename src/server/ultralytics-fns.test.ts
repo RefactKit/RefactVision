@@ -1,5 +1,28 @@
 // @vitest-environment node
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
+
+// Mock react-start createServerFn BEFORE importing fns
+vi.mock('@tanstack/react-start', () => {
+  return {
+    createServerFn: () => {
+      console.log('[MOCK_SERVER_FN] createServerFn called')
+      return {
+        // biome-ignore lint/suspicious/noExplicitAny: Mock handler
+        handler: (fn: any) => {
+          console.log('[MOCK_SERVER_FN] handler registered')
+          // biome-ignore lint/suspicious/noExplicitAny: Mock server function
+          return async (args: any) => {
+            console.log('[MOCK_SERVER_FN] executing handler with args:', args)
+            const result = await fn(args)
+            console.log('[MOCK_SERVER_FN] handler returned result:', result)
+            return result
+          }
+        },
+      }
+    },
+  }
+})
+
 import { projectCategory, projectFile } from '../../db/schema'
 import { decrypt, encrypt } from './crypto-fns'
 import {
@@ -7,15 +30,6 @@ import {
   exportToUltralytics,
   saveUltralyticsConfig,
 } from './ultralytics-fns'
-
-// Mock react-start/server helpers
-vi.mock('@tanstack/react-start/server', () => ({
-  getRequest: () => ({
-    headers: new Headers({
-      cookie: 'test-cookie',
-    }),
-  }),
-}))
 
 // Mock database
 // biome-ignore lint/suspicious/noExplicitAny: Mock variables require flexible shapes
@@ -25,6 +39,9 @@ let mockFiles: any[] = []
 // biome-ignore lint/suspicious/noExplicitAny: Mock variables require flexible shapes
 let mockCategories: any[] = []
 const mockUpdate = vi.fn().mockResolvedValue({ success: true })
+const mockSet = vi.fn().mockImplementation(() => ({
+  where: mockUpdate,
+}))
 const mockFindFirstMember = vi.fn()
 
 vi.mock('../../db/index', () => {
@@ -53,9 +70,7 @@ vi.mock('../../db/index', () => {
         })),
       })),
       update: vi.fn(() => ({
-        set: vi.fn(() => ({
-          where: mockUpdate,
-        })),
+        set: mockSet,
       })),
       query: {
         member: {
@@ -107,6 +122,15 @@ const mockFetch = vi.fn()
 // biome-ignore lint/suspicious/noExplicitAny: Mock call forwarder
 vi.stubGlobal('fetch', (...args: any[]) => mockFetch(...args))
 
+// Mock react-start/server helpers
+vi.mock('@tanstack/react-start/server', () => ({
+  getRequest: () => ({
+    headers: new Headers({
+      cookie: 'test-cookie',
+    }),
+  }),
+}))
+
 describe('Ultralytics Server Functions', () => {
   const SECRET_KEY = 'my-super-secret-key-that-is-32-chars-long-or-more'
 
@@ -138,16 +162,15 @@ describe('Ultralytics Server Functions', () => {
 
   describe('saveUltralyticsConfig', () => {
     it('saves encrypted key successfully when user has permissions', async () => {
-      // biome-ignore lint/suspicious/noExplicitAny: Execute server function directly
-      const result = await (saveUltralyticsConfig as any)({
+      const result = await saveUltralyticsConfig({
         data: { projectId: 'proj-1', apiKey: 'ultra-api-key-xyz' },
       })
 
       expect(result).toEqual({ success: true })
-      expect(mockUpdate).toHaveBeenCalled()
+      expect(mockSet).toHaveBeenCalled()
 
       // The key should have been encrypted
-      const encryptedValue = mockUpdate.mock.calls[0][0].ultralyticsApiKey
+      const encryptedValue = mockSet.mock.calls[0][0].ultralyticsApiKey
       expect(encryptedValue).not.toBe('ultra-api-key-xyz')
       expect(decrypt(encryptedValue, SECRET_KEY)).toBe('ultra-api-key-xyz')
     })
@@ -157,8 +180,7 @@ describe('Ultralytics Server Functions', () => {
       mockFindFirstMember.mockResolvedValue(null)
 
       await expect(
-        // biome-ignore lint/suspicious/noExplicitAny: Execute server function directly
-        (saveUltralyticsConfig as any)({
+        saveUltralyticsConfig({
           data: { projectId: 'proj-1', apiKey: 'key' },
         }),
       ).rejects.toThrow('Unauthorized')
@@ -167,8 +189,7 @@ describe('Ultralytics Server Functions', () => {
     it('throws encryption secret error if secret key is missing', async () => {
       delete process.env.BETTER_AUTH_SECRET
       await expect(
-        // biome-ignore lint/suspicious/noExplicitAny: Execute server function directly
-        (saveUltralyticsConfig as any)({
+        saveUltralyticsConfig({
           data: { projectId: 'proj-1', apiKey: 'key' },
         }),
       ).rejects.toThrow('Encryption secret is not configured on the server')
@@ -177,21 +198,19 @@ describe('Ultralytics Server Functions', () => {
 
   describe('disconnectUltralytics', () => {
     it('sets integration key to null successfully', async () => {
-      // biome-ignore lint/suspicious/noExplicitAny: Execute server function directly
-      const result = await (disconnectUltralytics as any)({
+      const result = await disconnectUltralytics({
         data: { projectId: 'proj-1' },
       })
 
       expect(result).toEqual({ success: true })
-      expect(mockUpdate).toHaveBeenCalledWith({ ultralyticsApiKey: null })
+      expect(mockSet).toHaveBeenCalledWith({ ultralyticsApiKey: null })
     })
   })
 
   describe('exportToUltralytics', () => {
     it('returns error if integration is not configured', async () => {
       mockProject.ultralyticsApiKey = null
-      // biome-ignore lint/suspicious/noExplicitAny: Execute server function directly
-      const result = await (exportToUltralytics as any)({
+      const result = await exportToUltralytics({
         data: { projectId: 'proj-1' },
       })
       expect(result).toEqual({
@@ -213,8 +232,7 @@ describe('Ultralytics Server Functions', () => {
         },
       ]
 
-      // biome-ignore lint/suspicious/noExplicitAny: Execute server function directly
-      const result = await (exportToUltralytics as any)({
+      const result = await exportToUltralytics({
         data: { projectId: 'proj-1' },
       })
       expect(result).toEqual({
@@ -251,8 +269,7 @@ describe('Ultralytics Server Functions', () => {
         return Promise.reject(new Error(`Unhandled fetch url: ${url}`))
       })
 
-      // biome-ignore lint/suspicious/noExplicitAny: Execute server function directly
-      const result = await (exportToUltralytics as any)({
+      const result = await exportToUltralytics({
         data: { projectId: 'proj-1' },
       })
 
@@ -301,8 +318,7 @@ describe('Ultralytics Server Functions', () => {
         return Promise.reject(new Error('Unknown url'))
       })
 
-      // biome-ignore lint/suspicious/noExplicitAny: Execute server function directly
-      const result = await (exportToUltralytics as any)({
+      const result = await exportToUltralytics({
         data: { projectId: 'proj-1' },
       })
 

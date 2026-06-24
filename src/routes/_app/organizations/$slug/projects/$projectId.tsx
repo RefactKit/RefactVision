@@ -743,10 +743,14 @@ export function ProjectStudioPage() {
                     className="flex flex-col gap-4"
                   >
                     <Field className="space-y-1">
-                      <FieldLabel className="text-left font-medium text-foreground text-xs">
+                      <FieldLabel
+                        htmlFor="ultra-api-key"
+                        className="text-left font-medium text-foreground text-xs"
+                      >
                         Ultralytics API Key
                       </FieldLabel>
                       <Input
+                        id="ultra-api-key"
                         type="password"
                         placeholder="Enter your Ultralytics API Key..."
                         value={ultraKey}
