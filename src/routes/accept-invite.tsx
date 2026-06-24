@@ -22,13 +22,15 @@ export const Route = createFileRoute('/accept-invite')({
   component: AcceptInvitePage,
 })
 
-function AcceptInvitePage() {
+export function AcceptInvitePage() {
   const { id, accept: shouldAutoAccept } = Route.useLoaderData()
   const navigate = useNavigate()
   const [error, setError] = useState<string | null>(null)
   const [isAccepting, setIsAccepting] = useState(false)
   const [isVerifying, setIsVerifying] = useState(true)
-  const [session, setSession] = useState<any>(null)
+  const [session, setSession] = useState<{
+    user: { id: string; name: string; email: string; image?: string | null }
+  } | null>(null)
   const hasAttemptedAutoAccept = useRef(false)
 
   const handleAcceptAction = useCallback(async () => {

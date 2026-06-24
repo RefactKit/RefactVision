@@ -28,8 +28,9 @@ export function UserProfile({ className }: UserProfileProps) {
   const [imageUrl, setImageUrl] = useState<string | undefined>(session?.user.image || undefined)
 
   const { mutate: updateProfile, isPending } = useMutation({
-    mutationFn: (data: { name?: string; imageUrl?: string }) => updateUserFn({ data } as any),
-    onError: (error: any) => toast.error(error.message),
+    mutationFn: (data: { name?: string; imageUrl?: string }) =>
+      updateUserFn({ data } as Parameters<typeof updateUserFn>[0]),
+    onError: (error: { message?: string }) => toast.error(error.message || 'An error occurred'),
     onSuccess: async () => {
       toast.success(localization.settings.profileUpdatedSuccess)
       await refetch()

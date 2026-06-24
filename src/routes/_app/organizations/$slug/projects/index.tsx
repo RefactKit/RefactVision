@@ -55,7 +55,7 @@ function ProjectsPage() {
       toast.success('Project created successfully')
       setIsCreateOpen(false)
     },
-    onError: (err: any) => {
+    onError: (err: { message?: string }) => {
       toast.error(err.message || 'Failed to create project')
     },
   })
@@ -67,7 +67,7 @@ function ProjectsPage() {
       queryClient.invalidateQueries({ queryKey: ['projects-count'] })
       toast.success('Project deleted successfully')
     },
-    onError: (err: any) => {
+    onError: (err: { message?: string }) => {
       toast.error(err.message || 'Failed to delete project')
     },
   })

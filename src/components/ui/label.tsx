@@ -6,6 +6,7 @@ import { cn } from '#/lib/utils'
 
 function Label({ className, ...props }: React.ComponentProps<'label'>) {
   return (
+    // biome-ignore lint/a11y/noLabelWithoutControl: This is a reusable primitive; consumers provide htmlFor or wrap inputs.
     <label
       data-slot="label"
       className={cn(

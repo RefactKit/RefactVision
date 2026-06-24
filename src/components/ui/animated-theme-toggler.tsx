@@ -121,7 +121,7 @@ export const AnimatedThemeToggler = ({
   fromCenter = false,
   ...props
 }: AnimatedThemeTogglerProps) => {
-  const { theme, setTheme, resolvedTheme } = useTheme()
+  const { theme: _theme, setTheme, resolvedTheme } = useTheme()
   const shape = variant ?? 'circle'
   const buttonRef = useRef<HTMLButtonElement>(null)
   const isDark = resolvedTheme === 'dark'

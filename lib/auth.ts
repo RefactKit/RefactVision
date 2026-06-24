@@ -249,8 +249,11 @@ export const auth = betterAuth({
       handler: (promise) => {
         // Platform-specific handler
         // Vercel/Nitro support waitUntil
-        if (typeof (globalThis as any).waitUntil === 'function') {
-          ;(globalThis as any).waitUntil(promise)
+        const globalWithWaitUntil = globalThis as typeof globalThis & {
+          waitUntil?: (p: Promise<unknown>) => void
+        }
+        if (typeof globalWithWaitUntil.waitUntil === 'function') {
+          globalWithWaitUntil.waitUntil(promise)
         }
       },
     },
@@ -317,7 +320,7 @@ export const auth = betterAuth({
             metadata: { role: invitation.role || 'member' },
           })
         },
-        afterAcceptInvitation: async ({ invitation, member, user, organization }) => {
+        afterAcceptInvitation: async ({ _invitation, _member, user, organization }) => {
           // → Notify ORG ADMINS: "[User] joined [Org]"
           await notifyOrgAdmins({
             organizationId: organization.id,
@@ -340,7 +343,7 @@ export const auth = betterAuth({
             organizationName: organization.name,
           })
         },
-        afterAddMember: async ({ member, user, organization }) => {
+        afterAddMember: async ({ _member, user, organization }) => {
           // → Notify the NEW MEMBER: "You were added to [Org]"
           await createNotification({
             recipientId: user.id,
@@ -349,7 +352,7 @@ export const auth = betterAuth({
             organizationName: organization.name,
           })
         },
-        afterRemoveMember: async ({ member, user, organization }) => {
+        afterRemoveMember: async ({ _member, user, organization }) => {
           // → Notify the REMOVED MEMBER: "You were removed from [Org]"
           await createNotification({
             recipientId: user.id,

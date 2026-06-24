@@ -72,7 +72,7 @@ interface ProjectCardProps {
   onEdit?: () => void
   userRole?: string
   orgSlug: string
-  permissions?: any
+  permissions?: Record<string, string[]>
 }
 
 export function ProjectCard({
@@ -81,9 +81,7 @@ export function ProjectCard({
   description,
   fileCount,
   ownerName,
-  ownerEmail,
   updatedAt,
-  type,
   topImages,
   topFiles,
   onDelete,
@@ -105,8 +103,8 @@ export function ProjectCard({
       return authClient.organization.checkRolePermission({
         role: userRole,
         permission: {
-          [resource]: [action as any],
-        },
+          [resource]: [action],
+        } as never,
       })
     }
     return false
@@ -239,9 +237,9 @@ export function ProjectCard({
           <div className="row-span-2 flex items-center gap-3 min-w-0">
             {filesToShow.length > 0 ? (
               <div className="flex -space-x-2 shrink-0">
-                {filesToShow.map((file, index) => (
+                {filesToShow.map((file) => (
                   <div
-                    key={index}
+                    key={file.url}
                     className="size-8 rounded-full ring-2 ring-background overflow-hidden border border-border/50 bg-muted shrink-0"
                   >
                     {getFilePreviewContent(file)}

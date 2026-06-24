@@ -1,14 +1,16 @@
 import { useMutation, useQuery } from '@tanstack/react-query'
-import { fireEvent, render, screen } from '@testing-library/react'
+import { fireEvent, render, screen, within } from '@testing-library/react'
 import { beforeEach, describe, expect, it, vi } from 'vitest'
 import { ProjectStudioPage } from './$projectId'
 
 // Mock react-router
 vi.mock('@tanstack/react-router', () => ({
+  // biome-ignore lint/suspicious/noExplicitAny: Test mock requires flexible typing
   createFileRoute: () => (config: any) => ({
     options: config,
   }),
   useParams: () => ({ slug: 'test-org', projectId: 'test-project-1' }),
+  // biome-ignore lint/suspicious/noExplicitAny: Test mock requires flexible typing
   Link: ({ children, to, params }: any) => {
     return (
       <a href={typeof to === 'string' ? to : '#'} data-params={JSON.stringify(params)}>
@@ -44,12 +46,52 @@ vi.mock('@tanstack/react-query', () => ({
   }),
   useQuery: vi.fn(),
   useMutation: vi.fn(),
-  queryOptions: (options: any) => options,
+  queryOptions: (options: unknown) => options,
+}))
+
+// Mock server functions
+const mockSaveUltralyticsConfig = vi.fn().mockResolvedValue({ success: true })
+const mockDisconnectUltralytics = vi.fn().mockResolvedValue({ success: true })
+const mockExportToUltralytics = vi.fn().mockResolvedValue({ success: true, message: 'Exported' })
+
+vi.mock('@/server/ultralytics-fns', () => ({
+  saveUltralyticsConfig: (...args: unknown[]) => mockSaveUltralyticsConfig(...args),
+  disconnectUltralytics: (...args: unknown[]) => mockDisconnectUltralytics(...args),
+  exportToUltralytics: (...args: unknown[]) => mockExportToUltralytics(...args),
+}))
+
+const mockUploadFile = vi
+  .fn()
+  .mockResolvedValue({ url: 'http://img.jpg', path: 'projects/img.jpg' })
+vi.mock('@/server/storage-fns', () => ({
+  uploadFile: (...args: unknown[]) => mockUploadFile(...args),
+}))
+
+const mockLinkProjectFile = vi.fn().mockResolvedValue({ success: true })
+vi.mock('@/server/project-fns', () => ({
+  bulkLabelFiles: vi.fn(),
+  createCategory: vi.fn(),
+  deleteFiles: vi.fn(),
+  disconnectRoboflow: vi.fn(),
+  getProjectById: vi.fn(),
+  getProjectStats: vi.fn(),
+  linkProjectFile: (...args: unknown[]) => mockLinkProjectFile(...args),
+  pushProjectFilesToRoboflow: vi.fn(),
+  saveRoboflowConfig: vi.fn(),
+  syncRoboflowModels: vi.fn(),
 }))
 
 // Mock project sub-components
 vi.mock('@/components/projects/labeling-gallery', () => ({
-  LabelingGallery: () => <div data-testid="labeling-gallery">Labeling Gallery Mock</div>,
+  // biome-ignore lint/suspicious/noExplicitAny: Mock props
+  LabelingGallery: ({ onUploadClick }: any) => (
+    <div data-testid="labeling-gallery">
+      Labeling Gallery Mock
+      <button type="button" data-testid="upload-button" onClick={onUploadClick}>
+        Upload Mock
+      </button>
+    </div>
+  ),
 }))
 
 vi.mock('@/components/projects/classes-table', () => ({
@@ -72,12 +114,17 @@ vi.mock('@/components/projects/project-files-table', () => ({
   ProjectFilesTable: () => <div data-testid="project-files-table">Project Files Table Mock</div>,
 }))
 
+// biome-ignore lint/suspicious/noExplicitAny: Test mock requires flexible typing
 const mockUseQuery = useQuery as any
+// biome-ignore lint/suspicious/noExplicitAny: Test mock requires flexible typing
 const mockUseMutation = useMutation as any
 
 describe('ProjectStudioPage tab routing and integration', () => {
+  // biome-ignore lint/suspicious/noExplicitAny: Test mock data requires flexible shape
   let projectData: any
+  // biome-ignore lint/suspicious/noExplicitAny: Test mock data requires flexible shape
   let statsData: any
+  // biome-ignore lint/suspicious/noExplicitAny: Test mock data requires flexible shape
   let orgData: any
 
   beforeEach(() => {
@@ -108,6 +155,7 @@ describe('ProjectStudioPage tab routing and integration', () => {
     }
 
     // Default mock query resolves
+    // biome-ignore lint/suspicious/noExplicitAny: Test mock callback requires flexible typing
     mockUseQuery.mockImplementation(({ queryKey }: any) => {
       if (queryKey[0] === 'project') {
         return { data: projectData, isLoading: false }
@@ -122,8 +170,12 @@ describe('ProjectStudioPage tab routing and integration', () => {
     })
 
     // Default mock mutations
-    mockUseMutation.mockImplementation(() => ({
-      mutate: vi.fn(),
+    mockUseMutation.mockImplementation((options: { mutationFn?: (args: unknown) => void }) => ({
+      mutate: vi.fn((args: unknown) => {
+        if (options?.mutationFn) {
+          options.mutationFn(args)
+        }
+      }),
       isPending: false,
     }))
   })
@@ -191,8 +243,13 @@ describe('ProjectStudioPage tab routing and integration', () => {
       expect(screen.getByLabelText('Workspace ID')).toBeInTheDocument()
       expect(screen.getByLabelText('Project ID (slug)')).toBeInTheDocument()
 
-      // Button should be disabled by default
-      const connectButton = screen.getByRole('button', { name: 'Save & Connect Integration' })
+      // Button should be disabled by default (scope to Roboflow card to avoid collision with Ultralytics card)
+      const roboflowCard = screen
+        .getByAltText('Roboflow Logo')
+        .closest('[data-slot="card"]') as HTMLElement
+      const connectButton = within(roboflowCard).getByRole('button', {
+        name: 'Save & Connect Integration',
+      })
       expect(connectButton).toBeInTheDocument()
       expect(connectButton).toBeDisabled()
     })
@@ -242,7 +299,13 @@ describe('ProjectStudioPage tab routing and integration', () => {
       fireEvent.change(workspaceInput, { target: { value: 'my-space' } })
       fireEvent.change(projectInput, { target: { value: 'my-proj' } })
 
-      const connectButton = screen.getByRole('button', { name: 'Save & Connect Integration' })
+      // Scope to Roboflow card to avoid collision with Ultralytics card
+      const roboflowCard = screen
+        .getByAltText('Roboflow Logo')
+        .closest('[data-slot="card"]') as HTMLElement
+      const connectButton = within(roboflowCard).getByRole('button', {
+        name: 'Save & Connect Integration',
+      })
       expect(connectButton).toBeEnabled()
       fireEvent.click(connectButton)
 
@@ -251,6 +314,143 @@ describe('ProjectStudioPage tab routing and integration', () => {
         workspace: 'my-space',
         project: 'my-proj',
       })
+    })
+  })
+
+  describe('Integration Tab - Ultralytics BYOK', () => {
+    it('renders unconfigured integration state with inputs when credentials are missing', () => {
+      render(<ProjectStudioPage />)
+
+      const integrationTab = screen.getByText('Integration')
+      fireEvent.click(integrationTab)
+
+      // Logo and Description should be there
+      expect(screen.getAllByAltText('Ultralytics Logo')).toHaveLength(1)
+      expect(screen.getByText(/Securely configure your Ultralytics API key/i)).toBeInTheDocument()
+
+      // Inputs should be present
+      expect(screen.getByLabelText('Ultralytics API Key')).toBeInTheDocument()
+
+      // Button should be disabled by default (scope to Ultralytics card)
+      const ultralyticsCard = screen
+        .getByPlaceholderText('Enter your Ultralytics API Key...')
+        .closest('[data-slot="card"]') as HTMLElement
+      const connectButton = within(ultralyticsCard).getByRole('button', {
+        name: 'Save & Connect Integration',
+      })
+      expect(connectButton).toBeInTheDocument()
+      expect(connectButton).toBeDisabled()
+    })
+
+    it('renders configured integration state when credentials exist in the project object', () => {
+      projectData.ultralyticsApiKey = '••••••••'
+
+      render(<ProjectStudioPage />)
+
+      const integrationTab = screen.getByText('Integration')
+      fireEvent.click(integrationTab)
+
+      // Should show connection status badge
+      expect(screen.getByText('Connected')).toBeInTheDocument()
+
+      // Should display parameters
+      expect(screen.getByText('••••••••')).toBeInTheDocument()
+
+      // Actions should be present
+      expect(screen.getByRole('button', { name: /Export Labeled Images/i })).toBeInTheDocument()
+      expect(screen.getByRole('button', { name: 'Disconnect' })).toBeInTheDocument()
+    })
+
+    it('submits config form to save credentials when fields are filled', () => {
+      render(<ProjectStudioPage />)
+
+      const integrationTab = screen.getByText('Integration')
+      fireEvent.click(integrationTab)
+
+      const apiKeyInput = screen.getByPlaceholderText('Enter your Ultralytics API Key...')
+      fireEvent.change(apiKeyInput, { target: { value: 'ultra_key_123' } })
+
+      const ultralyticsCard = apiKeyInput.closest('[data-slot="card"]') as HTMLElement
+      const connectButton = within(ultralyticsCard).getByRole('button', {
+        name: 'Save & Connect Integration',
+      })
+      expect(connectButton).toBeEnabled()
+      fireEvent.click(connectButton)
+
+      expect(mockSaveUltralyticsConfig).toHaveBeenCalledWith({
+        data: { projectId: 'test-project-1', apiKey: 'ultra_key_123' },
+      })
+    })
+
+    it('triggers disconnect integration', () => {
+      projectData.ultralyticsApiKey = '••••••••'
+
+      render(<ProjectStudioPage />)
+
+      const integrationTab = screen.getByText('Integration')
+      fireEvent.click(integrationTab)
+
+      const disconnectButton = screen.getByRole('button', { name: 'Disconnect' })
+      fireEvent.click(disconnectButton)
+
+      expect(mockDisconnectUltralytics).toHaveBeenCalledWith({
+        data: { projectId: 'test-project-1' },
+      })
+    })
+
+    it('triggers export integration', () => {
+      projectData.ultralyticsApiKey = '••••••••'
+
+      render(<ProjectStudioPage />)
+
+      const integrationTab = screen.getByText('Integration')
+      fireEvent.click(integrationTab)
+
+      const exportButton = screen.getByRole('button', { name: /Export Labeled Images/i })
+      fireEvent.click(exportButton)
+
+      expect(mockExportToUltralytics).toHaveBeenCalledWith({
+        data: { projectId: 'test-project-1' },
+      })
+    })
+  })
+
+  describe('File Upload Interaction', () => {
+    it('simulates file upload and database linking', async () => {
+      const mockInput = {
+        type: '',
+        multiple: false,
+        onchange: null as ((event: unknown) => void) | null,
+        click: vi.fn(() => {
+          if (mockInput.onchange) {
+            const event = {
+              target: {
+                files: [new File(['test'], 'image1.jpg', { type: 'image/jpeg' })],
+              },
+            }
+            mockInput.onchange(event)
+          }
+        }),
+      }
+
+      const originalCreateElement = document.createElement
+      const createElementSpy = vi.spyOn(document, 'createElement').mockImplementation((tagName) => {
+        if (tagName === 'input') return mockInput as unknown as HTMLInputElement
+        return originalCreateElement.call(document, tagName)
+      })
+
+      render(<ProjectStudioPage />)
+
+      // Trigger upload by clicking the upload button rendered in the mocked LabelingGallery
+      const uploadBtn = screen.getByTestId('upload-button')
+      await fireEvent.click(uploadBtn)
+
+      expect(createElementSpy).toHaveBeenCalledWith('input')
+      expect(mockInput.click).toHaveBeenCalled()
+      expect(mockUploadFile).toHaveBeenCalled()
+      expect(mockLinkProjectFile).toHaveBeenCalled()
+
+      createElementSpy.mockRestore()
     })
   })
 })

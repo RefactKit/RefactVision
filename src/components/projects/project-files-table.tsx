@@ -101,7 +101,7 @@ export function ProjectFilesTable({
   onCreateCategory,
   onRenameFile,
 }: ProjectFilesTableProps) {
-  const { t } = useI18n()
+  const { t: _t } = useI18n()
   const [selectedIds, setSelectedIds] = useState<string[]>([])
   const [currentPage, setCurrentPage] = useState(1)
   const itemsPerPage = 10
@@ -647,6 +647,7 @@ export function ProjectFilesTable({
               </PaginationItem>
 
               {Array.from({ length: totalPages }).map((_, i) => (
+                // biome-ignore lint/suspicious/noArrayIndexKey: Pagination pages are static and never reorder
                 <PaginationItem key={i}>
                   <PaginationLink
                     href="#"

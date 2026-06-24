@@ -1,9 +1,9 @@
-import { supabase } from '@/lib/supabase'
-import { getFileCategoryIds } from '@/lib/utils'
 import { createServerFn } from '@tanstack/react-start'
 import { getRequest } from '@tanstack/react-start/server'
 import { and, eq, inArray } from 'drizzle-orm'
 import { z } from 'zod'
+import { supabase } from '@/lib/supabase'
+import { getFileCategoryIds } from '@/lib/utils'
 import { db } from '../../db/index'
 import { member, project, projectCategory, projectFile } from '../../db/schema'
 import { auth } from '../../lib/auth'
@@ -37,54 +37,55 @@ async function checkProjectPermission(
 }
 
 // --- Save Ultralytics API Key ---
-export const saveUltralyticsConfig = createServerFn({ method: 'POST' }).handler(async ({ data }) => {
-  const { projectId, apiKey } = z
-    .object({ projectId: z.string(), apiKey: z.string().min(1) })
-    .parse(data)
+export const saveUltralyticsConfig = createServerFn({ method: 'POST' }).handler(
+  async ({ data }) => {
+    const { projectId, apiKey } = z
+      .object({ projectId: z.string(), apiKey: z.string().min(1) })
+      .parse(data)
 
-  const request = getRequest()
-  const [proj] = await db.select().from(project).where(eq(project.id, projectId)).limit(1)
-  if (!proj) throw new Error('Project not found')
+    const request = getRequest()
+    const [proj] = await db.select().from(project).where(eq(project.id, projectId)).limit(1)
+    if (!proj) throw new Error('Project not found')
 
-  const hasAccess = await checkProjectPermission(request, proj.organizationId, 'update')
-  if (!hasAccess) throw new Error('Unauthorized')
+    const hasAccess = await checkProjectPermission(request, proj.organizationId, 'update')
+    if (!hasAccess) throw new Error('Unauthorized')
 
-  const secretKey = process.env.BETTER_AUTH_SECRET
-  if (!secretKey) throw new Error('Encryption secret is not configured on the server')
+    const secretKey = process.env.BETTER_AUTH_SECRET
+    if (!secretKey) throw new Error('Encryption secret is not configured on the server')
 
-  let encryptedKey = proj.ultralyticsApiKey
-  if (apiKey !== '••••••••') {
-    encryptedKey = encrypt(apiKey, secretKey)
-  }
+    let encryptedKey = proj.ultralyticsApiKey
+    if (apiKey !== '••••••••') {
+      encryptedKey = encrypt(apiKey, secretKey)
+    }
 
-  await db
-    .update(project)
-    .set({ ultralyticsApiKey: encryptedKey })
-    .where(eq(project.id, projectId))
+    await db
+      .update(project)
+      .set({ ultralyticsApiKey: encryptedKey })
+      .where(eq(project.id, projectId))
 
-  console.log(`[ULTRALYTICS] Configured integration for project: ${projectId}`)
-  return { success: true }
-})
+    console.log(`[ULTRALYTICS] Configured integration for project: ${projectId}`)
+    return { success: true }
+  },
+)
 
 // --- Disconnect Ultralytics ---
-export const disconnectUltralytics = createServerFn({ method: 'POST' }).handler(async ({ data }) => {
-  const { projectId } = z.object({ projectId: z.string() }).parse(data)
-  const request = getRequest()
+export const disconnectUltralytics = createServerFn({ method: 'POST' }).handler(
+  async ({ data }) => {
+    const { projectId } = z.object({ projectId: z.string() }).parse(data)
+    const request = getRequest()
 
-  const [proj] = await db.select().from(project).where(eq(project.id, projectId)).limit(1)
-  if (!proj) throw new Error('Project not found')
+    const [proj] = await db.select().from(project).where(eq(project.id, projectId)).limit(1)
+    if (!proj) throw new Error('Project not found')
 
-  const hasAccess = await checkProjectPermission(request, proj.organizationId, 'update')
-  if (!hasAccess) throw new Error('Unauthorized')
+    const hasAccess = await checkProjectPermission(request, proj.organizationId, 'update')
+    if (!hasAccess) throw new Error('Unauthorized')
 
-  await db
-    .update(project)
-    .set({ ultralyticsApiKey: null })
-    .where(eq(project.id, projectId))
+    await db.update(project).set({ ultralyticsApiKey: null }).where(eq(project.id, projectId))
 
-  console.log(`[ULTRALYTICS] Disconnected integration for project: ${projectId}`)
-  return { success: true }
-})
+    console.log(`[ULTRALYTICS] Disconnected integration for project: ${projectId}`)
+    return { success: true }
+  },
+)
 
 // --- Export to Ultralytics via NDJSON (no binary download) ---
 export const exportToUltralytics = createServerFn({ method: 'POST' }).handler(async ({ data }) => {
@@ -98,7 +99,11 @@ export const exportToUltralytics = createServerFn({ method: 'POST' }).handler(as
   if (!hasAccess) throw new Error('Unauthorized')
 
   if (!proj.ultralyticsApiKey) {
-    return { success: false, message: 'Ultralytics is not configured for this project', exported: 0 }
+    return {
+      success: false,
+      message: 'Ultralytics is not configured for this project',
+      exported: 0,
+    }
   }
 
   const secretKey = process.env.BETTER_AUTH_SECRET
@@ -145,12 +150,14 @@ export const exportToUltralytics = createServerFn({ method: 'POST' }).handler(as
 
   // 3. Build NDJSON
   const lines: string[] = []
-  lines.push(JSON.stringify({
-    type: 'dataset',
-    task: 'detect',
-    name: datasetName,
-    class_names: classNamesObj,
-  }))
+  lines.push(
+    JSON.stringify({
+      type: 'dataset',
+      task: 'detect',
+      name: datasetName,
+      class_names: classNamesObj,
+    }),
+  )
 
   let exportedCount = 0
 
@@ -163,13 +170,15 @@ export const exportToUltralytics = createServerFn({ method: 'POST' }).handler(as
 
     if (boxes.length === 0) continue
 
-    lines.push(JSON.stringify({
-      type: 'image',
-      file: file.name,
-      url: file.url,
-      split: 'train',
-      annotations: { boxes },
-    }))
+    lines.push(
+      JSON.stringify({
+        type: 'image',
+        file: file.name,
+        url: file.url,
+        split: 'train',
+        annotations: { boxes },
+      }),
+    )
     exportedCount++
   }
 
@@ -189,16 +198,23 @@ export const exportToUltralytics = createServerFn({ method: 'POST' }).handler(as
     })
 
   if (uploadError) {
-    return { success: false, message: `Failed to prepare export: ${uploadError.message}`, exported: 0 }
+    return {
+      success: false,
+      message: `Failed to prepare export: ${uploadError.message}`,
+      exported: 0,
+    }
   }
 
-  const { data: { publicUrl: ndjsonUrl } } = supabase.storage
-    .from('projects')
-    .getPublicUrl(ndjsonPath)
+  const {
+    data: { publicUrl: ndjsonUrl },
+  } = supabase.storage.from('projects').getPublicUrl(ndjsonPath)
 
   // 5. Create dataset + ingest NDJSON
   try {
-    const slug = datasetName.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '')
+    const slug = datasetName
+      .toLowerCase()
+      .replace(/[^a-z0-9]+/g, '-')
+      .replace(/(^-|-$)/g, '')
 
     const createRes = await fetch('https://platform.ultralytics.com/api/datasets', {
       method: 'POST',
@@ -214,8 +230,12 @@ export const exportToUltralytics = createServerFn({ method: 'POST' }).handler(as
     })
 
     const createText = await createRes.text()
-    let createResult: any
-    try { createResult = JSON.parse(createText) } catch { createResult = { error: createText } }
+    let createResult: Record<string, unknown>
+    try {
+      createResult = JSON.parse(createText)
+    } catch {
+      createResult = { error: createText }
+    }
 
     let datasetId: string
 
@@ -227,7 +247,11 @@ export const exportToUltralytics = createServerFn({ method: 'POST' }).handler(as
       const listResult = await listRes.json()
       const existing = listResult.datasets?.[0]
       if (!existing) {
-        return { success: false, message: 'Dataset conflict but could not resolve existing dataset', exported: 0 }
+        return {
+          success: false,
+          message: 'Dataset conflict but could not resolve existing dataset',
+          exported: 0,
+        }
       }
       datasetId = existing._id
     } else if (!createRes.ok) {
@@ -247,8 +271,12 @@ export const exportToUltralytics = createServerFn({ method: 'POST' }).handler(as
     })
 
     const ingestText = await ingestRes.text()
-    let ingestResult: any
-    try { ingestResult = JSON.parse(ingestText) } catch { ingestResult = { error: ingestText } }
+    let ingestResult: Record<string, unknown>
+    try {
+      ingestResult = JSON.parse(ingestText)
+    } catch {
+      ingestResult = { error: ingestText }
+    }
 
     if (!ingestRes.ok) {
       return {
@@ -265,7 +293,11 @@ export const exportToUltralytics = createServerFn({ method: 'POST' }).handler(as
       jobId: ingestResult.jobId,
       datasetId,
     }
-  } catch (err: any) {
-    return { success: false, message: `Network error: ${err.message}`, exported: 0 }
+  } catch (err: unknown) {
+    return {
+      success: false,
+      message: `Network error: ${err instanceof Error ? err.message : String(err)}`,
+      exported: 0,
+    }
   }
 })

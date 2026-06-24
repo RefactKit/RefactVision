@@ -77,7 +77,7 @@ export function ClassesTable({ projectId, categories, files }: ClassesTableProps
       toast.success('Class added successfully')
       setNewClassName('')
     },
-    onError: (err: any) => {
+    onError: (err: { message?: string }) => {
       toast.error(err?.message ?? 'Failed to add class')
     },
   })
@@ -91,7 +91,7 @@ export function ClassesTable({ projectId, categories, files }: ClassesTableProps
       setEditingCategoryId(null)
       setEditingName('')
     },
-    onError: (err: any) => {
+    onError: (err: { message?: string }) => {
       toast.error(err?.message ?? 'Failed to update class')
     },
   })
@@ -102,7 +102,7 @@ export function ClassesTable({ projectId, categories, files }: ClassesTableProps
       queryClient.invalidateQueries({ queryKey: ['project', projectId] })
       toast.success('Class deleted successfully')
     },
-    onError: (err: any) => {
+    onError: (err: { message?: string }) => {
       toast.error(err?.message ?? 'Failed to delete class')
     },
   })

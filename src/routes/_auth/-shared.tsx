@@ -149,6 +149,6 @@ export function MicrosoftIcon({ className }: { className?: string }) {
   )
 }
 
-export function cn(...inputs: any[]) {
+export function cn(...inputs: (string | undefined | null | boolean)[]) {
   return inputs.filter(Boolean).join(' ')
 }

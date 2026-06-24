@@ -107,7 +107,7 @@ function LoginPage() {
                 {field.state.meta.isTouched && field.state.meta.errors[0] && (
                   <p className="text-xs text-red-500">
                     {field.state.meta.errors
-                      .map((error: any) =>
+                      .map((error: string | { message?: string }) =>
                         typeof error === 'string' ? error : error?.message || 'Invalid value',
                       )
                       .join(', ')}
@@ -140,7 +140,7 @@ function LoginPage() {
                 {field.state.meta.isTouched && field.state.meta.errors[0] && (
                   <p className="text-xs text-red-500">
                     {field.state.meta.errors
-                      .map((error: any) =>
+                      .map((error: string | { message?: string }) =>
                         typeof error === 'string' ? error : error?.message || 'Invalid value',
                       )
                       .join(', ')}
