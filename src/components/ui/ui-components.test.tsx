@@ -28,11 +28,14 @@ vi.mock('next-themes', () => ({
 }))
 
 // Stub IntersectionObserver for framer-motion useInView
-vi.stubGlobal('IntersectionObserver', class {
-  observe() {}
-  unobserve() {}
-  disconnect() {}
-})
+vi.stubGlobal(
+  'IntersectionObserver',
+  class {
+    observe() {}
+    unobserve() {}
+    disconnect() {}
+  },
+)
 
 // Define global stubs for JSDOM
 if (typeof window !== 'undefined') {
@@ -93,13 +96,13 @@ describe('UI Components', () => {
 
     it('renders block and underscore cursor styles', () => {
       const { unmount: unmountBlock } = render(
-        <TypingAnimation startOnView={false} cursorStyle="block" words={['A']} />
+        <TypingAnimation startOnView={false} cursorStyle="block" words={['A']} />,
       )
       expect(screen.getByText('▌')).toBeInTheDocument()
       unmountBlock()
 
       const { unmount: unmountUnderscore } = render(
-        <TypingAnimation startOnView={false} cursorStyle="underscore" words={['A']} />
+        <TypingAnimation startOnView={false} cursorStyle="underscore" words={['A']} />,
       )
       expect(screen.getByText('_')).toBeInTheDocument()
       unmountUnderscore()
@@ -116,7 +119,7 @@ describe('UI Components', () => {
           pauseDelay={10}
           loop={true}
           words={['Hi', 'Go']}
-        />
+        />,
       )
 
       for (let i = 0; i < 20; i++) {
@@ -166,20 +169,18 @@ describe('UI Components', () => {
         configurable: true,
       })
 
-      const variants: ('circle' | 'square' | 'triangle' | 'diamond' | 'hexagon' | 'rectangle' | 'star')[] = [
-        'circle',
-        'square',
-        'triangle',
-        'diamond',
-        'hexagon',
-        'rectangle',
-        'star'
-      ]
+      const variants: (
+        | 'circle'
+        | 'square'
+        | 'triangle'
+        | 'diamond'
+        | 'hexagon'
+        | 'rectangle'
+        | 'star'
+      )[] = ['circle', 'square', 'triangle', 'diamond', 'hexagon', 'rectangle', 'star']
 
       for (const variant of variants) {
-        const { unmount } = render(
-          <AnimatedThemeToggler variant={variant} fromCenter={true} />
-        )
+        const { unmount } = render(<AnimatedThemeToggler variant={variant} fromCenter={true} />)
         const button = screen.getByRole('button')
         fireEvent.click(button)
         expect(mockStartViewTransition).toHaveBeenCalled()
@@ -189,16 +190,14 @@ describe('UI Components', () => {
       }
 
       // Test with fromCenter = false and undefined shape/variant
-      const { unmount } = render(
-        <AnimatedThemeToggler fromCenter={false} />
-      )
+      const { unmount } = render(<AnimatedThemeToggler fromCenter={false} />)
       const button = screen.getByRole('button')
       fireEvent.click(button)
       expect(mockStartViewTransition).toHaveBeenCalled()
       unmount()
 
       // Clean up
-      // @ts-ignore
+      // @ts-expect-error
       delete document.startViewTransition
     })
 
@@ -224,7 +223,7 @@ describe('UI Components', () => {
       expect(mockStartViewTransition).not.toHaveBeenCalled()
       expect(mockSetTheme).toHaveBeenCalledWith('dark')
 
-      // @ts-ignore
+      // @ts-expect-error
       delete document.startViewTransition
       Object.defineProperty(window, 'matchMedia', {
         writable: true,
@@ -274,7 +273,7 @@ describe('UI Components', () => {
               <FieldLabel>Responsive Label</FieldLabel>
             </Field>
           </FieldGroup>
-        </FieldSet>
+        </FieldSet>,
       )
       expect(screen.getByText('Label Legend')).toBeInTheDocument()
       expect(screen.getByText('Horizontal Label')).toBeInTheDocument()
@@ -293,11 +292,7 @@ describe('UI Components', () => {
       const { rerender } = render(<FieldError>Custom Error Message</FieldError>)
       expect(screen.getByText('Custom Error Message')).toBeInTheDocument()
 
-      const errors = [
-        { message: 'Error A' },
-        { message: 'Error B' },
-        { message: 'Error A' },
-      ]
+      const errors = [{ message: 'Error A' }, { message: 'Error B' }, { message: 'Error A' }]
       rerender(<FieldError errors={errors} />)
       expect(screen.getByText('Error A')).toBeInTheDocument()
       expect(screen.getByText('Error B')).toBeInTheDocument()

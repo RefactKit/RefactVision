@@ -1,10 +1,10 @@
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
+import { fireEvent, render, screen } from '@testing-library/react'
 import React from 'react'
-import { render, screen, fireEvent } from '@testing-library/react'
-import { describe, expect, it, vi, beforeEach } from 'vitest'
+import { beforeEach, describe, expect, it, vi } from 'vitest'
 import { HeaderBreadcrumb } from './header-breadcrumb'
 import { NavMain } from './nav-main'
 import { OrgSwitcher } from './org-switcher'
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 
 const mockNavigate = vi.fn()
 let mockPathname = '/organizations/org-1/dashboard'
@@ -12,8 +12,18 @@ let mockParams: Record<string, string | undefined> = { slug: 'org-1' }
 const mockMatchRoute = vi.fn()
 
 vi.mock('@tanstack/react-router', () => ({
-  Link: ({ children, to, ...props }: { children?: React.ReactNode; to?: string; [key: string]: unknown }) => (
-    <a href={to} {...props}>{children}</a>
+  Link: ({
+    children,
+    to,
+    ...props
+  }: {
+    children?: React.ReactNode
+    to?: string
+    [key: string]: unknown
+  }) => (
+    <a href={to} {...props}>
+      {children}
+    </a>
   ),
   useLocation: () => ({ pathname: mockPathname }),
   useParams: () => mockParams,
@@ -52,8 +62,18 @@ vi.mock('@/i18n/context', () => ({
 vi.mock('@/components/ui/sidebar', () => {
   return {
     SidebarMenu: ({ children }: { children?: React.ReactNode }) => <div>{children}</div>,
-    SidebarMenuButton: ({ children, className, ...props }: { children?: React.ReactNode; className?: string; [key: string]: unknown }) => (
-      <button className={className} {...props}>{children}</button>
+    SidebarMenuButton: ({
+      children,
+      className,
+      ...props
+    }: {
+      children?: React.ReactNode
+      className?: string
+      [key: string]: unknown
+    }) => (
+      <button className={className} {...props}>
+        {children}
+      </button>
     ),
     SidebarMenuItem: ({ children }: { children?: React.ReactNode }) => <div>{children}</div>,
     useSidebar: () => ({ isMobile: false }),
@@ -61,7 +81,15 @@ vi.mock('@/components/ui/sidebar', () => {
     SidebarGroupLabel: ({ children }: { children?: React.ReactNode }) => <div>{children}</div>,
     SidebarMenuSub: ({ children }: { children?: React.ReactNode }) => <div>{children}</div>,
     SidebarMenuSubItem: ({ children }: { children?: React.ReactNode }) => <div>{children}</div>,
-    SidebarMenuSubButton: ({ children, render, ...props }: { children?: React.ReactNode; render?: React.ReactElement; [key: string]: unknown }) => {
+    SidebarMenuSubButton: ({
+      children,
+      render,
+      ...props
+    }: {
+      children?: React.ReactNode
+      render?: React.ReactElement
+      [key: string]: unknown
+    }) => {
       if (render) {
         return React.cloneElement(render, props, children)
       }
@@ -73,7 +101,15 @@ vi.mock('@/components/ui/sidebar', () => {
 vi.mock('@/components/ui/dropdown-menu', () => {
   return {
     DropdownMenu: ({ children }: { children?: React.ReactNode }) => <div>{children}</div>,
-    DropdownMenuTrigger: ({ children, render, ...props }: { children?: React.ReactNode; render?: React.ReactElement; [key: string]: unknown }) => {
+    DropdownMenuTrigger: ({
+      children,
+      render,
+      ...props
+    }: {
+      children?: React.ReactNode
+      render?: React.ReactElement
+      [key: string]: unknown
+    }) => {
       if (render) {
         return React.cloneElement(render, props, children)
       }
@@ -81,8 +117,18 @@ vi.mock('@/components/ui/dropdown-menu', () => {
     },
     DropdownMenuContent: ({ children }: { children?: React.ReactNode }) => <div>{children}</div>,
     DropdownMenuGroup: ({ children }: { children?: React.ReactNode }) => <div>{children}</div>,
-    DropdownMenuItem: ({ children, onClick, className }: { children?: React.ReactNode; onClick?: () => void; className?: string }) => (
-      <div role="menuitem" onClick={onClick} className={className}>{children}</div>
+    DropdownMenuItem: ({
+      children,
+      onClick,
+      className,
+    }: {
+      children?: React.ReactNode
+      onClick?: () => void
+      className?: string
+    }) => (
+      <div role="menuitem" onClick={onClick} className={className}>
+        {children}
+      </div>
     ),
     DropdownMenuLabel: ({ children }: { children?: React.ReactNode }) => <div>{children}</div>,
     DropdownMenuSeparator: () => <hr />,
@@ -91,7 +137,15 @@ vi.mock('@/components/ui/dropdown-menu', () => {
 
 vi.mock('@/components/ui/collapsible', () => ({
   Collapsible: ({ children }: { children?: React.ReactNode }) => <div>{children}</div>,
-  CollapsibleTrigger: ({ children, render, ...props }: { children?: React.ReactNode; render?: React.ReactElement; [key: string]: unknown }) => {
+  CollapsibleTrigger: ({
+    children,
+    render,
+    ...props
+  }: {
+    children?: React.ReactNode
+    render?: React.ReactElement
+    [key: string]: unknown
+  }) => {
     if (render) {
       return React.cloneElement(render, props, children)
     }
@@ -101,9 +155,8 @@ vi.mock('@/components/ui/collapsible', () => ({
 }))
 
 vi.mock('./create-org-dialog', () => ({
-  CreateOrgDialog: ({ open }: { open: boolean }) => (
-    open ? <div data-testid="mock-create-org-dialog">Mock Dialog</div> : null
-  ),
+  CreateOrgDialog: ({ open }: { open: boolean }) =>
+    open ? <div data-testid="mock-create-org-dialog">Mock Dialog</div> : null,
 }))
 
 describe('Dashboard Components', () => {
@@ -120,7 +173,7 @@ describe('Dashboard Components', () => {
       render(
         <QueryClientProvider client={queryClient}>
           <HeaderBreadcrumb orgName="My Org" />
-        </QueryClientProvider>
+        </QueryClientProvider>,
       )
       expect(screen.getByText('My Org')).toBeInTheDocument()
     })
@@ -131,7 +184,7 @@ describe('Dashboard Components', () => {
       render(
         <QueryClientProvider client={queryClient}>
           <HeaderBreadcrumb orgName="My Org" />
-        </QueryClientProvider>
+        </QueryClientProvider>,
       )
       expect(screen.getByText('Projets')).toBeInTheDocument()
     })
@@ -144,7 +197,7 @@ describe('Dashboard Components', () => {
       render(
         <QueryClientProvider client={queryClient}>
           <HeaderBreadcrumb orgName="My Org" />
-        </QueryClientProvider>
+        </QueryClientProvider>,
       )
       expect(screen.getByText('Amazing ML Project')).toBeInTheDocument()
       expect(screen.getByText('Projets')).toBeInTheDocument()
@@ -154,14 +207,14 @@ describe('Dashboard Components', () => {
       mockPathname = '/settings/account'
       mockParams = {}
       const originalLocation = window.location
-      // @ts-ignore
+      // @ts-expect-error
       delete window.location
       window.location = { ...originalLocation, search: '?view=security' } as any
 
       render(
         <QueryClientProvider client={queryClient}>
           <HeaderBreadcrumb />
-        </QueryClientProvider>
+        </QueryClientProvider>,
       )
       expect(screen.getByText('Mon Compte')).toBeInTheDocument()
       expect(screen.getByText('Sécurité')).toBeInTheDocument()
@@ -245,9 +298,13 @@ describe('Dashboard Components', () => {
 
     it('handles org switching by replacing URL path if in organization context', () => {
       const originalLocation = window.location
-      // @ts-ignore
+      // @ts-expect-error
       delete window.location
-      window.location = { ...originalLocation, pathname: '/organizations/org-one/projects', href: '' } as any
+      window.location = {
+        ...originalLocation,
+        pathname: '/organizations/org-one/projects',
+        href: '',
+      } as any
 
       render(<OrgSwitcher orgs={orgs} currentSlug="org-one" />)
       const trigger = screen.getByRole('button', { name: /Org One/i })
@@ -263,7 +320,7 @@ describe('Dashboard Components', () => {
 
     it('handles org switching by navigating to dashboard if not in organization context', () => {
       const originalLocation = window.location
-      // @ts-ignore
+      // @ts-expect-error
       delete window.location
       window.location = { ...originalLocation, pathname: '/settings', href: '' } as any
 

@@ -1,4 +1,4 @@
-import { act, fireEvent, render, screen, waitFor } from '@testing-library/react'
+import { fireEvent, render, screen, waitFor } from '@testing-library/react'
 import { beforeEach, describe, expect, it, vi } from 'vitest'
 import { AcceptInvitePage, Route } from './accept-invite'
 
@@ -15,7 +15,7 @@ vi.mock('@tanstack/react-router', () => {
     useNavigate: () => mockNavigate,
     redirect: (config: unknown) => {
       const err = new Error('Redirect')
-      // @ts-ignore
+      // @ts-expect-error
       err.redirectConfig = config
       return err
     },
@@ -141,29 +141,28 @@ describe('AcceptInvitePage', () => {
   })
 
   it('validates search parameters correctly', () => {
-    // @ts-ignore
+    // @ts-expect-error
     const result1 = Route.options.validateSearch({ id: '123', accept: 'true' })
     expect(result1).toEqual({ id: '123', accept: true })
 
-    // @ts-ignore
+    // @ts-expect-error
     const result2 = Route.options.validateSearch({ id: '456', accept: false })
     expect(result2).toEqual({ id: '456', accept: false })
   })
 
   it('loader redirects if id is missing', async () => {
-    // @ts-ignore
-    await expect(Route.options.loader({ deps: { id: undefined, accept: false } }))
-      .rejects.toThrow()
+    // @ts-expect-error
+    await expect(Route.options.loader({ deps: { id: undefined, accept: false } })).rejects.toThrow()
   })
 
   it('loader returns deps if id is present', async () => {
-    // @ts-ignore
+    // @ts-expect-error
     const result = await Route.options.loader({ deps: { id: '123', accept: false } })
     expect(result).toEqual({ id: '123', accept: false })
   })
 
   it('calls loaderDeps correctly', () => {
-    // @ts-ignore
+    // @ts-expect-error
     const result = Route.options.loaderDeps({ search: { id: '123', accept: true } })
     expect(result).toEqual({ id: '123', accept: true })
   })

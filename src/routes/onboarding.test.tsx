@@ -24,14 +24,14 @@ vi.mock('@tanstack/react-query', () => ({
 // Mock router
 const mockNavigate = vi.fn()
 vi.mock('@tanstack/react-router', () => ({
-  createFileRoute: () => (config: any) => ({
+  createFileRoute: () => (config: Record<string, unknown>) => ({
     ...config,
     options: config,
   }),
   useNavigate: () => mockNavigate,
   redirect: (config: unknown) => {
     const err = new Error('Redirect')
-    // @ts-ignore
+    // @ts-expect-error
     err.redirectConfig = config
     return err
   },
@@ -147,14 +147,14 @@ describe('OnboardingPage', () => {
   })
 
   it('loader returns empty object when user is authenticated', async () => {
-    // @ts-ignore
+    // @ts-expect-error
     const result = await Route.options.loader()
     expect(result).toEqual({})
   })
 
   it('loader redirects when user is not authenticated', async () => {
     mockSession = null
-    // @ts-ignore
+    // @ts-expect-error
     await expect(Route.options.loader()).rejects.toThrow('Redirect')
   })
 })

@@ -1,8 +1,8 @@
+import { fireEvent, render, screen, waitFor } from '@testing-library/react'
 import React from 'react'
-import { render, screen, fireEvent, waitFor } from '@testing-library/react'
+import { toast } from 'sonner'
 import { beforeEach, describe, expect, it, vi } from 'vitest'
 import { OrgSettingsPage } from './settings'
-import { toast } from 'sonner'
 
 let mockLoaderData = {
   org: { id: 'org-1', name: 'Original Name', slug: 'original-slug', logo: 'logo.png' },
@@ -34,10 +34,14 @@ vi.mock('@tanstack/react-query', () => ({
     data: mockLoaderData,
     isLoading: false,
   }),
-  useMutation: ({ mutationFn, onSuccess, onError }: {
-    mutationFn: (variables: any) => Promise<any>;
-    onSuccess?: (data: any) => void;
-    onError?: (error: any) => void;
+  useMutation: ({
+    mutationFn,
+    onSuccess,
+    onError,
+  }: {
+    mutationFn: (variables: any) => Promise<any>
+    onSuccess?: (data: any) => void
+    onError?: (error: any) => void
   }) => {
     return {
       mutate: async (args: any) => {
@@ -110,7 +114,11 @@ vi.mock('@/components/shared/forbidden-content', () => ({
 
 vi.mock('@/components/shared/image-upload', () => ({
   ImageUpload: ({ onUploadSuccess }: { onUploadSuccess: (url: string) => void }) => (
-    <button data-testid="image-upload-btn" type="button" onClick={() => onUploadSuccess('new-logo.png')}>
+    <button
+      data-testid="image-upload-btn"
+      type="button"
+      onClick={() => onUploadSuccess('new-logo.png')}
+    >
       Upload Image
     </button>
   ),
@@ -118,7 +126,15 @@ vi.mock('@/components/shared/image-upload', () => ({
 
 vi.mock('@/components/ui/alert-dialog', () => ({
   AlertDialog: ({ children }: { children?: React.ReactNode }) => <div>{children}</div>,
-  AlertDialogTrigger: ({ children, render, ...props }: { children?: React.ReactNode; render?: React.ReactElement; [key: string]: unknown }) => {
+  AlertDialogTrigger: ({
+    children,
+    render,
+    ...props
+  }: {
+    children?: React.ReactNode
+    render?: React.ReactElement
+    [key: string]: unknown
+  }) => {
     if (render) return React.cloneElement(render, props, children)
     return <button {...props}>{children}</button>
   },
@@ -127,11 +143,31 @@ vi.mock('@/components/ui/alert-dialog', () => ({
   AlertDialogTitle: ({ children }: { children?: React.ReactNode }) => <h2>{children}</h2>,
   AlertDialogDescription: ({ children }: { children?: React.ReactNode }) => <div>{children}</div>,
   AlertDialogFooter: ({ children }: { children?: React.ReactNode }) => <div>{children}</div>,
-  AlertDialogCancel: ({ children, onClick, ...props }: { children?: React.ReactNode; onClick?: () => void; [key: string]: unknown }) => (
-    <button onClick={onClick} {...props}>{children}</button>
+  AlertDialogCancel: ({
+    children,
+    onClick,
+    ...props
+  }: {
+    children?: React.ReactNode
+    onClick?: () => void
+    [key: string]: unknown
+  }) => (
+    <button onClick={onClick} {...props}>
+      {children}
+    </button>
   ),
-  AlertDialogAction: ({ children, onClick, ...props }: { children?: React.ReactNode; onClick?: () => void; [key: string]: unknown }) => (
-    <button onClick={onClick} {...props}>{children}</button>
+  AlertDialogAction: ({
+    children,
+    onClick,
+    ...props
+  }: {
+    children?: React.ReactNode
+    onClick?: () => void
+    [key: string]: unknown
+  }) => (
+    <button onClick={onClick} {...props}>
+      {children}
+    </button>
   ),
   AlertDialogMedia: ({ children }: { children?: React.ReactNode }) => <div>{children}</div>,
 }))
@@ -252,7 +288,9 @@ describe('OrgSettingsPage', () => {
     const options = successCalls[successCalls.length - 1][1] as any
     if (options?.action?.onClick) {
       options.action.onClick()
-      expect(toast.info).toHaveBeenCalledWith('Critical data deletion cannot be reversed via this action.')
+      expect(toast.info).toHaveBeenCalledWith(
+        'Critical data deletion cannot be reversed via this action.',
+      )
     }
 
     // Test Delete error branch
