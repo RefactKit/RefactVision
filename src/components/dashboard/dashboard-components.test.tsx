@@ -126,7 +126,7 @@ vi.mock('@/components/ui/dropdown-menu', () => {
       onClick?: () => void
       className?: string
     }) => (
-      <div role="menuitem" onClick={onClick} className={className}>
+      <div role="menuitem" tabIndex={0} onClick={onClick} className={className}>
         {children}
       </div>
     ),
