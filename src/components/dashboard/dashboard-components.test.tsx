@@ -126,9 +126,9 @@ vi.mock('@/components/ui/dropdown-menu', () => {
       onClick?: () => void
       className?: string
     }) => (
-      <div role="menuitem" tabIndex={0} onClick={onClick} className={className}>
+      <button type="button" onClick={onClick} className={className}>
         {children}
-      </div>
+      </button>
     ),
     DropdownMenuLabel: ({ children }: { children?: React.ReactNode }) => <div>{children}</div>,
     DropdownMenuSeparator: () => <hr />,
@@ -209,7 +209,7 @@ describe('Dashboard Components', () => {
       const originalLocation = window.location
       // @ts-expect-error
       delete window.location
-      window.location = { ...originalLocation, search: '?view=security' } as any
+      window.location = { ...originalLocation, search: '?view=security' } as unknown as Location
 
       render(
         <QueryClientProvider client={queryClient}>
@@ -304,7 +304,7 @@ describe('Dashboard Components', () => {
         ...originalLocation,
         pathname: '/organizations/org-one/projects',
         href: '',
-      } as any
+      } as unknown as Location
 
       render(<OrgSwitcher orgs={orgs} currentSlug="org-one" />)
       const trigger = screen.getByRole('button', { name: /Org One/i })
@@ -322,7 +322,11 @@ describe('Dashboard Components', () => {
       const originalLocation = window.location
       // @ts-expect-error
       delete window.location
-      window.location = { ...originalLocation, pathname: '/settings', href: '' } as any
+      window.location = {
+        ...originalLocation,
+        pathname: '/settings',
+        href: '',
+      } as unknown as Location
 
       render(<OrgSwitcher orgs={orgs} currentSlug="org-one" />)
       const trigger = screen.getByRole('button', { name: /Org One/i })

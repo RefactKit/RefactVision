@@ -39,12 +39,12 @@ vi.mock('@tanstack/react-query', () => ({
     onSuccess,
     onError,
   }: {
-    mutationFn: (variables: any) => Promise<any>
-    onSuccess?: (data: any) => void
-    onError?: (error: any) => void
+    mutationFn: (variables: unknown) => Promise<unknown>
+    onSuccess?: (data: unknown) => void
+    onError?: (error: unknown) => void
   }) => {
     return {
-      mutate: async (args: any) => {
+      mutate: async (args: unknown) => {
         try {
           const res = await mutationFn(args)
           if (onSuccess) onSuccess(res)
@@ -234,7 +234,9 @@ describe('OrgSettingsPage', () => {
 
     // Simulate Undo click
     const successCalls = vi.mocked(toast.success).mock.calls
-    const options = successCalls[successCalls.length - 1][1] as any
+    const options = successCalls[successCalls.length - 1][1] as {
+      action?: { onClick?: () => void }
+    }
     if (options?.action?.onClick) {
       options.action.onClick()
       expect(mockUpdateOrg).toHaveBeenCalledTimes(2)
@@ -285,7 +287,9 @@ describe('OrgSettingsPage', () => {
 
     // Test Delete Undo
     const successCalls = vi.mocked(toast.success).mock.calls
-    const options = successCalls[successCalls.length - 1][1] as any
+    const options = successCalls[successCalls.length - 1][1] as {
+      action?: { onClick?: () => void }
+    }
     if (options?.action?.onClick) {
       options.action.onClick()
       expect(toast.info).toHaveBeenCalledWith(
