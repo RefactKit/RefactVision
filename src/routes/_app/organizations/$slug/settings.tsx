@@ -39,7 +39,7 @@ export const Route = createFileRoute('/_app/organizations/$slug/settings')({
   component: OrgSettingsPage,
 })
 
-function OrgSettingsPage() {
+export function OrgSettingsPage() {
   const { t } = useI18n()
   const navigate = useNavigate()
   const params = useParams({ strict: false }) as { slug?: string }

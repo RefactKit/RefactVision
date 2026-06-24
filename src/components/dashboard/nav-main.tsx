@@ -16,12 +16,12 @@ import { cn } from '@/lib/utils'
 interface NavItem {
   title: string
   to: string
-  search?: Record<string, any>
+  search?: Record<string, string | number | boolean>
   icon: React.ElementType
   items?: {
     title: string
     to: string
-    search?: Record<string, any>
+    search?: Record<string, string | number | boolean>
   }[]
   badge?: string | number
 }
@@ -80,7 +80,7 @@ export function NavMain({
                             type="button"
                             onClick={(e) => {
                               e.preventDefault()
-                              navigate({ to: subItem.to as any, search: subItem.search })
+                              navigate({ to: subItem.to as string, search: subItem.search })
                             }}
                           />
                         }

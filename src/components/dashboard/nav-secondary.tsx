@@ -11,7 +11,7 @@ import {
 interface NavSecondaryItem {
   title: string
   url: string
-  icon: any // Changed to any to support both Lucide and Phosphor
+  icon: React.ElementType
   isExternal?: boolean
 }
 
@@ -33,30 +33,34 @@ export function NavSecondary({
 
             return (
               <SidebarMenuItem key={item.title}>
-                <SidebarMenuButton
-                  isActive={isActive}
-                  render={
-                    item.isExternal ? (
-                      <a
-                        href={item.url}
-                        target="_blank"
-                        rel="noreferrer"
-                        className="flex items-center gap-2 w-full"
-                      />
-                    ) : (
-                      <button
-                        type="button"
-                        onClick={() => navigate({ to: item.url })}
-                        className="flex items-center gap-2 w-full"
-                      />
-                    )
-                  }
-                  size="sm"
-                  className="text-muted-foreground hover:text-foreground"
-                >
-                  <item.icon className="size-4 shrink-0" />
-                  <span>{item.title}</span>
-                </SidebarMenuButton>
+                {item.isExternal ? (
+                  <SidebarMenuButton
+                    isActive={isActive}
+                    size="sm"
+                    className="text-muted-foreground hover:text-foreground"
+                    asChild
+                  >
+                    <a
+                      href={item.url}
+                      target="_blank"
+                      rel="noreferrer"
+                      className="flex items-center gap-2 w-full"
+                    >
+                      <item.icon className="size-4 shrink-0" />
+                      <span>{item.title}</span>
+                    </a>
+                  </SidebarMenuButton>
+                ) : (
+                  <SidebarMenuButton
+                    isActive={isActive}
+                    size="sm"
+                    className="text-muted-foreground hover:text-foreground"
+                    onClick={() => navigate({ to: item.url })}
+                  >
+                    <item.icon className="size-4 shrink-0" />
+                    <span>{item.title}</span>
+                  </SidebarMenuButton>
+                )}
               </SidebarMenuItem>
             )
           })}

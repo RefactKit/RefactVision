@@ -79,7 +79,6 @@ export function LabelingGallery({
   onBulkLabel,
   onDeleteFiles,
   onCreateCategory,
-  onUploadClick,
 }: LabelingGalleryProps) {
   const { t } = useI18n()
   const [selectedIds, setSelectedIds] = useState<string[]>([])
@@ -339,10 +338,11 @@ export function LabelingGallery({
         {paginatedFiles.length > 0 ? (
           <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4">
             {paginatedFiles.map((file) => (
-              <div
+              <button
+                type="button"
                 key={file.id}
                 className={cn(
-                  'group relative flex flex-col bg-card border border-border/50 rounded-2xl overflow-hidden transition-all hover:shadow-lg',
+                  'group relative flex flex-col bg-card border border-border/50 rounded-2xl overflow-hidden transition-all hover:shadow-lg text-left',
                   selectedIds.includes(file.id) && 'ring-2 ring-primary border-primary',
                 )}
                 onClick={() => toggleSelect(file.id)}
@@ -449,7 +449,7 @@ export function LabelingGallery({
                     <Trash2 className="size-3" />
                   </Button>
                 </div>
-              </div>
+              </button>
             ))}
           </div>
         ) : (
@@ -480,7 +480,8 @@ export function LabelingGallery({
               </PaginationItem>
 
               {Array.from({ length: totalPages }).map((_, i) => (
-                <PaginationItem key={i}>
+                // biome-ignore lint/suspicious/noArrayIndexKey: Pagination pages are static and never reorder
+                <PaginationItem key={`page-${i + 1}`}>
                   <PaginationLink
                     href="#"
                     onClick={(e) => {

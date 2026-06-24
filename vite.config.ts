@@ -7,7 +7,12 @@ import { nitro } from 'nitro/vite'
 import { defineConfig } from 'vite'
 
 export default defineConfig({
-  plugins: [tanstackStart(), viteReact(), tailwindcss(), nitro()],
+  plugins: [
+    ...(process.env.VITEST ? [] : [tanstackStart()]),
+    viteReact(),
+    tailwindcss(),
+    ...(process.env.VITEST ? [] : [nitro()]),
+  ],
   resolve: {
     tsconfigPaths: true,
   },
@@ -19,5 +24,16 @@ export default defineConfig({
     environment: 'jsdom',
     setupFiles: ['./src/test/setup.ts'],
     include: ['src/**/*.{test,spec}.{ts,tsx}'],
+    coverage: {
+      reporter: ['text', 'json', 'html', 'lcov'],
+      exclude: [
+        'src/test/setup.ts',
+        'src/routeTree.gen.ts',
+        '**/*.test.ts',
+        '**/*.test.tsx',
+        '**/*.spec.ts',
+        '**/*.spec.tsx',
+      ],
+    },
   },
 })

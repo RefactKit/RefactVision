@@ -21,7 +21,8 @@ export function ChangeEmail({ className }: ChangeEmailProps) {
 
   const { mutate: changeEmail, isPending } = useChangeEmail({
     onSuccess: () => toast.success(localization.settings.changeEmailSuccess),
-    onError: (error: any) => toast.error(error.error?.message || error.message),
+    onError: (error: { error?: { message?: string }; message?: string }) =>
+      toast.error(error.error?.message || error.message),
   })
 
   const [fieldErrors, setFieldErrors] = useState<{ email?: string }>({})

@@ -15,6 +15,7 @@ import {
 } from 'lucide-react'
 import { useState } from 'react'
 import { toast } from 'sonner'
+import type { z } from 'zod'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import {
@@ -45,6 +46,7 @@ import {
 import { Textarea } from '@/components/ui/textarea'
 import {
   createProjectModel,
+  type createProjectModelSchema,
   deleteProjectModel,
   getGlobalModels,
   getProjectModels,
@@ -53,6 +55,8 @@ import {
 interface ModelsTableProps {
   projectId: string
 }
+
+type CreateProjectModelInput = z.infer<typeof createProjectModelSchema>
 
 export function ModelsTable({ projectId }: ModelsTableProps) {
   const queryClient = useQueryClient()
@@ -85,14 +89,14 @@ export function ModelsTable({ projectId }: ModelsTableProps) {
 
   // Mutations
   const createMutation = useMutation({
-    mutationFn: (data: any) => createProjectModel({ data }),
+    mutationFn: (data: CreateProjectModelInput) => createProjectModel({ data }),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['project-models', projectId] })
       toast.success('Model registered successfully')
       resetForm()
       setIsRegisterOpen(false)
     },
-    onError: (err: any) => {
+    onError: (err: { message?: string }) => {
       toast.error(err?.message ?? 'Failed to register model')
     },
   })
@@ -103,7 +107,7 @@ export function ModelsTable({ projectId }: ModelsTableProps) {
       queryClient.invalidateQueries({ queryKey: ['project-models', projectId] })
       toast.success('Model deleted successfully')
     },
-    onError: (err: any) => {
+    onError: (err: { message?: string }) => {
       toast.error(err?.message ?? 'Failed to delete model')
     },
   })
@@ -271,7 +275,7 @@ export function ModelsTable({ projectId }: ModelsTableProps) {
             variant="outline"
             size="icon"
             className="h-10 w-10 rounded-xl border-border/60 hover:bg-muted"
-            render={<Link to="/settings" search={{ view: 'models' } as any} />}
+            render={<Link to="/settings" search={{ view: 'models' } as Record<string, unknown>} />}
             title="View Global Catalog"
           >
             <Eye className="size-4 text-muted-foreground hover:text-foreground" />
@@ -306,7 +310,7 @@ export function ModelsTable({ projectId }: ModelsTableProps) {
             </TableHeader>
             <TableBody>
               {filteredModels.map((pm) => {
-                let metricsObj: any = null
+                let metricsObj: Record<string, number> | null = null
                 if (pm.metrics) {
                   try {
                     metricsObj = JSON.parse(pm.metrics)
@@ -393,7 +397,12 @@ export function ModelsTable({ projectId }: ModelsTableProps) {
                           variant="ghost"
                           size="icon-sm"
                           className="text-muted-foreground hover:text-foreground"
-                          render={<Link to="/settings" search={{ view: 'models' } as any} />}
+                          render={
+                            <Link
+                              to="/settings"
+                              search={{ view: 'models' } as Record<string, unknown>}
+                            />
+                          }
                           title="View Global Catalog"
                         >
                           <Eye className="size-3.5" />
@@ -467,9 +476,9 @@ export function ModelsTable({ projectId }: ModelsTableProps) {
             <div className="grid gap-4 py-5">
               {/* Base Model selection */}
               <div className="grid gap-1.5">
-                <label className="text-xs font-semibold text-muted-foreground ml-0.5">
+                <div className="text-xs font-semibold text-muted-foreground ml-0.5">
                   Base Model Framework
-                </label>
+                </div>
                 {isLoadingGlobals ? (
                   <Spinner className="size-5" />
                 ) : (
@@ -531,10 +540,13 @@ export function ModelsTable({ projectId }: ModelsTableProps) {
                   />
                 </div>
                 <div className="grid gap-1.5">
-                  <label className="text-xs font-semibold text-muted-foreground ml-0.5">
-                    Status
-                  </label>
-                  <Select value={status} onValueChange={(val: any) => setStatus(val)}>
+                  <div className="text-xs font-semibold text-muted-foreground ml-0.5">Status</div>
+                  <Select
+                    value={status}
+                    onValueChange={(
+                      val: 'draft' | 'training' | 'ready' | 'deployed' | 'archived',
+                    ) => setStatus(val)}
+                  >
                     <SelectTrigger className="w-full h-10 rounded-xl bg-card border-border/60">
                       <SelectValue placeholder="Status" />
                     </SelectTrigger>

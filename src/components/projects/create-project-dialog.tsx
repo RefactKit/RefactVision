@@ -50,6 +50,8 @@ export function CreateProjectDialog({
   const [githubUrl, setGithubUrl] = useState('')
   const [otherUrl, setOtherUrl] = useState('')
 
+  const firstTypeId = projectTypes[0]?.id
+
   useEffect(() => {
     if (open) {
       setTitle('')
@@ -57,20 +59,20 @@ export function CreateProjectDialog({
       setGithubUrl('')
       setOtherUrl('')
       // Only set initial typeId if we have projectTypes
-      if (projectTypes.length > 0) {
-        setTypeId(projectTypes[0].id)
+      if (firstTypeId) {
+        setTypeId(firstTypeId)
       } else {
         setTypeId('')
       }
     }
-  }, [open, projectTypes.length])
+  }, [open, firstTypeId])
 
   // Update typeId if projectTypes load while the dialog is open and no typeId is set
   useEffect(() => {
-    if (open && projectTypes.length > 0 && !typeId) {
-      setTypeId(projectTypes[0].id)
+    if (open && firstTypeId && !typeId) {
+      setTypeId(firstTypeId)
     }
-  }, [open, projectTypes, typeId])
+  }, [open, firstTypeId, typeId])
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()

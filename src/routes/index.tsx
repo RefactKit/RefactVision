@@ -343,7 +343,7 @@ function LandingPage() {
 
               {l.workflow.steps.map((step: { title: string; description: string }, i: number) => (
                 <motion.div
-                  key={i}
+                  key={step.title}
                   initial={{ opacity: 0, y: 30 }}
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true }}
@@ -397,9 +397,9 @@ function LandingPage() {
               className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5"
             >
               {l.useCases.items.map(
-                (item: { title: string; description: string; emoji: string }, i: number) => (
+                (item: { title: string; description: string; emoji: string }) => (
                   <motion.div
-                    key={i}
+                    key={item.title}
                     variants={fadeInUp}
                     className="group relative flex flex-col gap-3 rounded-3xl border border-border/40 bg-card p-7 transition-all hover:shadow-lg hover:border-primary/20 hover:-translate-y-1"
                   >
@@ -531,8 +531,8 @@ function LandingPage() {
                 { value: 12, suffix: '', label: 'Languages Supported' },
                 { value: 100, suffix: '%', label: 'Open Source' },
                 { value: 4, suffix: '', label: 'Export Formats' },
-              ].map((stat, i) => (
-                <div key={i} className="text-center">
+              ].map((stat) => (
+                <div key={stat.label} className="text-center">
                   <div className="text-4xl sm:text-5xl font-bold text-primary">
                     <AnimatedCounter value={stat.value} />
                     {stat.suffix}
@@ -601,10 +601,10 @@ function LandingPage() {
           <div className="flex flex-col items-center md:items-end gap-6">
             <p>{l.footer.madeWith} Y.BERDAI</p>
             <div className="flex items-center gap-8 font-medium">
-              <a href="#" className="hover:text-primary transition-colors">
+              <a href="/privacy" className="hover:text-primary transition-colors">
                 Privacy
               </a>
-              <a href="#" className="hover:text-primary transition-colors">
+              <a href="/terms" className="hover:text-primary transition-colors">
                 Terms
               </a>
               <a

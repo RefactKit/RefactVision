@@ -31,7 +31,8 @@ export function CreateOrgDialog({ open, onOpenChange }: CreateOrgDialogProps) {
   const [logo, setLogo] = useState<string | undefined>()
 
   const createMutation = useMutation({
-    mutationFn: (data: { name: string; logo?: string }) => createOrganization({ data } as any),
+    mutationFn: (data: { name: string; logo?: string }) =>
+      createOrganization({ data } as Parameters<typeof createOrganization>[0]),
     onSuccess: async (result) => {
       onOpenChange(false)
       setNewOrgName('')
@@ -45,7 +46,7 @@ export function CreateOrgDialog({ open, onOpenChange }: CreateOrgDialogProps) {
       })
       toast.success(t.newOrg.success)
     },
-    onError: (err: any) => {
+    onError: (err: Error) => {
       if (err?.message === 'Organization name already taken') {
         toast.error(t.onboarding.nameTaken)
       } else {

@@ -61,14 +61,20 @@ export function GlobalModelsSettings({ className }: GlobalModelsSettingsProps) {
 
   // Mutations
   const createMutation = useMutation({
-    mutationFn: (data: any) => createGlobalModel({ data }),
+    mutationFn: (data: {
+      name: string
+      framework: string
+      architecture: string
+      version: string
+      description?: string
+    }) => createGlobalModel({ data }),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['global-models'] })
       toast.success('Global model added to catalog')
       resetForm()
       setIsAddOpen(false)
     },
-    onError: (err: any) => {
+    onError: (err: { message?: string }) => {
       toast.error(err?.message ?? 'Failed to add model')
     },
   })
@@ -79,7 +85,7 @@ export function GlobalModelsSettings({ className }: GlobalModelsSettingsProps) {
       queryClient.invalidateQueries({ queryKey: ['global-models'] })
       toast.success('Global model deleted from catalog')
     },
-    onError: (err: any) => {
+    onError: (err: { message?: string }) => {
       toast.error(err?.message ?? 'Failed to delete model')
     },
   })
@@ -315,9 +321,7 @@ export function GlobalModelsSettings({ className }: GlobalModelsSettingsProps) {
 
               {/* Framework */}
               <div className="grid gap-1.5">
-                <label className="text-xs font-semibold text-muted-foreground ml-0.5">
-                  Framework
-                </label>
+                <div className="text-xs font-semibold text-muted-foreground ml-0.5">Framework</div>
                 <Select value={framework} onValueChange={setFramework}>
                   <SelectTrigger className="w-full h-10 rounded-xl bg-card border-border/60">
                     <SelectValue placeholder="Select Framework" />
@@ -343,9 +347,9 @@ export function GlobalModelsSettings({ className }: GlobalModelsSettingsProps) {
 
               {/* Architecture */}
               <div className="grid gap-1.5">
-                <label className="text-xs font-semibold text-muted-foreground ml-0.5">
+                <div className="text-xs font-semibold text-muted-foreground ml-0.5">
                   Architecture / Task
-                </label>
+                </div>
                 <Select value={architecture} onValueChange={setArchitecture}>
                   <SelectTrigger className="w-full h-10 rounded-xl bg-card border-border/60">
                     <SelectValue placeholder="Select Architecture / Task" />

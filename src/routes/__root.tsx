@@ -83,9 +83,9 @@ function RootComponent() {
         >
           <AuthProvider
             authClient={authClient}
-            navigate={(href) => navigate({ to: href as any })}
+            navigate={(href) => navigate({ to: href as string })}
             Link={({ href, children, ...props }) => (
-              <RouterLink to={href as any} {...props}>
+              <RouterLink to={href as string} {...props}>
                 {children}
               </RouterLink>
             )}

@@ -19,6 +19,12 @@ import { useI18n } from '@/i18n/context'
 import { cn } from '@/lib/utils'
 import { authClient } from '../../../../lib/auth-client'
 
+interface DynamicRole {
+  id: string
+  role: string
+  permission: string | Record<string, string[]>
+}
+
 const AVAILABLE_RESOURCES = {
   project: ['create', 'read', 'update', 'delete'],
   member: ['read', 'create', 'update', 'delete'],
@@ -65,10 +71,10 @@ export function RoleMatrix() {
     enabled: !!activeOrg?.id,
   })
 
-  const dynamicRoles = orgRolesResponse?.data || []
+  const dynamicRoles = (orgRolesResponse?.data || []) as DynamicRole[]
 
   const allRoleNames = Array.from(
-    new Set([...Object.keys(DEFAULT_STATIC_ROLES), ...dynamicRoles.map((r: any) => r.role)]),
+    new Set([...Object.keys(DEFAULT_STATIC_ROLES), ...dynamicRoles.map((r) => r.role)]),
   )
 
   const createRoleMutation = useMutation({
@@ -96,7 +102,7 @@ export function RoleMatrix() {
       action,
       currentPermissions,
     }: {
-      role: any // The full role object or string for static
+      role: DynamicRole | string
       resource: string
       action: string
       currentPermissions: Record<string, string[]>
@@ -117,7 +123,7 @@ export function RoleMatrix() {
       }
 
       return authClient.organization.updateRole({
-        roleId: role.id,
+        roleId: (role as DynamicRole).id,
         permission: newPermissions,
       })
     },
@@ -128,7 +134,7 @@ export function RoleMatrix() {
         queryClient.invalidateQueries({ queryKey: ['orgRoles', activeOrg?.id] })
       }
     },
-    onError: (err: any) => {
+    onError: (err: { message: string }) => {
       toast.error(err.message)
     },
   })
@@ -152,7 +158,7 @@ export function RoleMatrix() {
   if (!activeOrg) return null
 
   const getRolePermissions = (roleName: string) => {
-    const dynamicRole = dynamicRoles.find((r: any) => r.role === roleName)
+    const dynamicRole = dynamicRoles.find((r) => r.role === roleName)
     if (dynamicRole) {
       try {
         return typeof dynamicRole.permission === 'string'
@@ -171,7 +177,7 @@ export function RoleMatrix() {
     createRoleMutation.mutate(newRoleName)
   }
 
-  const handleToggle = (role: any, resource: string, action: string) => {
+  const handleToggle = (role: DynamicRole | string, resource: string, action: string) => {
     const roleName = typeof role === 'string' ? role : role.role
     const currentPermissions = getRolePermissions(roleName)
     togglePermissionMutation.mutate({ role, resource, action, currentPermissions })
@@ -211,7 +217,7 @@ export function RoleMatrix() {
                 <TableHead className="w-[200px] font-bold">{t.roles.resourceAction}</TableHead>
                 {allRoleNames.map((rn) => {
                   const isStatic = Object.keys(DEFAULT_STATIC_ROLES).includes(rn)
-                  const dynamicRole = dynamicRoles.find((dr: any) => dr.role === rn)
+                  const dynamicRole = dynamicRoles.find((dr) => dr.role === rn)
 
                   return (
                     <TableHead key={rn} className="text-center font-bold">
@@ -221,6 +227,7 @@ export function RoleMatrix() {
                         </Badge>
                         {!isStatic && dynamicRole && (
                           <button
+                            type="button"
                             className="text-muted-foreground hover:text-destructive transition-colors"
                             onClick={() => {
                               if (confirm(t.roles.deleteConfirm.replace('{{role}}', rn))) {
@@ -268,7 +275,7 @@ export function RoleMatrix() {
                         </TableCell>
                         {allRoleNames.map((rn) => {
                           const isStatic = Object.keys(DEFAULT_STATIC_ROLES).includes(rn)
-                          const dynamicRole = dynamicRoles.find((dr: any) => dr.role === rn)
+                          const dynamicRole = dynamicRoles.find((dr) => dr.role === rn)
                           const roleObj = isStatic ? rn : dynamicRole
                           const isOwner = rn === 'owner'
                           const isDisabled = isStatic || togglePermissionMutation.isPending
