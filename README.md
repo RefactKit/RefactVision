@@ -69,7 +69,7 @@ Key advantages include:
 ### Export interoperability
 
 - Export datasets into YOLO-oriented pipelines.
-- Connect annotated datasets to Roboflow-style or Ultralytics-style downstream workflows.
+- Connect annotated datasets to Roboflow-style ,Hugging Face or Ultralytics-style downstream workflows.
 - Avoid vendor lock-in by keeping labeling independent from model training.
 
 ### Privacy-first operations

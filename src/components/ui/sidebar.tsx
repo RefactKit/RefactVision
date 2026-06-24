@@ -78,7 +78,7 @@ function SidebarProvider({
         _setOpen(openState)
       }
 
-      // This sets the cookie to keep the sidebar state.
+      // biome-ignore lint/suspicious/noDocumentCookie: Cookie Store API not universally supported; sidebar state needs cookie persistence.
       document.cookie = `${SIDEBAR_COOKIE_NAME}=${openState}; path=/; max-age=${SIDEBAR_COOKIE_MAX_AGE}`
     },
     [setOpenProp, open],
@@ -220,6 +220,7 @@ function Sidebar({
             : 'group-data-[collapsible=icon]:w-(--sidebar-width-icon)',
         )}
       />
+      {/* biome-ignore lint/a11y/noStaticElementInteractions: Sidebar container needs mouse hover detection for collapsible icon mode expansion */}
       <div
         data-slot="sidebar-container"
         data-side={side}

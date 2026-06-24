@@ -1,3 +1,26 @@
+import { GithubIcon } from '@hugeicons/core-free-icons'
+import { HugeiconsIcon } from '@hugeicons/react'
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
+import { createFileRoute, Link, useParams } from '@tanstack/react-router'
+import {
+  ArrowLeft,
+  BarChart,
+  Cpu,
+  Database,
+  Globe,
+  LayoutGrid,
+  Link2Off,
+  List,
+  MoreHorizontal,
+  Network,
+  Pencil,
+  Plus,
+  RefreshCw,
+  Send,
+  Tags,
+} from 'lucide-react'
+import { useState } from 'react'
+import { toast } from 'sonner'
 import { ClassesTable } from '@/components/projects/classes-table'
 import { EditProjectDialog } from '@/components/projects/edit-project-dialog'
 import { LabelingGallery } from '@/components/projects/labeling-gallery'
@@ -34,31 +57,11 @@ import {
 } from '@/server/project-fns'
 import { orgBySlugQuery } from '@/server/query-keys'
 import { uploadFile } from '@/server/storage-fns'
-import { disconnectUltralytics, exportToUltralytics, saveUltralyticsConfig } from '@/server/ultralytics-fns'
-import { GithubIcon } from '@hugeicons/core-free-icons'
-import { HugeiconsIcon } from '@hugeicons/react'
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
-import { createFileRoute, Link, useParams } from '@tanstack/react-router'
 import {
-  ArrowLeft,
-  BarChart,
-  Cpu,
-  Database,
-  Globe,
-  LayoutGrid,
-  Link2Off,
-  List,
-  MoreHorizontal,
-  Network,
-  Pencil,
-  Plus,
-  RefreshCw,
-  Send,
-  Tags,
-} from 'lucide-react'
-import { useState } from 'react'
-import { toast } from 'sonner'
-
+  disconnectUltralytics,
+  exportToUltralytics,
+  saveUltralyticsConfig,
+} from '@/server/ultralytics-fns'
 
 const colorsPalette = [
   'bg-emerald-500',
@@ -87,7 +90,6 @@ export function ProjectStudioPage() {
   const [activeTab, setActiveTab] = useState('dataset')
   const [ultraKey, setUltraKey] = useState('')
 
-
   // Roboflow BYOK state
   const [rfApiKey, setRfApiKey] = useState('')
   const [rfWorkspace, setRfWorkspace] = useState('')
@@ -106,8 +108,7 @@ export function ProjectStudioPage() {
   const isUltralyticsConfigured = !!project?.ultralyticsApiKey
 
   const saveUltraMutation = useMutation({
-    mutationFn: (apiKey: string) =>
-      saveUltralyticsConfig({ data: { projectId, apiKey } }),
+    mutationFn: (apiKey: string) => saveUltralyticsConfig({ data: { projectId, apiKey } }),
     onSuccess: () => {
       toast.success('Ultralytics integration configured successfully!')
       setUltraKey('')
@@ -143,7 +144,7 @@ export function ProjectStudioPage() {
     },
   })
 
-  const { data: org } = useQuery(orgBySlugQuery(slug))
+  useQuery(orgBySlugQuery(slug))
 
   // Roboflow mutations
   const isRoboflowConfigured = !!(
@@ -291,7 +292,8 @@ export function ProjectStudioPage() {
         {/* File grid skeleton */}
         <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4">
           {Array.from({ length: 12 }).map((_, i) => (
-            <div key={i} className="flex flex-col gap-2">
+            // biome-ignore lint/suspicious/noArrayIndexKey: Skeleton placeholders are static and never reorder
+            <div key={`skeleton-${i}`} className="flex flex-col gap-2">
               <Skeleton className="aspect-4/3 rounded-2xl" />
               <Skeleton className="h-4 w-full rounded-lg" />
               <Skeleton className="h-3 w-2/3 rounded-lg" />
@@ -634,7 +636,11 @@ export function ProjectStudioPage() {
               <Card className="flex flex-col gap-6">
                 <CardHeader className="flex flex-col items-center text-center gap-4 pb-0">
                   <div className="flex items-center justify-center h-20 w-full p-2 bg-white rounded-2xl border border-border/10 shadow-sm dark:bg-white dark:border-white/20">
-                    <img src="/ultra.jpeg" alt="Ultralytics Logo" className="h-12 w-auto object-contain" />
+                    <img
+                      src="/ultra.jpeg"
+                      alt="Ultralytics Logo"
+                      className="h-12 w-auto object-contain"
+                    />
                   </div>
                   <div className="flex flex-col items-center gap-1.5 w-full">
                     <div className="flex items-center justify-center gap-2">
@@ -660,7 +666,9 @@ export function ProjectStudioPage() {
                   <div className="space-y-4">
                     <div className="grid grid-cols-3 gap-2 py-1 text-xs border-b border-border/40 pb-2">
                       <span className="text-muted-foreground font-medium text-left">API Key</span>
-                      <span className="col-span-2 text-foreground font-mono text-right">••••••••</span>
+                      <span className="col-span-2 text-foreground font-mono text-right">
+                        ••••••••
+                      </span>
                     </div>
                   </div>
 
@@ -672,7 +680,10 @@ export function ProjectStudioPage() {
                     >
                       {exportUltraMutation.isPending ? (
                         <>
-                          <Spinner data-icon="inline-start" className="h-4 w-4 text-primary-foreground animate-spin" />
+                          <Spinner
+                            data-icon="inline-start"
+                            className="h-4 w-4 text-primary-foreground animate-spin"
+                          />
                           Exporting...
                         </>
                       ) : (
@@ -708,10 +719,15 @@ export function ProjectStudioPage() {
               <Card className="flex flex-col gap-6">
                 <CardHeader className="flex flex-col items-center text-center gap-4 pb-0">
                   <div className="flex items-center justify-center h-20 w-full p-2 bg-white rounded-2xl border border-border/10 shadow-sm dark:bg-white dark:border-white/20">
-                    <img src="/ultra.jpeg" alt="Ultralytics Logo" className="h-12 w-auto object-contain" />
+                    <img
+                      src="/ultra.jpeg"
+                      alt="Ultralytics Logo"
+                      className="h-12 w-auto object-contain"
+                    />
                   </div>
                   <CardDescription className="text-center text-sm font-normal text-muted-foreground leading-relaxed max-w-sm">
-                    Securely configure your Ultralytics API key (BYOK) to export labeled images as NDJSON.
+                    Securely configure your Ultralytics API key (BYOK) to export labeled images as
+                    NDJSON.
                   </CardDescription>
                 </CardHeader>
                 <CardContent className="flex-1 flex flex-col justify-end">
@@ -745,7 +761,10 @@ export function ProjectStudioPage() {
                     >
                       {saveUltraMutation.isPending ? (
                         <>
-                          <Spinner data-icon="inline-start" className="text-primary-foreground animate-spin" />
+                          <Spinner
+                            data-icon="inline-start"
+                            className="text-primary-foreground animate-spin"
+                          />
                           Connecting...
                         </>
                       ) : (

@@ -61,7 +61,7 @@ export const getOrgBySlug = createServerFn({ method: 'GET' }).handler(async ({ d
   if (!userMembership) return { org: null, role: null, permissions: null }
 
   // Fetch permissions for this role
-  let permissions: any = null
+  let permissions: Record<string, string[]> | null = null
   const dynamicRole = await db.query.organizationRole.findFirst({
     where: and(
       eq(organizationRole.organizationId, org.id),

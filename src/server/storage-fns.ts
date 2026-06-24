@@ -54,9 +54,11 @@ export const uploadFile = createServerFn({ method: 'POST' }).handler(
           ContentType: file.type,
         }),
       )
-    } catch (uploadError: any) {
+    } catch (uploadError: unknown) {
       console.error('S3 upload error:', uploadError)
-      throw new Error(`Upload failed: ${uploadError.message}`)
+      throw new Error(
+        `Upload failed: ${uploadError instanceof Error ? uploadError.message : String(uploadError)}`,
+      )
     }
 
     const publicUrl = `${s3PublicUrlBase}/${bucket}/${fullPath}`

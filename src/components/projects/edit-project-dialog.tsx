@@ -49,7 +49,7 @@ export function EditProjectDialog({
 
   const { data: project, isLoading } = useQuery({
     queryKey: ['project', projectId],
-    queryFn: () => getProjectById({ data: projectId! }),
+    queryFn: () => getProjectById({ data: projectId as string }),
     enabled: !!projectId && open,
   })
 
@@ -78,7 +78,7 @@ export function EditProjectDialog({
       toast.success(t.common?.success || 'Project updated successfully')
       onOpenChange(false)
     },
-    onError: (err: any) => {
+    onError: (err: { message?: string }) => {
       toast.error(err.message || 'Failed to update project')
     },
   })

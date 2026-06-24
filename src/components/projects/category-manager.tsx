@@ -84,6 +84,7 @@ export function CategoryManager({
 
       <div className="flex-1 space-y-1 overflow-y-auto pr-2 custom-scrollbar">
         <button
+          type="button"
           className={cn(
             'w-full flex items-center gap-2.5 px-3 py-2.5 rounded-xl text-sm font-medium transition-all group',
             selectedCategoryId === null
@@ -104,6 +105,7 @@ export function CategoryManager({
         {categories.map((cat) => (
           <div key={cat.id} className="group relative">
             <button
+              type="button"
               className={cn(
                 'w-full flex items-center justify-between px-3 py-2.5 rounded-xl text-sm font-medium transition-all',
                 selectedCategoryId === cat.id

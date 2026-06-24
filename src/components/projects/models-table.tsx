@@ -397,7 +397,12 @@ export function ModelsTable({ projectId }: ModelsTableProps) {
                           variant="ghost"
                           size="icon-sm"
                           className="text-muted-foreground hover:text-foreground"
-                          render={<Link to="/settings" search={{ view: 'models' } as Record<string, unknown>} />}
+                          render={
+                            <Link
+                              to="/settings"
+                              search={{ view: 'models' } as Record<string, unknown>}
+                            />
+                          }
                           title="View Global Catalog"
                         >
                           <Eye className="size-3.5" />
@@ -535,10 +540,13 @@ export function ModelsTable({ projectId }: ModelsTableProps) {
                   />
                 </div>
                 <div className="grid gap-1.5">
-                  <div className="text-xs font-semibold text-muted-foreground ml-0.5">
-                    Status
-                  </div>
-                  <Select value={status} onValueChange={(val: 'draft' | 'training' | 'ready' | 'deployed' | 'archived') => setStatus(val)}>
+                  <div className="text-xs font-semibold text-muted-foreground ml-0.5">Status</div>
+                  <Select
+                    value={status}
+                    onValueChange={(
+                      val: 'draft' | 'training' | 'ready' | 'deployed' | 'archived',
+                    ) => setStatus(val)}
+                  >
                     <SelectTrigger className="w-full h-10 rounded-xl bg-card border-border/60">
                       <SelectValue placeholder="Status" />
                     </SelectTrigger>

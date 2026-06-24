@@ -30,7 +30,9 @@ function NewOrgPage() {
     validators: { onSubmit: schema },
     onSubmit: async ({ value }) => {
       try {
-        const result = await createOrganization({ data: { name: value.name } } as any)
+        const result = await createOrganization({ data: { name: value.name } } as {
+          data: { name: string }
+        })
         queryClient.invalidateQueries({ queryKey: ['user-orgs'] })
         toast.success(l.success)
         navigate({
@@ -38,11 +40,11 @@ function NewOrgPage() {
           params: { slug: result.org.slug },
           search: { page: 1 },
         })
-      } catch (err: any) {
-        if (err?.message === 'Organization name already taken') {
+      } catch (err: unknown) {
+        if (err instanceof Error && err.message === 'Organization name already taken') {
           toast.error(t.onboarding.nameTaken)
         } else {
-          toast.error(err?.message ?? l.error)
+          toast.error(err instanceof Error ? err.message : l.error)
         }
       }
     },

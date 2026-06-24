@@ -5,10 +5,12 @@ import { ProjectStudioPage } from './$projectId'
 
 // Mock react-router
 vi.mock('@tanstack/react-router', () => ({
+  // biome-ignore lint/suspicious/noExplicitAny: Test mock requires flexible typing
   createFileRoute: () => (config: any) => ({
     options: config,
   }),
   useParams: () => ({ slug: 'test-org', projectId: 'test-project-1' }),
+  // biome-ignore lint/suspicious/noExplicitAny: Test mock requires flexible typing
   Link: ({ children, to, params }: any) => {
     return (
       <a href={typeof to === 'string' ? to : '#'} data-params={JSON.stringify(params)}>
@@ -44,6 +46,7 @@ vi.mock('@tanstack/react-query', () => ({
   }),
   useQuery: vi.fn(),
   useMutation: vi.fn(),
+  // biome-ignore lint/suspicious/noExplicitAny: Test mock requires flexible typing
   queryOptions: (options: any) => options,
 }))
 
@@ -72,12 +75,17 @@ vi.mock('@/components/projects/project-files-table', () => ({
   ProjectFilesTable: () => <div data-testid="project-files-table">Project Files Table Mock</div>,
 }))
 
+// biome-ignore lint/suspicious/noExplicitAny: Test mock requires flexible typing
 const mockUseQuery = useQuery as any
+// biome-ignore lint/suspicious/noExplicitAny: Test mock requires flexible typing
 const mockUseMutation = useMutation as any
 
 describe('ProjectStudioPage tab routing and integration', () => {
+  // biome-ignore lint/suspicious/noExplicitAny: Test mock data requires flexible shape
   let projectData: any
+  // biome-ignore lint/suspicious/noExplicitAny: Test mock data requires flexible shape
   let statsData: any
+  // biome-ignore lint/suspicious/noExplicitAny: Test mock data requires flexible shape
   let orgData: any
 
   beforeEach(() => {
@@ -108,6 +116,7 @@ describe('ProjectStudioPage tab routing and integration', () => {
     }
 
     // Default mock query resolves
+    // biome-ignore lint/suspicious/noExplicitAny: Test mock callback requires flexible typing
     mockUseQuery.mockImplementation(({ queryKey }: any) => {
       if (queryKey[0] === 'project') {
         return { data: projectData, isLoading: false }
@@ -192,8 +201,12 @@ describe('ProjectStudioPage tab routing and integration', () => {
       expect(screen.getByLabelText('Project ID (slug)')).toBeInTheDocument()
 
       // Button should be disabled by default (scope to Roboflow card to avoid collision with Ultralytics card)
-      const roboflowCard = screen.getByAltText('Roboflow Logo').closest('[data-slot="card"]') as HTMLElement
-      const connectButton = within(roboflowCard).getByRole('button', { name: 'Save & Connect Integration' })
+      const roboflowCard = screen
+        .getByAltText('Roboflow Logo')
+        .closest('[data-slot="card"]') as HTMLElement
+      const connectButton = within(roboflowCard).getByRole('button', {
+        name: 'Save & Connect Integration',
+      })
       expect(connectButton).toBeInTheDocument()
       expect(connectButton).toBeDisabled()
     })
@@ -244,8 +257,12 @@ describe('ProjectStudioPage tab routing and integration', () => {
       fireEvent.change(projectInput, { target: { value: 'my-proj' } })
 
       // Scope to Roboflow card to avoid collision with Ultralytics card
-      const roboflowCard = screen.getByAltText('Roboflow Logo').closest('[data-slot="card"]') as HTMLElement
-      const connectButton = within(roboflowCard).getByRole('button', { name: 'Save & Connect Integration' })
+      const roboflowCard = screen
+        .getByAltText('Roboflow Logo')
+        .closest('[data-slot="card"]') as HTMLElement
+      const connectButton = within(roboflowCard).getByRole('button', {
+        name: 'Save & Connect Integration',
+      })
       expect(connectButton).toBeEnabled()
       fireEvent.click(connectButton)
 

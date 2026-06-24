@@ -67,7 +67,8 @@ function SetPassword({ className }: { className?: string }) {
               requestPasswordReset(
                 { email: session.user.email },
                 {
-                  onError: (error: any) => toast.error(error.error?.message || error.message),
+                  onError: (error: { error?: { message?: string }; message?: string }) =>
+                    toast.error(error.error?.message || error.message),
                   onSuccess: () => toast.success(localization.auth.passwordResetEmailSent),
                 },
               )
@@ -94,7 +95,7 @@ function ChangePasswordForm({
     maxPasswordLength?: number
     confirmPassword?: boolean
   }
-  localization: Record<string, any>
+  localization: Record<string, Record<string, string> | string>
   session: { user: { email: string } } | null | undefined
 }) {
   const [currentPassword, setCurrentPassword] = useState('')
@@ -115,7 +116,7 @@ function ChangePasswordForm({
     changePassword(
       { currentPassword, newPassword, revokeOtherSessions: true },
       {
-        onError: (error: any) => {
+        onError: (error: { error?: { message?: string }; message?: string }) => {
           setCurrentPassword('')
           setNewPassword('')
           setConfirmPassword('')
