@@ -15,7 +15,7 @@ export const Route = createFileRoute('/_app/organizations/new')({
   component: NewOrgPage,
 })
 
-function NewOrgPage() {
+export function NewOrgPage() {
   const { t } = useI18n()
   const l = t.newOrg
   const navigate = useNavigate()

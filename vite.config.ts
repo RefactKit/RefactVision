@@ -26,6 +26,14 @@ export default defineConfig({
     include: ['src/**/*.{test,spec}.{ts,tsx}'],
     coverage: {
       reporter: ['text', 'json', 'html', 'lcov'],
+      exclude: [
+        'src/test/setup.ts',
+        'src/routeTree.gen.ts',
+        '**/*.test.ts',
+        '**/*.test.tsx',
+        '**/*.spec.ts',
+        '**/*.spec.tsx',
+      ],
     },
   },
 })

@@ -23,7 +23,7 @@ export const Route = createFileRoute('/onboarding')({
   component: OnboardingPage,
 })
 
-function OnboardingPage() {
+export function OnboardingPage() {
   const { t } = useI18n()
   const l = t.onboarding
   const navigate = useNavigate()

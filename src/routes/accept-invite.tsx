@@ -22,7 +22,7 @@ export const Route = createFileRoute('/accept-invite')({
   component: AcceptInvitePage,
 })
 
-function AcceptInvitePage() {
+export function AcceptInvitePage() {
   const { id, accept: shouldAutoAccept } = Route.useLoaderData()
   const navigate = useNavigate()
   const [error, setError] = useState<string | null>(null)
