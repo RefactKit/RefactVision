@@ -79,7 +79,6 @@ export function LabelingGallery({
   onBulkLabel,
   onDeleteFiles,
   onCreateCategory,
-  onUploadClick,
 }: LabelingGalleryProps) {
   const { t } = useI18n()
   const [selectedIds, setSelectedIds] = useState<string[]>([])
@@ -346,6 +345,14 @@ export function LabelingGallery({
                   selectedIds.includes(file.id) && 'ring-2 ring-primary border-primary',
                 )}
                 onClick={() => toggleSelect(file.id)}
+                onKeyDown={(e) => {
+                  if (e.key === 'Enter' || e.key === ' ') {
+                    e.preventDefault()
+                    toggleSelect(file.id)
+                  }
+                }}
+                tabIndex={0}
+                role="button"
               >
                 {/* Image / Icon Preview */}
                 <div className="relative aspect-4/3 bg-muted/20 flex items-center justify-center overflow-hidden">
@@ -480,7 +487,7 @@ export function LabelingGallery({
               </PaginationItem>
 
               {Array.from({ length: totalPages }).map((_, i) => (
-                <PaginationItem key={i}>
+                <PaginationItem key={`page-${i + 1}`}>
                   <PaginationLink
                     href="#"
                     onClick={(e) => {

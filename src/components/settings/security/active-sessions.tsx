@@ -50,7 +50,7 @@ export function ActiveSessions({ className }: ActiveSessionsProps) {
   }
 
   return (
-    <div className="flex flex-col gap-4">
+    <div className={`flex flex-col gap-4 ${className || ''}`.trim()}>
       <div className="flex items-center justify-between">
         <h2 className="text-sm font-semibold">{localization.settings.activeSessions}</h2>
         <div className="flex gap-2">
