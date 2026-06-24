@@ -7,7 +7,12 @@ import { nitro } from 'nitro/vite'
 import { defineConfig } from 'vite'
 
 export default defineConfig({
-  plugins: [tanstackStart(), viteReact(), tailwindcss(), nitro()],
+  plugins: [
+    ...(process.env.VITEST ? [] : [tanstackStart()]),
+    viteReact(),
+    tailwindcss(),
+    ...(process.env.VITEST ? [] : [nitro()]),
+  ],
   resolve: {
     tsconfigPaths: true,
   },
