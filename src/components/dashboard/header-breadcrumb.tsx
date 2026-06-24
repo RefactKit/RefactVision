@@ -64,7 +64,7 @@ export function HeaderBreadcrumb({ orgName }: HeaderBreadcrumbProps) {
     return { title: '' }
   }
 
-  const { title: pageTitle, icon: PageIcon, parent } = getPageConfig()
+  const { title: pageTitle, parent } = getPageConfig()
 
   const isDashboard = lastSegment === 'dashboard'
 

@@ -33,7 +33,7 @@ interface ProjectListProps {
   projects: Project[]
   orgSlug: string
   userRole?: string
-  permissions?: any
+  permissions?: Record<string, string[]>
   onDelete?: (id: string) => void
   onEdit?: (id: string) => void
   onCreate?: () => void

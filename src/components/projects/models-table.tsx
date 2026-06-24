@@ -15,6 +15,7 @@ import {
 } from 'lucide-react'
 import { useState } from 'react'
 import { toast } from 'sonner'
+import type { z } from 'zod'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import {
@@ -45,6 +46,7 @@ import {
 import { Textarea } from '@/components/ui/textarea'
 import {
   createProjectModel,
+  type createProjectModelSchema,
   deleteProjectModel,
   getGlobalModels,
   getProjectModels,
@@ -53,6 +55,8 @@ import {
 interface ModelsTableProps {
   projectId: string
 }
+
+type CreateProjectModelInput = z.infer<typeof createProjectModelSchema>
 
 export function ModelsTable({ projectId }: ModelsTableProps) {
   const queryClient = useQueryClient()
@@ -85,14 +89,14 @@ export function ModelsTable({ projectId }: ModelsTableProps) {
 
   // Mutations
   const createMutation = useMutation({
-    mutationFn: (data: any) => createProjectModel({ data }),
+    mutationFn: (data: CreateProjectModelInput) => createProjectModel({ data }),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['project-models', projectId] })
       toast.success('Model registered successfully')
       resetForm()
       setIsRegisterOpen(false)
     },
-    onError: (err: any) => {
+    onError: (err: { message?: string }) => {
       toast.error(err?.message ?? 'Failed to register model')
     },
   })
@@ -103,7 +107,7 @@ export function ModelsTable({ projectId }: ModelsTableProps) {
       queryClient.invalidateQueries({ queryKey: ['project-models', projectId] })
       toast.success('Model deleted successfully')
     },
-    onError: (err: any) => {
+    onError: (err: { message?: string }) => {
       toast.error(err?.message ?? 'Failed to delete model')
     },
   })

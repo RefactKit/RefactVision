@@ -87,7 +87,8 @@ export function OrgSwitcher({ orgs, currentSlug }: OrgSwitcherProps) {
                     {activeOrg.role === 'admin' && <Shield className="size-2.5 shrink-0" />}
                     {activeOrg.role === 'member' && <User className="size-2.5 shrink-0" />}
                     {/* Fallback translation or capitalized role */}
-                    {(t.members?.roles as any)?.[activeOrg.role] || activeOrg.role}
+                    {(t.members?.roles as Record<string, string>)?.[activeOrg.role] ||
+                      activeOrg.role}
                   </Badge>
                 </div>
               </div>
@@ -114,7 +115,7 @@ export function OrgSwitcher({ orgs, currentSlug }: OrgSwitcherProps) {
                           `/organizations/${currentSlug}`,
                           `/organizations/${org.slug}`,
                         )
-                        navigate({ to: newPath as any })
+                        window.location.href = newPath
                       } else {
                         // Otherwise (or if global), go to dashboard
                         navigate({
@@ -153,7 +154,7 @@ export function OrgSwitcher({ orgs, currentSlug }: OrgSwitcherProps) {
                         {org.role === 'owner' && <Crown className="size-2.5 shrink-0" />}
                         {org.role === 'admin' && <Shield className="size-2.5 shrink-0" />}
                         {org.role === 'member' && <User className="size-2.5 shrink-0" />}
-                        {(t.members?.roles as any)?.[org.role] || org.role}
+                        {(t.members?.roles as Record<string, string>)?.[org.role] || org.role}
                       </Badge>
                       {org.slug === activeOrg.slug && (
                         <span className="text-xs text-primary shrink-0 w-3 text-right">✓</span>
