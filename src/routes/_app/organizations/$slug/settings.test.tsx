@@ -2,6 +2,7 @@ import React from 'react'
 import { render, screen, fireEvent, waitFor } from '@testing-library/react'
 import { beforeEach, describe, expect, it, vi } from 'vitest'
 import { OrgSettingsPage } from './settings'
+import { toast } from 'sonner'
 
 let mockLoaderData = {
   org: { id: 'org-1', name: 'Original Name', slug: 'original-slug', logo: 'logo.png' },
@@ -60,6 +61,15 @@ vi.mock('@/server/org-fns', () => ({
   deleteOrganization: (...args: unknown[]) => mockDeleteOrg(...args),
 }))
 
+// Mock sonner
+vi.mock('sonner', () => ({
+  toast: {
+    success: vi.fn(),
+    error: vi.fn(),
+    info: vi.fn(),
+  },
+}))
+
 // Mock i18n
 vi.mock('@/i18n/context', () => ({
   useI18n: () => ({
@@ -99,7 +109,11 @@ vi.mock('@/components/shared/forbidden-content', () => ({
 }))
 
 vi.mock('@/components/shared/image-upload', () => ({
-  ImageUpload: () => <div data-testid="image-upload">Image Upload Mock</div>,
+  ImageUpload: ({ onUploadSuccess }: { onUploadSuccess: (url: string) => void }) => (
+    <button data-testid="image-upload-btn" type="button" onClick={() => onUploadSuccess('new-logo.png')}>
+      Upload Image
+    </button>
+  ),
 }))
 
 vi.mock('@/components/ui/alert-dialog', () => ({
@@ -136,7 +150,7 @@ describe('OrgSettingsPage', () => {
 
     expect(screen.getByLabelText('Workspace URL (Slug)')).toBeInTheDocument()
     expect(screen.getByLabelText('Organization Name')).toBeInTheDocument()
-    expect(screen.getByTestId('image-upload')).toBeInTheDocument()
+    expect(screen.getByTestId('image-upload-btn')).toBeInTheDocument()
     expect(screen.queryByText('Danger Zone')).not.toBeInTheDocument()
   })
 
@@ -146,8 +160,53 @@ describe('OrgSettingsPage', () => {
     expect(screen.getByTestId('forbidden-content')).toBeInTheDocument()
   })
 
-  it('submits update organization successfully', async () => {
+  it('submits update organization successfully and handles Undo', async () => {
     mockUpdateOrg.mockResolvedValue({ org: { slug: 'new-slug' } })
+
+    render(<OrgSettingsPage />)
+
+    // Trigger logo upload
+    const uploadBtn = screen.getByTestId('image-upload-btn')
+    fireEvent.click(uploadBtn)
+
+    // Change slug and name
+    const nameInput = screen.getByLabelText('Organization Name')
+    fireEvent.change(nameInput, { target: { value: 'New Name' } })
+
+    const slugInput = screen.getByLabelText('Workspace URL (Slug)')
+    fireEvent.change(slugInput, { target: { value: 'new-slug' } })
+
+    const saveBtn = screen.getByRole('button', { name: 'Save Changes' })
+    fireEvent.click(saveBtn)
+
+    await waitFor(() => {
+      expect(mockUpdateOrg).toHaveBeenCalledWith({
+        data: {
+          organizationId: 'org-1',
+          name: 'New Name',
+          slug: 'new-slug',
+          logo: 'new-logo.png',
+        },
+      })
+      expect(mockNavigate).toHaveBeenCalledWith({
+        to: '/organizations/$slug/settings',
+        params: { slug: 'new-slug' },
+        replace: true,
+      })
+      expect(toast.success).toHaveBeenCalled()
+    })
+
+    // Simulate Undo click
+    const successCalls = vi.mocked(toast.success).mock.calls
+    const options = successCalls[successCalls.length - 1][1] as any
+    if (options?.action?.onClick) {
+      options.action.onClick()
+      expect(mockUpdateOrg).toHaveBeenCalledTimes(2)
+    }
+  })
+
+  it('handles update organization error branch', async () => {
+    mockUpdateOrg.mockRejectedValue(new Error('Update failed'))
 
     render(<OrgSettingsPage />)
 
@@ -158,27 +217,16 @@ describe('OrgSettingsPage', () => {
     fireEvent.click(saveBtn)
 
     await waitFor(() => {
-      expect(mockUpdateOrg).toHaveBeenCalledWith({
-        data: {
-          organizationId: 'org-1',
-          name: 'New Name',
-          slug: 'original-slug',
-          logo: 'logo.png',
-        },
-      })
-      expect(mockNavigate).toHaveBeenCalledWith({
-        to: '/organizations/$slug/settings',
-        params: { slug: 'new-slug' },
-        replace: true,
-      })
+      expect(mockUpdateOrg).toHaveBeenCalled()
+      expect(toast.error).toHaveBeenCalledWith('Update failed')
     })
   })
 
-  it('renders danger zone and deletes organization successfully when role is owner', async () => {
+  it('renders danger zone and deletes organization successfully and handles delete error / Undo', async () => {
     mockLoaderData.role = 'owner'
     mockDeleteOrg.mockResolvedValue({ success: true })
 
-    render(<OrgSettingsPage />)
+    const { rerender } = render(<OrgSettingsPage />)
 
     expect(screen.getByText('Danger Zone')).toBeInTheDocument()
 
@@ -196,6 +244,24 @@ describe('OrgSettingsPage', () => {
         to: '/organizations',
         replace: true,
       })
+      expect(toast.success).toHaveBeenCalled()
+    })
+
+    // Test Delete Undo
+    const successCalls = vi.mocked(toast.success).mock.calls
+    const options = successCalls[successCalls.length - 1][1] as any
+    if (options?.action?.onClick) {
+      options.action.onClick()
+      expect(toast.info).toHaveBeenCalledWith('Critical data deletion cannot be reversed via this action.')
+    }
+
+    // Test Delete error branch
+    mockDeleteOrg.mockRejectedValue(new Error('Delete failed'))
+    rerender(<OrgSettingsPage />)
+    fireEvent.click(deleteBtn)
+    fireEvent.click(confirmBtn)
+    await waitFor(() => {
+      expect(toast.error).toHaveBeenCalledWith('Delete failed')
     })
   })
 })
