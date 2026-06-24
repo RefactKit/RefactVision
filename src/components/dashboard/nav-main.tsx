@@ -1,5 +1,3 @@
-import { useMatchRoute, useNavigate } from '@tanstack/react-router'
-import { ChevronRight } from 'lucide-react'
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/collapsible'
 import {
   SidebarGroup,
@@ -12,6 +10,8 @@ import {
   SidebarMenuSubItem,
 } from '@/components/ui/sidebar'
 import { cn } from '@/lib/utils'
+import { useMatchRoute, useNavigate } from '@tanstack/react-router'
+import { ChevronRight } from 'lucide-react'
 
 interface NavItem {
   title: string
@@ -125,6 +125,7 @@ export function NavMain({
               render={
                 <SidebarGroupLabel className="flex w-full items-center justify-between hover:text-foreground transition-colors" />
               }
+              nativeButton={false}
             >
               <span className="text-xs font-semibold uppercase tracking-wider">{label}</span>
               <ChevronRight className="size-3.5 transition-transform duration-200 group-data-[state=open]:rotate-90" />

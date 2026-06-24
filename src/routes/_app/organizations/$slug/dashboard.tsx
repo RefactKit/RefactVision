@@ -69,7 +69,7 @@ const MODELS = [
     description: 'Dernière génération YOLO, meilleur équilibre global.',
   },
   {
-    id: 'rt-detr',
+    id: 'rtdetr',
     name: 'RT-DETR',
     type: 'Transformer',
     description: 'Basé sur les transformers, précision maximale.',
