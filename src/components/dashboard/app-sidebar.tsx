@@ -1,15 +1,3 @@
-import { useQuery } from '@tanstack/react-query'
-import {
-  Building2,
-  ExternalLink,
-  FolderIcon,
-  LayoutGrid,
-  LifeBuoy,
-  MessageSquareText,
-  Settings,
-  ShieldCheck,
-  Users,
-} from 'lucide-react'
 import {
   Sidebar,
   SidebarContent,
@@ -20,6 +8,19 @@ import {
 } from '@/components/ui/sidebar'
 import { useI18n } from '@/i18n/context'
 import { projectsCountQuery } from '@/server/query-keys'
+import { useQuery } from '@tanstack/react-query'
+import {
+  Building2,
+  ExternalLink,
+  FolderIcon,
+  LayoutGrid,
+  LifeBuoy,
+  MessageSquareText,
+  ScanLine,
+  Settings,
+  ShieldCheck,
+  Users,
+} from 'lucide-react'
 import { NavMain } from './nav-main'
 import { NavSecondary } from './nav-secondary'
 import { NavUser } from './nav-user'
@@ -63,6 +64,11 @@ export function AppSidebar({ orgs, currentSlug }: AppSidebarProps) {
           to: `/organizations/${slug}/projects`,
           icon: FolderIcon,
           badge: projectsCount ?? 0,
+        },
+        {
+          title: 'Disease Detection',
+          to: `/organizations/${slug}/detection`,
+          icon: ScanLine,
         },
       ]
     : []
